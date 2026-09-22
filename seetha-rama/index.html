@@ -240,6 +240,10 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
 @keyframes spin{to{transform:rotate(360deg)}}
 
 
+/* optional top line (Bismillah / verse / Sri Ganeshaya Namaha) */
+.topline{font-size:13px;font-style:italic;color:var(--maroon);margin:0 auto 16px;max-width:300px;line-height:1.5;padding:0 14px}
+.topline.ar{font:400 26px/1.6 'Amiri',serif;font-style:normal;color:var(--maroon-d);margin-bottom:10px}
+.topline:empty{display:none}
 /* thank you heading */
 .h-script.ty{margin-top:26px;font-size:54px}
 /* per-event location */
@@ -308,6 +312,7 @@ body.indic #openBtn{font-size:16px}
     <div class="scene" data-img="mansion" data-label="images/01-mansion.jpg"></div>
     <div class="veil"></div>
     <div class="txt">
+      <div class="topline rv" id="hTop"></div>
       <div class="caps name rv" id="h1"></div>
       <div class="weds rv d1" data-l="weds">weds</div>
       <div class="caps name rv d2" id="h2"></div>
@@ -491,17 +496,16 @@ const CONFIG = {
   "thankYouLine": "Your presence and blessings will make our day complete.",
   "from": "With love, the Subramanian & Ramanathan families",
   "images": {
-    "mansion": "",
-    "courtyard": "",
+    "mansion": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/img-mansion-1790057857221.jpg",
+    "courtyard": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/img-courtyard-1790062161840.jpg",
     "sky": "",
     "couple": "",
     "base": "",
     "footer": ""
   },
   "videos": {
-    "mansion": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-mansion-1790051534566.mp4",
-    "courtyard": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-courtyard-1790051535018.mp4",
-    "couple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-couple-1790051535475.mp4",
+    "mansion": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-mansion-1790062152892.mp4",
+    "couple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-couple-1790062189474.mp4",
     "base": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-base-1790051535869.mp4",
     "footer": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/vid-footer-1790051536500.mp4"
   },
@@ -595,6 +599,14 @@ if (CONFIG.lang && CONFIG.lang !== 'en'){
     r.setProperty('--serif', `'${F.body}',Georgia,serif`);
     r.setProperty('--script', `'${F.disp || F.body}',Georgia,serif`);
   }
+}
+
+// top line
+set('hTop', CONFIG.topLine || '');
+if (/[\u0600-\u06FF]/.test(CONFIG.topLine || '')){
+  const t = $('#hTop'); t.classList.add('ar'); t.dir = 'rtl';
+  const ln = document.createElement('link'); ln.rel = 'stylesheet';
+  ln.href = 'https://fonts.googleapis.com/css2?family=Amiri&display=swap'; document.head.appendChild(ln);
 }
 
 // text
