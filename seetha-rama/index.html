@@ -239,6 +239,50 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
 #music.playing svg{animation:spin 6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+
+/* thank you heading */
+.h-script.ty{margin-top:26px;font-size:54px}
+/* per-event location */
+.ev .pl{font-size:14px;color:var(--ink-soft);margin-top:3px}
+.ev .emap{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:5px 12px;border-radius:20px;border:1px solid var(--gold);
+  color:var(--maroon);font:600 11px var(--serif);letter-spacing:.15em;text-transform:uppercase;text-decoration:none;background:rgba(255,255,255,.5)}
+.ev .emap svg{width:11px;height:11px}
+/* RSVP */
+#rsvp{background:var(--cream);padding:34px 18px 40px}
+.rcard{background:var(--paper);border:1px solid rgba(184,137,58,.55);border-radius:14px;padding:26px 20px 22px;text-align:center;
+  box-shadow:0 10px 30px rgba(60,20,8,.12)}
+.rnote{font-size:15px;font-style:italic;color:var(--ink-soft);margin:6px 0 4px}
+#rForm{display:flex;flex-direction:column;gap:10px;margin-top:14px;text-align:left}
+#rForm input,#rForm textarea,#rForm select{width:100%;font:16px var(--serif);color:var(--ink);padding:11px 12px;border:1px solid rgba(184,137,58,.6);
+  border-radius:8px;background:#fffdf8}
+#rForm textarea{resize:vertical}
+.rchoice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rchoice button{font:600 14px var(--serif);padding:11px 6px;border-radius:8px;border:1px solid rgba(184,137,58,.6);background:#fffdf8;color:var(--ink);cursor:pointer}
+.rchoice button.on{background:var(--maroon);color:#f7e2b6;border-color:var(--maroon)}
+.rguests{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;color:var(--ink-soft)}
+.rguests select{width:90px!important}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+#rForm .btn{align-self:center;margin-top:4px;border:1px solid var(--gold);cursor:pointer}
+.rmsg{min-height:18px;font-size:14px;text-align:center;color:#a0281e}
+.rdone{display:none;font-size:18px;color:var(--maroon);padding:18px 6px 6px;line-height:1.5}
+.rcard.sent #rForm{display:none}.rcard.sent .rdone{display:block}
+
+/* Indian-language invites: no letter-spacing / capitals (they break conjuncts), roomier lines, smaller display sizes */
+body.indic,body.indic *{letter-spacing:normal!important;text-transform:none!important}
+body.indic{line-height:1.6}
+body.indic #hero .name{font-size:clamp(26px,8vw,36px);line-height:1.35;font-weight:600}
+body.indic #hero .weds{font-size:26px;margin:6px 0}
+body.indic .parch .invites{font-size:30px;margin:10px 0 6px;line-height:1.4}
+body.indic .parch .couple .caps{font-size:21px;line-height:1.45}
+body.indic .h-script{font-size:34px;line-height:1.35}
+body.indic .h-script.ty{font-size:38px}
+body.indic #sky .line .script{font-size:30px;line-height:1.4}
+body.indic #couple .cap .script{font-size:32px;line-height:1.4}
+body.indic footer .script{font-size:24px;line-height:1.5}
+body.indic .ev .n{font-size:16px}
+body.indic .count span{font-size:10.5px}
+body.indic #openBtn{font-size:16px}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01s!important}
 }
@@ -253,7 +297,7 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
     <div class="glow"></div>
     <div class="leaf l"><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><span class="knock"></span></div>
     <div class="leaf r"><div class="panel"></div><div class="panel"></div><div class="panel"></div><div class="panel"></div><span class="knock"></span></div>
-    <div class="cta"><small id="gateNames"></small><button id="openBtn" type="button">Open Invitation</button></div>
+    <div class="cta"><small id="gateNames"></small><button id="openBtn" type="button" data-l="open">Open Invitation</button></div>
   </div>
 </div>
 
@@ -265,12 +309,12 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
     <div class="veil"></div>
     <div class="txt">
       <div class="caps name rv" id="h1"></div>
-      <div class="weds rv d1">weds</div>
+      <div class="weds rv d1" data-l="weds">weds</div>
       <div class="caps name rv d2" id="h2"></div>
       <div class="date caps rv d3" id="hDate"></div>
     </div>
     <div class="birds"></div>
-    <div class="scroll-hint">Scroll</div>
+    <div class="scroll-hint" data-l="scroll">Scroll</div>
   </section>
 
   <!-- 2. COURTYARD -->
@@ -281,7 +325,7 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
     <canvas class="petals"></canvas>
     <div class="parch rv" id="parch">
       <div class="blessing" id="pBless"></div>
-      <div class="invites">invites</div>
+      <div class="invites" data-l="invites">invites</div>
       <p><span class="who" id="pGrand"></span></p>
       <p><span class="who" id="pParents"></span><br><span id="pLine"></span></p>
       <svg class="flourish" viewBox="0 0 120 20"><path d="M2 10h44M74 10h44" stroke="#b8893a" stroke-width="1"/><path d="M60 3l6 7-6 7-6-7z" fill="none" stroke="#b8893a"/><circle cx="60" cy="10" r="1.6" fill="#b8893a"/></svg>
@@ -329,13 +373,36 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
       <div class="arch rv">
         <svg viewBox="0 0 400 640" preserveAspectRatio="none" class="archsvg"></svg>
         <div class="inner">
-          <div class="h-script">Celebrations</div>
+          <div class="h-script" data-l="celebrations">Celebrations</div>
           <div class="count" id="count"></div>
           <div id="evList" style="width:100%"></div>
         </div>
       </div>
     </div>
     <div class="base"><div class="scene" data-img="base" data-label="images/05-mansion-base.jpg"></div></div>
+  </section>
+
+  <!-- 6b. RSVP (optional) -->
+  <section id="rsvp">
+    <div class="rcard rv">
+      <div class="h-script" data-l="rsvpTitle">Will you join us?</div>
+      <div class="rnote" id="rNote"></div>
+      <form id="rForm" autocomplete="on">
+        <input type="text" name="name" maxlength="80" required data-ph="rsvpName">
+        <div class="rchoice">
+          <button type="button" data-a="1" data-l="rsvpYes">Joyfully accept</button>
+          <button type="button" data-a="0" data-l="rsvpNo">Regretfully decline</button>
+        </div>
+        <label class="rguests"><span data-l="rsvpGuests">Number of guests</span>
+          <select name="guests"></select></label>
+        <input type="tel" name="phone" maxlength="20" data-ph="rsvpPhone">
+        <textarea name="message" maxlength="300" rows="2" data-ph="rsvpMsg"></textarea>
+        <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn" data-l="rsvpSend">Send RSVP</button>
+        <div class="rmsg" id="rMsg" role="status"></div>
+      </form>
+      <div class="rdone" id="rDone"></div>
+    </div>
   </section>
 
   <!-- 7. LOCATION + THANK YOU -->
@@ -345,15 +412,15 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
       <div class="arch rv">
         <svg viewBox="0 0 400 720" preserveAspectRatio="none" class="archsvg"></svg>
         <div class="inner">
-          <div class="h-script">Wedding</div>
-          <div class="caps" style="font-size:13px;margin-top:10px">Location</div>
+          <div class="h-script" data-l="wedding">Wedding</div>
+          <div class="caps" style="font-size:13px;margin-top:10px" data-l="location">Location</div>
           <svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>
           <div style="font-size:19px;font-weight:600;color:var(--maroon)" id="vName"></div>
           <div style="font-size:15px;color:var(--ink-soft);margin-top:2px" id="vAddr"></div>
           <a class="btn" id="vMap" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>
-            Click for location</a>
-          <div class="h-script" style="margin-top:26px;font-size:54px">Thank You</div>
+            <span data-l="mapBtn">Click for location</span></a>
+          <div class="h-script ty" data-l="thankYou">Thank You</div>
           <div style="font-size:15px;color:var(--ink-soft);margin-top:8px;font-style:italic;max-width:260px" id="tyLine"></div>
           <svg class="flourish" viewBox="0 0 120 20"><path d="M2 10h44M74 10h44" stroke="#b8893a" stroke-width="1"/><path d="M60 3l6 7-6 7-6-7z" fill="none" stroke="#b8893a"/></svg>
           <div style="font-size:14px;color:var(--maroon)" id="tyFrom"></div>
@@ -377,8 +444,8 @@ footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-tr
    CONFIG — change only this block for each client
    ========================================================= */
 const CONFIG = {
-  "groom": "Rama",
-  "bride": "Seetha",
+  "groom": "Harish ",
+  "bride": "Meenakashi",
   "groomFull": "Sri Rama",
   "brideFull": "Seethamma",
   "dateLong": "Friday, 12 February 2027",
@@ -397,17 +464,23 @@ const CONFIG = {
     {
       "name": "Nichayathartham",
       "date": "Thursday, 11 February 2027",
-      "time": "6:00 PM onwards"
+      "time": "6:00 PM onwards",
+      "place": "",
+      "map": ""
     },
     {
       "name": "Muhurtham",
       "date": "Friday, 12 February 2027",
-      "time": "7:30 AM – 9:00 AM"
+      "time": "7:30 AM – 9:00 AM",
+      "place": "",
+      "map": ""
     },
     {
       "name": "Reception",
       "date": "Friday, 12 February 2027",
-      "time": "7:00 PM onwards"
+      "time": "7:00 PM onwards",
+      "place": "",
+      "map": ""
     }
   ],
   "venue": {
@@ -440,7 +513,46 @@ const CONFIG = {
     "url": "https://afterfxtemplates.com",
     "whatsapp": "918971738710"
   },
-  "theme": "maroon"
+  "lang": "en",
+  "fontStyle": 0,
+  "labels": {
+    "open": "Open Invitation",
+    "scroll": "Scroll",
+    "weds": "weds",
+    "invites": "invites",
+    "celebrations": "Celebrations",
+    "wedding": "Wedding",
+    "location": "Location",
+    "mapBtn": "Click for location",
+    "evMap": "Location",
+    "thankYou": "Thank You",
+    "days": "Days",
+    "hrs": "Hrs",
+    "min": "Min",
+    "sec": "Sec",
+    "rsvpTitle": "Will you join us?",
+    "rsvpName": "Your name",
+    "rsvpYes": "Joyfully accept",
+    "rsvpNo": "Regretfully decline",
+    "rsvpGuests": "Number of guests",
+    "rsvpPhone": "Phone (optional)",
+    "rsvpMsg": "Wishes for the couple (optional)",
+    "rsvpSend": "Send RSVP",
+    "rsvpThanks": "Thank you! Your response has been received.",
+    "today": "Today is the day"
+  },
+  "rsvp": {
+    "on": true,
+    "note": ""
+  },
+  "theme": "maroon",
+  "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/23d85782ab3881aeac17",
+  "rsvpId": "23d85782ab3881aeac17",
+  "fonts": {
+    "name": "Classic script",
+    "body": "Cormorant Garamond",
+    "disp": "Pinyon Script"
+  }
 };
 
 /* =========================================================
@@ -463,6 +575,28 @@ if (TH){
   const mc = document.querySelector('meta[name="theme-color"]'); if (mc) mc.content = TH['maroon-d'];
 }
 
+// language: fonts + fixed words
+const L = Object.assign({ open: 'Open Invitation', scroll: 'Scroll', weds: 'weds', invites: 'invites', celebrations: 'Celebrations',
+  wedding: 'Wedding', location: 'Location', mapBtn: 'Click for location', evMap: 'Location', thankYou: 'Thank You',
+  days: 'Days', hrs: 'Hrs', min: 'Min', sec: 'Sec', today: 'Today is the day', rsvpTitle: 'Will you join us?', rsvpName: 'Your name',
+  rsvpYes: 'Joyfully accept', rsvpNo: 'Regretfully decline', rsvpGuests: 'Number of guests', rsvpPhone: 'Phone (optional)',
+  rsvpMsg: 'Wishes for the couple (optional)', rsvpSend: 'Send RSVP', rsvpThanks: 'Thank you! Your response has been received.' }, CONFIG.labels || {});
+document.querySelectorAll('[data-l]').forEach(el => { if (L[el.dataset.l] != null) el.textContent = L[el.dataset.l]; });
+document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = L[el.dataset.ph] || ''; });
+if (CONFIG.lang && CONFIG.lang !== 'en'){
+  document.documentElement.lang = CONFIG.lang;
+  document.body.classList.add('indic');
+  const F = CONFIG.fonts || {};
+  if (F.body){
+    const ln = document.createElement('link'); ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q || '').replace(/[^A-Za-z0-9+&=:;@]/g, '') + '&display=swap';
+    document.head.appendChild(ln);
+    const r = document.documentElement.style;
+    r.setProperty('--serif', `'${F.body}',Georgia,serif`);
+    r.setProperty('--script', `'${F.disp || F.body}',Georgia,serif`);
+  }
+}
+
 // text
 set('gateNames', `${CONFIG.bride} & ${CONFIG.groom}`);
 set('h1', CONFIG.groom); set('h2', CONFIG.bride); set('hDate', CONFIG.dateShort);
@@ -481,8 +615,49 @@ set('fNames', `${CONFIG.bride} & ${CONFIG.groom}`); set('fDate', CONFIG.dateShor
 document.title = `${CONFIG.bride} & ${CONFIG.groom} — Wedding Invitation`;
 
 const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-$('#evList').innerHTML = CONFIG.events.map(e =>
-  `<div class="ev"><div class="n">${esc(e.name)}</div><div class="d">${esc(e.date)}</div><div class="t">${esc(e.time)}</div></div>`).join('');
+const PIN = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>';
+$('#evList').innerHTML = CONFIG.events.map(e => {
+  const map = safeUrl(e.map);
+  return `<div class="ev"><div class="n">${esc(e.name)}</div><div class="d">${esc(e.date)}</div><div class="t">${esc(e.time)}</div>` +
+    (e.place ? `<div class="pl">${esc(e.place)}</div>` : '') +
+    (map !== '#' ? `<a class="emap" href="${esc(map)}" target="_blank" rel="noopener">${PIN}${esc(L.evMap)}</a>` : '') + `</div>`;
+}).join('');
+
+// RSVP (optional)
+(function(){
+  const R = CONFIG.rsvp || {};
+  if (!R.on){ $('#rsvp').remove(); return; }
+  set('rNote', R.note || '');
+  const form = $('#rForm'), card = $('.rcard'), msg = $('#rMsg');
+  $('#rDone').textContent = L.rsvpThanks;
+  const sel = form.guests; for (let i = 1; i <= 10; i++) sel.add(new Option(i, i));
+  let attending = null;
+  const guestsRow = $('.rguests');
+  form.querySelectorAll('.rchoice button').forEach(b => b.onclick = () => {
+    attending = b.dataset.a === '1';
+    form.querySelectorAll('.rchoice button').forEach(x => x.classList.toggle('on', x === b));
+    guestsRow.style.display = attending ? '' : 'none';
+  });
+  const KEY = 'afx-rsvp-' + (CONFIG.rsvpId || '');
+  try { if (CONFIG.rsvpId && localStorage.getItem(KEY)) card.classList.add('sent'); } catch (e) {}
+  form.onsubmit = async ev => {
+    ev.preventDefault(); msg.textContent = '';
+    if (!form.name.value.trim()){ form.name.focus(); return; }
+    if (attending === null){ msg.textContent = '👆 ' + L.rsvpYes + ' / ' + L.rsvpNo; return; }
+    if (!CONFIG.rsvpUrl){ msg.textContent = 'RSVP starts working after the invite is published.'; return; }
+    const btn = form.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      const r = await fetch(CONFIG.rsvpUrl, { method: 'POST', headers: { 'content-type': 'text/plain' },
+        body: JSON.stringify({ name: form.name.value, attending, guests: attending ? +sel.value : 0,
+          phone: form.phone.value, message: form.message.value, website: form.website.value }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Could not send, please try again');
+      card.classList.add('sent');
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    } catch (x){ msg.textContent = x.message || 'Could not send, please try again'; }
+    finally { btn.disabled = false; }
+  };
+})();
 
 // images with placeholder fallback
 const vio = new IntersectionObserver(es => es.forEach(e => {
@@ -601,9 +776,9 @@ function tick(){
   const ms = new Date(CONFIG.weddingAt) - Date.now();
   const el = $('#count');
   if (isNaN(ms)) { el.remove(); return; }
-  if (ms <= 0){ el.innerHTML = `<div style="padding:8px 14px"><b style="font-size:18px">Today is the day</b></div>`; return; }
+  if (ms <= 0){ el.innerHTML = `<div style="padding:8px 14px"><b style="font-size:18px">${esc(L.today)}</b></div>`; return; }
   const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
-  el.innerHTML = [[d,'Days'],[h,'Hrs'],[m,'Min'],[s,'Sec']].map(([v,l]) => `<div><b>${String(v).padStart(2,'0')}</b><span>${l}</span></div>`).join('');
+  el.innerHTML = [[d,L.days],[h,L.hrs],[m,L.min],[s,L.sec]].map(([v,l]) => `<div><b>${String(v).padStart(2,'0')}</b><span>${l}</span></div>`).join('');
 }
 tick(); setInterval(tick, 1000);
 
