@@ -79,7 +79,12 @@ section{position:relative;width:100%}
 #hero.cut .temple .scene{background-size:100% auto;background-position:50% 100%}
 #hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(253,244,226,.95) 0%,rgba(253,244,226,.6) 26%,transparent 46%);pointer-events:none}
 #hero .txt{position:absolute;left:0;right:0;top:17%;padding:0 48px;text-align:center;z-index:4;will-change:transform,opacity}
+#hero.hassym .txt{top:8%}
 #hero .topline{font-size:14px;color:var(--maroon);margin:0 auto 14px;max-width:300px;line-height:1.5}
+.symbol{display:block;margin:0 auto 6px;width:auto;object-fit:contain}
+.hide{display:none!important}
+.symbol.sm{height:52px} .symbol.md{height:72px} .symbol.lg{height:96px}
+@media (max-height:700px){.symbol.sm{height:44px}.symbol.md{height:58px}.symbol.lg{height:74px}}
 #hero .topline.ar{font:400 26px/1.6 'Amiri',serif}
 #hero .nm{font:400 58px/1 var(--script);color:var(--maroon);text-shadow:0 2px 16px rgba(255,250,235,.9)}
 #hero .and{font:400 30px/1 var(--script);color:var(--gold);margin:4px 0}
@@ -231,6 +236,7 @@ footer{background:var(--maroon-d);color:#e9cf98;text-align:center;padding:22px 1
 footer .script{font-size:30px;letter-spacing:0;text-transform:none;color:#f5dfae;display:block;margin-bottom:4px}
 .powered{background:var(--maroon-dd);color:#c9a978;text-align:center;padding:14px 16px 18px;font:12px/1.6 system-ui,sans-serif}
 .powered a{color:#f3d58f;text-decoration:none;font-weight:600}
+.powered .pblogo{height:46px;width:auto;max-width:70%;object-fit:contain;margin-bottom:8px}
 .powered .cta{display:inline-block;margin-top:6px;padding:6px 14px;border:1px solid rgba(243,213,143,.45);border-radius:20px;font-size:11.5px}
 
 #music{position:fixed;right:max(14px,calc(50% - 226px));bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);
@@ -272,6 +278,7 @@ body.indic footer .script{font-size:24px}
       <svg class="garland" viewBox="0 0 480 170" preserveAspectRatio="none" id="heroGarland"></svg>
       <div class="bells" id="bells"></div>
       <div class="txt">
+        <img class="symbol hide" id="hSym" alt="">
         <div class="topline" id="hTop"></div>
         <div class="nm" id="h1"></div>
         <div class="and" data-l="weds">weds</div>
@@ -395,7 +402,7 @@ body.indic footer .script{font-size:24px}
 
 <script>
 const CONFIG = {
-  "groom": "Aarav",
+  "groom": "Arvind",
   "bride": "Diya",
   "groomFull": "Aarav Sharma",
   "brideFull": "Diya Mehta",
@@ -449,7 +456,7 @@ const CONFIG = {
   "thankYouLine": "Your presence and blessings will make our celebration complete.",
   "from": "With love, the Sharma & Mehta families",
   "images": {
-    "temple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test/img-temple-1790087273260.jpg",
+    "temple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test/img-temple-1790133723179.webp",
     "herobg": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test/img-herobg-1790087515684.jpg",
     "walk": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test/img-walk-1790087921334.jpg",
     "events": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test/img-events-1790088056744.jpg",
@@ -468,18 +475,13 @@ const CONFIG = {
     "url": "https://afterfxtemplates.com",
     "whatsapp": "918971738710"
   },
-  "topLine": "॥ श्री गणेशाय नमः ॥",
+  "topLine": "Om Shree Ganeshaya Namaha",
   "layout": "mandir",
   "faq": [
     {
       "icon": "dress",
       "title": "Dress code",
       "text": "Yellow for the Haldi, bright colours for the Mehendi and traditional wear for the Shaadi."
-    },
-    {
-      "icon": "weather",
-      "title": "Weather",
-      "text": "Pleasant evenings around 22°C — carry a light shawl."
     },
     {
       "icon": "parking",
@@ -535,15 +537,28 @@ const CONFIG = {
     "on": true,
     "note": ""
   },
-  "theme": "maroon",
+  "theme": "emerald",
+  "symbolSize": "md",
+  "fontNames": "",
+  "fontBody": "",
+  "fontCustom": "",
+  "brand": {
+    "on": false,
+    "name": "",
+    "url": "",
+    "whatsapp": ""
+  },
   "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/d9554505917c9ac3b57f",
   "rsvpId": "d9554505917c9ac3b57f",
   "fonts": {
-    "name": "Classic script",
     "body": "Cormorant Garamond",
-    "disp": "Pinyon Script"
+    "disp": "Pinyon Script",
+    "q": ""
   },
-  "gallery": []
+  "gallery": [],
+  "symbol": "",
+  "studioLogo": "",
+  "fontFile": ""
 };
 
 const $ = s => document.querySelector(s);
@@ -571,15 +586,41 @@ const L = Object.assign({ open: 'Open Invitation', scroll: 'Scroll', weds: 'weds
   gallerySub: 'A few of our favourite memories', thingsToKnow: 'Things to know', countdown: 'The countdown begins', addCal: 'Add to calendar' }, CONFIG.labels || {});
 document.querySelectorAll('[data-l]').forEach(el => { if (L[el.dataset.l] != null) el.textContent = L[el.dataset.l]; });
 document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = L[el.dataset.ph] || ''; });
-if (CONFIG.lang && CONFIG.lang !== 'en'){
-  document.documentElement.lang = CONFIG.lang; document.body.classList.add('indic');
-  const F = CONFIG.fonts || {};
-  if (F.body){
+if (CONFIG.lang && CONFIG.lang !== 'en'){ document.documentElement.lang = CONFIG.lang; document.body.classList.add('indic'); }
+// fonts: language preset, the designer's own picks, and an uploaded font file
+function applyFonts(){
+  const F = CONFIG.fonts || {}, r = document.documentElement.style;
+  if (F.q){
     const ln = document.createElement('link'); ln.rel = 'stylesheet';
-    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q || '').replace(/[^A-Za-z0-9+&=:;@]/g, '') + '&display=swap'; document.head.appendChild(ln);
-    const r = document.documentElement.style; r.setProperty('--serif', `'${F.body}',Georgia,serif`); r.setProperty('--script', `'${F.disp || F.body}',Georgia,serif`);
+    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q).replace(/[^A-Za-z0-9+&=:;@,.]/g, '') + '&display=swap';
+    document.head.appendChild(ln);
   }
+  let body = F.body || '', disp = F.disp || body;
+  if (CONFIG.fontFile && CONFIG.fontCustom){
+    const st = document.createElement('style');
+    st.textContent = "@font-face{font-family:'AfxCustom';src:url('" + String(CONFIG.fontFile).replace(/'/g, '') + "');font-display:swap}";
+    document.head.appendChild(st);
+    if (CONFIG.fontCustom === 'names' || CONFIG.fontCustom === 'both') disp = 'AfxCustom';
+    if (CONFIG.fontCustom === 'body' || CONFIG.fontCustom === 'both') body = 'AfxCustom';
+  }
+  if (body) r.setProperty('--serif', "'" + body + "',Georgia,serif");
+  if (disp) r.setProperty('--script', "'" + disp + "',Georgia,serif");
 }
+// the small symbol above the names (Ganesha, a cross, a crescent…)
+function applySymbol(){
+  const el = document.getElementById('hSym'); if (!el) return;
+  if (!CONFIG.symbol){ el.remove(); return; }
+  const hero = document.getElementById('hero');
+  el.classList.add(['sm', 'md', 'lg'].indexOf(CONFIG.symbolSize) >= 0 ? CONFIG.symbolSize : 'md');
+  // the names move up only once the symbol has really loaded, so a missing file changes nothing
+  el.onload = () => { el.classList.remove('hide'); if (hero) hero.classList.add('hassym'); };
+  el.onerror = () => { el.remove(); if (hero) hero.classList.remove('hassym'); };
+  el.src = CONFIG.symbol;
+  if (el.complete && el.naturalWidth) el.onload();
+}
+applyFonts();
+applySymbol();
+
 
 // text
 const couple = `${CONFIG.bride} & ${CONFIG.groom}`;
@@ -789,7 +830,9 @@ tick(); setInterval(tick, 1000);
   const pb = CONFIG.poweredBy, el = $('#powered');
   if (!pb || !pb.text){ el.remove(); return; }
   const wa = pb.whatsapp ? `<br><a class="cta" target="_blank" rel="noopener" href="https://wa.me/${encodeURIComponent(String(pb.whatsapp).replace(/\D/g, ''))}?text=${encodeURIComponent('Hi, I saw a wedding invite made by you and I want one like this')}">Want an invite like this? Chat on WhatsApp</a>` : '';
-  el.innerHTML = `Powered by <a target="_blank" rel="noopener" href="${esc(safeUrl(pb.url))}">${esc(pb.text)}</a>${wa}`;
+  const logo = pb.logo ? `<img class="pblogo" src="${esc(pb.logo)}" alt=""><br>` : '';
+  const nm = pb.url ? `<a target="_blank" rel="noopener" href="${esc(safeUrl(pb.url))}">${esc(pb.text)}</a>` : `<b>${esc(pb.text)}</b>`;
+  el.innerHTML = `${logo}Powered by ${nm}${wa}`;
 })();
 
 // music + door
