@@ -16,6 +16,10 @@ body.locked{overflow:hidden;height:100%}
 #pg{margin:0 auto;position:relative}
 .sw{position:relative;overflow:hidden;transform-origin:50% 40%;will-change:transform}
 .sw.m-stack{position:-webkit-sticky;position:sticky}
+html.snap{scroll-snap-type:y mandatory}
+.sw.m-pages{scroll-snap-align:start;scroll-snap-stop:always}
+html.snap #pw{scroll-snap-align:end}
+.sw.m-pages .pbg{position:absolute;inset:-8%;background-size:cover;background-position:center;will-change:transform}
 .sw.m-stack+.sw{box-shadow:0 -14px 30px rgba(0,0,0,.28)}
 .sw .dim{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:3}
 .sec{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden}
@@ -595,6 +599,10 @@ const CONFIG = {
       {
         "fam": "Cormorant Garamond",
         "g": 1
+      },
+      {
+        "fam": "Pinyon Script",
+        "g": 1
       }
     ],
     "sections": [
@@ -648,6 +656,72 @@ const CONFIG = {
             "lbl": "Days,Hours,Mins,Secs",
             "done": "Today is the day!",
             "sep": true
+          },
+          {
+            "id": "nbjws1ph",
+            "t": "text",
+            "x": 40,
+            "y": 38.4,
+            "w": 320,
+            "h": 81,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "ascend",
+              "d": 1.2,
+              "dl": 0
+            },
+            "text": "Shreya",
+            "f": "Pinyon Script",
+            "fs": 58,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "br2a1nr8",
+            "t": "text",
+            "x": 160,
+            "y": 104.4,
+            "w": 80,
+            "h": 42,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "ascend",
+              "d": 1.2,
+              "dl": 0
+            },
+            "text": "&",
+            "f": "Playfair Display",
+            "fs": 30,
+            "c": "#b08d57",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "yxwujdk4",
+            "t": "text",
+            "x": 40,
+            "y": 150.4,
+            "w": 320,
+            "h": 81,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "ascend",
+              "d": 1.2,
+              "dl": 0
+            },
+            "text": "Avinash",
+            "f": "Pinyon Script",
+            "fs": 58,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
           }
         ]
       },
@@ -767,7 +841,7 @@ const CONFIG = {
       "bg": "#6b1616",
       "img": ""
     },
-    "scroll": "parallax",
+    "scroll": "pages",
     "particles": "petals"
   },
   "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/86d50dd238db691f47ed",
@@ -835,22 +909,39 @@ const CONFIG = {
       var d = AFX.renderEl(e, asset);
       if (e.link) { d.classList.add('link'); d.addEventListener('click', function () { window.open(e.link, '_blank', 'noopener'); }); }
       AFX.prepare(d, e);
-      sec.appendChild(d); all.push([d, e]);
+      sec.appendChild(d); all.push([d, e, i]);
       if (e.sp && !RM) deep.push([d, e, i]);
     });
     var dim = document.createElement('div'); dim.className = 'dim';
+    var pbg = null;
+    if (mode === 'pages') {
+      // the whole screen gets the section colour / picture, the design sits in the middle
+      sw.style.background = s.bg || '#ffffff';
+      sec.style.background = 'transparent';
+      if (bg) { pbg = document.createElement('div'); pbg.className = 'pbg'; pbg.style.backgroundImage = bg.style.backgroundImage; sw.appendChild(pbg); bg.style.display = 'none'; }
+    }
     sw.appendChild(sec); sw.appendChild(dim); pg.appendChild(sw);
-    wraps.push({ sw: sw, sec: sec, s: s, mode: mode, bg: bg, dim: dim });
+    wraps.push({ sw: sw, sec: sec, s: s, mode: mode, bg: bg, dim: dim, pbg: pbg });
   });
 
   var k = 1, vh = innerHeight;
+  var SNAP = wraps.some(function (x) { return x.mode === 'pages'; });
+  if (SNAP) document.documentElement.classList.add('snap');
   function fit() {
     var vw = Math.min(document.documentElement.clientWidth || innerWidth, 520);
     k = vw / W; vh = innerHeight;
     pg.style.width = vw + 'px';
     wraps.forEach(function (x, i) {
       var h = x.s.h * k;
-      x.sw.style.height = h + 'px'; x.sec.style.transform = 'scale(' + k + ')';
+      if (x.mode === 'pages' && h < vh) {
+        // fill the phone screen: scale the design to cover it (a little of the sides may be cut) and centre it
+        var kk = Math.max(vw / W, vh / x.s.h);
+        x.base = 'translate(' + ((vw - W * kk) / 2).toFixed(1) + 'px,' + ((vh - x.s.h * kk) / 2).toFixed(1) + 'px) scale(' + kk + ')';
+        x.sw.style.height = vh + 'px'; x.sec.style.transform = x.base; x.kk = kk;
+        return;
+      }
+      x.base = 'scale(' + k + ')'; x.kk = k;
+      x.sw.style.height = h + 'px'; x.sec.style.transform = x.base;
       // stack: a section stays pinned (its bottom at the screen bottom if it is taller) while the next one slides over it
       if (x.mode === 'stack' && i < wraps.length - 1) x.sw.style.top = Math.min(0, vh - h) + 'px';
       else if (x.mode === 'stack') { x.sw.style.position = 'relative'; x.sw.style.top = ''; }
@@ -866,6 +957,12 @@ const CONFIG = {
       var x = wraps[i], r = x.sw.getBoundingClientRect();
       var p = (vh / 2 - (r.top + r.height / 2)) / (vh / 2 + r.height / 2);   // -1 below .. 0 centred .. 1 above
       p = Math.max(-1, Math.min(1, p)); x.p = p;
+      if (x.mode === 'pages') {
+        // while a page slides in / out its content lags a little behind and the picture breathes
+        x.sec.style.transform = x.base + ' translateY(' + (p * x.s.h * 0.12).toFixed(1) + 'px)';
+        if (x.pbg) x.pbg.style.transform = 'translate3d(0,' + (p * 6).toFixed(2) + '%,0) scale(' + (1 + 0.06 * Math.abs(p)).toFixed(4) + ')';
+        x.dim.style.opacity = (0.35 * Math.abs(p)).toFixed(3);
+      }
       if (x.mode === 'stack' && i < wraps.length - 1) {
         // how much of this (pinned) section the next one already covers
         var h = x.s.h * k, stuckBottom = Math.min(0, vh - h) + h;
@@ -884,6 +981,7 @@ const CONFIG = {
         x.sec.style.opacity = v.toFixed(3); x.sw.style.transform = v < 1 ? 'translateY(' + ((1 - v) * 40).toFixed(1) + 'px)' : '';
       }
     }
+    checkAnims();
     for (var j = 0; j < deep.length; j++) {
       var dd = deep[j], pp = wraps[dd[2]].p || 0;
       dd[0].style.translate = '0 ' + (pp * dd[1].sp * 1.1).toFixed(1) + 'px';
@@ -899,20 +997,26 @@ const CONFIG = {
 
   /* ---------------- entrance animations (after the cover opens) ---------------- */
   var started = false;
-  function startAnims() {
-    if (started) return; started = true;
-    var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (ents) {
-      ents.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        io.unobserve(en.target);
-        var pair = en.target._afx; AFX.unprepare(pair[0]); AFX.play(pair[0], pair[1]);
-      });
-    }, { threshold: 0.2, rootMargin: '0px 0px -22% 0px' }) : null;   // play only once it is well inside the screen
-    all.forEach(function (p) {
-      p[0]._afx = p;
-      if (io && p[1].an) io.observe(p[0]); else { AFX.unprepare(p[0]); AFX.play(p[0], p[1]); }
-    });
+  /* entrance animations, driven by the scroll position:
+     - normal scroll: an element plays once it is 15% into the screen (or when the page cannot scroll further)
+     - swipe pages: everything on a page plays when the page lands, and plays again when the page comes back */
+  function checkAnims() {
+    if (!started) return;
+    var de = document.documentElement, atEnd = scrollY + vh >= de.scrollHeight - 4;
+    for (var i = 0; i < all.length; i++) {
+      var pr = all[i], d = pr[0], x = wraps[pr[2]];
+      if (!pr[1].an) { if (!pr.played) { pr.played = true; AFX.play(d, pr[1]); } continue; }
+      var er = d.getBoundingClientRect();
+      if (x.mode === 'pages') {
+        var r = x.sw.getBoundingClientRect();
+        if (!pr.played && r.top < vh * 0.25 && r.bottom > vh * 0.5 && er.top < vh && er.bottom > 0) { pr.played = true; AFX.unprepare(d); AFX.play(d, pr[1]); }
+        else if (pr.played && (r.bottom <= 0 || r.top >= vh)) { pr.played = false; AFX.stop(d); AFX.restoreText(d, pr[1]); AFX.prepare(d, pr[1]); }
+      } else if (!pr.played && er.bottom > 0 && (er.top < vh * 0.85 || (atEnd && er.top < vh))) {
+        pr.played = true; AFX.unprepare(d); AFX.play(d, pr[1]);
+      }
+    }
   }
+  function startAnims() { if (started) return; started = true; checkAnims(); }
   var fontsReady = new Promise(function (ok) { if (document.fonts && document.fonts.ready) document.fonts.ready.then(ok); setTimeout(ok, 2500); });
 
   /* ---------------- music ---------------- */
