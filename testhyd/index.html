@@ -59,6 +59,43 @@ html.snap #pw{scroll-snap-align:end}
 #gate.open .seal{transform:scale(1.35);opacity:0;animation:none}
 #gate.open .ring{display:none}
 #gate.gone{display:none}
+/* seal with the couple's initials, or their own seal picture */
+#gate .mono.ini{display:flex;align-items:center;justify-content:center;gap:6px;font-size:46px;max-width:none}
+#gate .mono.ini .amp{font-size:.46em;opacity:.8;transform:translateY(.12em)}
+#gate .seal.pic{background:none;box-shadow:none;border-radius:0}
+#gate .seal.pic img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 12px 22px rgba(0,0,0,.45))}
+#gate .seal.pic .gsub{position:absolute;top:100%;margin-top:14px;white-space:nowrap;color:#fff6e5!important;opacity:1;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+/* curtains */
+#gate .cur{position:absolute;top:0;bottom:0;width:50.5%;overflow:hidden;transition:transform 1.9s cubic-bezier(.6,.02,.2,1),filter 1.9s ease}
+#gate .cur.l{left:0;transform-origin:0 0}
+#gate .cur.r{right:0;transform-origin:100% 0}
+#gate .cur .dimg{position:absolute;top:0;bottom:0;width:198%;background-size:cover;background-position:center}
+#gate .cur.l .dimg{left:0}#gate .cur.r .dimg{right:0}
+#gate .cur:before{content:"";position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(90deg,rgba(0,0,0,.26) 0,rgba(255,255,255,.07) 14px,rgba(0,0,0,.2) 30px,rgba(255,255,255,.05) 44px,rgba(0,0,0,.26) 58px)}
+#gate .val{position:absolute;left:0;right:0;top:0;height:64px;z-index:3;transition:transform 1.4s ease .5s;
+  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,0) 70%),repeating-linear-gradient(90deg,rgba(0,0,0,.18) 0,rgba(255,255,255,.08) 20px,rgba(0,0,0,.18) 40px);
+  border-bottom:5px solid #d9b56c;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+#gate .val:after{content:"";position:absolute;left:0;right:0;bottom:-15px;height:12px;background:repeating-linear-gradient(90deg,#e6c47a 0 3px,transparent 3px 7px)}
+#gate.open .cur.l{transform:translateX(-88%) scaleX(.22);filter:brightness(.7)}
+#gate.open .cur.r{transform:translateX(88%) scaleX(.22);filter:brightness(.7)}
+#gate.open .val{transform:translateY(-120%)}
+/* envelope */
+#gate .env{position:absolute;inset:0;background-size:cover;background-position:center}
+#gate .env.bk{filter:brightness(.62)}
+#gate .env.sl{clip-path:polygon(0 0,52% 53%,0 100%);filter:brightness(.82)}
+#gate .env.sr{clip-path:polygon(100% 0,48% 53%,100% 100%);filter:brightness(.76)}
+#gate .env.bt{clip-path:polygon(0 100%,50% 47%,100% 100%);filter:brightness(.95)}
+#gate .elines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+#gate .env.fl{clip-path:polygon(0 0,100% 0,50% 55%);filter:brightness(1.18)}
+#gate .flw{position:absolute;inset:0;z-index:2;transform-origin:50% 0;transition:transform 1s cubic-bezier(.5,0,.3,1);filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+#gate.open .flw{transform:rotateX(180deg)}
+#gate .env.fl:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.18))}
+#gate .envb{position:absolute;inset:0;transition:transform 1.2s cubic-bezier(.6,0,.3,1) .85s,opacity 1.2s ease .85s}
+#gate.st-envelope{perspective:1400px}
+
+#gate.open .envb{transform:translateY(105%)}
+#gate.open .env.bk{opacity:0;transition:opacity 1s ease .9s}
+#burst{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:110}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
 @keyframes ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.9);opacity:0}}
 /* falling petals + scroll hint */
@@ -85,6 +122,7 @@ html.snap #pw{scroll-snap-align:end}
 <div id="pg"></div>
 <div id="pw"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
+<canvas id="burst" aria-hidden="true"></canvas>
 <div id="hint" aria-hidden="true">&#8964;</div>
 <button id="mus" type="button" aria-label="Music on or off">&#9835;</button>
 <audio id="bgm" loop preload="none"></audio>
@@ -911,6 +949,26 @@ const CONFIG = {
       {
         "fam": "Tiro Devanagari Hindi",
         "g": 1
+      },
+      {
+        "fam": "Abril Fatface",
+        "g": 1
+      },
+      {
+        "fam": "Noto Sans Devanagari",
+        "g": 1
+      },
+      {
+        "fam": "Kalam",
+        "g": 1
+      },
+      {
+        "fam": "Noto Sans Telugu",
+        "g": 1
+      },
+      {
+        "fam": "Ramabhadra",
+        "g": 1
       }
     ],
     "sections": [
@@ -1067,23 +1125,64 @@ const CONFIG = {
         "bgFit": "cover",
         "els": [
           {
-            "id": "uqu5cbn1",
-            "t": "image",
-            "x": -2.2,
-            "y": -47.1,
-            "w": 402.2,
-            "h": 715.1,
+            "id": "zgyi9cvp",
+            "t": "shape",
+            "x": 59.3,
+            "y": 133.7,
+            "w": 300,
+            "h": 30,
             "r": 0,
             "o": 1,
-            "src": "vid-u9wv2te6r",
+            "sh": "orn-lotus",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "h8fbwlea",
+            "t": "image",
+            "x": -3.2,
+            "y": -4.8,
+            "w": 404.4,
+            "h": 713.5,
+            "r": 0,
+            "o": 1,
+            "src": "img-uagwtwcec",
             "fit": "cover",
             "rad": 0
           },
           {
+            "id": "ufjie9b5",
+            "t": "text",
+            "x": 62.7,
+            "y": 170.7,
+            "w": 300,
+            "h": 45,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "skate",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "of the almighty \nand the love of our famillies",
+            "f": "Amita",
+            "fs": 16,
+            "c": "#ffffff",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0,
+            "fx": {
+              "k": "shadow",
+              "n": 50,
+              "c": ""
+            }
+          },
+          {
             "id": "1j478lpj",
             "t": "image",
-            "x": 62.7,
-            "y": 236.3,
+            "x": 42.7,
+            "y": 215.7,
             "w": 296.6,
             "h": 444.8,
             "r": 0,
@@ -1096,33 +1195,6 @@ const CONFIG = {
             "src": "img-ukhe9towy",
             "fit": "cover",
             "rad": 0
-          },
-          {
-            "id": "2k0t9lfy",
-            "t": "text",
-            "x": 62.7,
-            "y": 61.7,
-            "w": 300,
-            "h": 14,
-            "r": 0,
-            "o": 1,
-            "an": {
-              "k": "spread",
-              "d": 1.4,
-              "dl": 0
-            },
-            "text": "|| SHUBHA VIVAHA ||",
-            "f": "Cinzel",
-            "fs": 10,
-            "c": "#ffffff",
-            "al": "center",
-            "lh": 1.4,
-            "ls": 300,
-            "fx": {
-              "k": "shadow",
-              "n": 50,
-              "c": ""
-            }
           },
           {
             "id": "s52wpkxw",
@@ -1152,40 +1224,26 @@ const CONFIG = {
             }
           },
           {
-            "id": "zgyi9cvp",
-            "t": "shape",
-            "x": 59.3,
-            "y": 133.7,
-            "w": 300,
-            "h": 30,
-            "r": 0,
-            "o": 1,
-            "sh": "orn-lotus",
-            "fill": "gold",
-            "st": "#000000",
-            "sw": 0
-          },
-          {
-            "id": "ufjie9b5",
+            "id": "2k0t9lfy",
             "t": "text",
             "x": 62.7,
-            "y": 170.7,
+            "y": 61.7,
             "w": 300,
-            "h": 45,
+            "h": 14,
             "r": 0,
             "o": 1,
             "an": {
-              "k": "skate",
-              "d": 1.1,
+              "k": "spread",
+              "d": 1.4,
               "dl": 0
             },
-            "text": "of the almighty \nand the love of our famillies",
-            "f": "Amita",
-            "fs": 16,
+            "text": "|| SHUBHA VIVAHA ||",
+            "f": "Cinzel",
+            "fs": 10,
             "c": "#ffffff",
             "al": "center",
             "lh": 1.4,
-            "ls": 0,
+            "ls": 300,
             "fx": {
               "k": "shadow",
               "n": 50,
@@ -1210,6 +1268,7 @@ const CONFIG = {
             "h": 709.8,
             "r": 0,
             "o": 1,
+            "lock": true,
             "src": "vid-uwczo6yfg",
             "fit": "cover",
             "rad": 0
@@ -1223,6 +1282,7 @@ const CONFIG = {
             "h": 41,
             "r": 0,
             "o": 1,
+            "lock": true,
             "an": {
               "k": "skate",
               "d": 1.1,
@@ -1264,6 +1324,7 @@ const CONFIG = {
             "h": 156,
             "r": 0,
             "o": 1,
+            "lock": true,
             "an": {
               "k": "typewriter",
               "d": 1.6,
@@ -1286,6 +1347,7 @@ const CONFIG = {
             "h": 133.9,
             "r": -13.7,
             "o": 1,
+            "lock": true,
             "an": {
               "k": "tumble",
               "d": 1,
@@ -1305,6 +1367,7 @@ const CONFIG = {
             "h": 133.9,
             "r": 12,
             "o": 1,
+            "lock": true,
             "an": {
               "k": "tumble",
               "d": 1,
@@ -1481,8 +1544,8 @@ const CONFIG = {
           {
             "id": "o9dkxx8p",
             "t": "text",
-            "x": 54.3,
-            "y": 193.5,
+            "x": 54.4,
+            "y": 208,
             "w": 300,
             "h": 59,
             "r": 0,
@@ -1504,11 +1567,16 @@ const CONFIG = {
             "id": "5ujndn6u",
             "t": "shape",
             "x": 54.3,
-            "y": 237.5,
+            "y": 252,
             "w": 300,
             "h": 30,
             "r": 0,
             "o": 1,
+            "an": {
+              "k": "drift",
+              "d": 2,
+              "dl": 0
+            },
             "sh": "orn-lotus",
             "fill": "gold",
             "st": "#000000",
@@ -1523,6 +1591,11 @@ const CONFIG = {
             "h": 22,
             "r": 0,
             "o": 1,
+            "an": {
+              "k": "typewriter",
+              "d": 1.6,
+              "dl": 0
+            },
             "text": "FRIDAY · 12 FEBRUARY 2027",
             "f": "Cinzel",
             "fs": 16,
@@ -1563,6 +1636,11 @@ const CONFIG = {
             "h": 22,
             "r": 0,
             "o": 1,
+            "an": {
+              "k": "typewriter",
+              "d": 1.6,
+              "dl": 0
+            },
             "text": "Vrushabha Lagnam",
             "f": "Cormorant Garamond",
             "fs": 16,
@@ -1582,10 +1660,560 @@ const CONFIG = {
             "h": 19.1,
             "r": 0,
             "o": 1,
+            "an": {
+              "k": "drift",
+              "d": 2,
+              "dl": 0
+            },
             "sh": "orn-diamond",
             "fill": "#7b2233",
             "st": "#000000",
             "sw": 0
+          },
+          {
+            "id": "71q5xccg",
+            "t": "shape",
+            "x": 190.2,
+            "y": 180.2,
+            "w": 28.4,
+            "h": 28.4,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "pop",
+              "d": 0.7,
+              "dl": 0
+            },
+            "sh": "ic-lotus",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "autgsg5i",
+            "t": "text",
+            "x": 54.3,
+            "y": 411.1,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "skate",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "Venue",
+            "f": "Cinzel",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 300,
+            "b": true
+          },
+          {
+            "id": "7dm6redd",
+            "t": "text",
+            "x": 54.3,
+            "y": 433.1,
+            "w": 300,
+            "h": 45,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "skate",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "A1 Banquet Hall\nKalyana Mandapam",
+            "f": "Ramabhadra",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150
+          },
+          {
+            "id": "8j5jzpmb",
+            "t": "text",
+            "x": 54.4,
+            "y": 478.1,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "typewriter",
+              "d": 1.6,
+              "dl": 0
+            },
+            "text": "Banjara Hills, Hyderabad",
+            "f": "Cormorant Garamond",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150,
+            "b": true
+          }
+        ]
+      },
+      {
+        "id": "83vt72bj",
+        "h": 668,
+        "bg": "#ffffff",
+        "bgImg": "",
+        "bgFit": "cover",
+        "els": [
+          {
+            "id": "9lsu7jkk",
+            "t": "image",
+            "x": 2.2,
+            "y": -9.6,
+            "w": 404.5,
+            "h": 687.3,
+            "r": 0,
+            "o": 1,
+            "src": "img-u8qa13df0",
+            "fit": "cover",
+            "rad": 0
+          },
+          {
+            "id": "8u47kapz",
+            "t": "image",
+            "x": 21.5,
+            "y": 47.8,
+            "w": 365.8,
+            "h": 538.4,
+            "r": 0,
+            "o": 1,
+            "src": "img-umpztvk1l",
+            "fit": "cover",
+            "rad": 0
+          },
+          {
+            "id": "ubtfcr2e",
+            "t": "shape",
+            "x": 92.1,
+            "y": 522.3,
+            "w": 242.6,
+            "h": 45.5,
+            "r": 0,
+            "o": 1,
+            "lock": true,
+            "an": {
+              "k": "breathe",
+              "d": 1.8,
+              "dl": 0
+            },
+            "sh": "rrect",
+            "fill": "#7b2233",
+            "st": "#c9a24d",
+            "sw": 2.5,
+            "rad": 23
+          },
+          {
+            "id": "b6zbhcqr",
+            "t": "text",
+            "x": 92.1,
+            "y": 533.1,
+            "w": 249.5,
+            "h": 24,
+            "r": 0,
+            "o": 1,
+            "lock": true,
+            "link": "https://share.google/oh7sFdtEgEuN1pcSi",
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "GET DIRECTION",
+            "f": "Cinzel",
+            "fs": 16.9,
+            "c": "#ffedd1",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 200,
+            "b": true
+          },
+          {
+            "id": "axci7psh",
+            "t": "shape",
+            "x": 96.7,
+            "y": 530.6,
+            "w": 29,
+            "h": 29,
+            "r": 0,
+            "o": 1,
+            "lock": true,
+            "sh": "ic-pin",
+            "fill": "#ffedd1",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "v875dl12",
+            "t": "text",
+            "x": 54.5,
+            "y": 148.2,
+            "w": 300,
+            "h": 15,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "merge",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "AN EVENING OF CELEBRATION",
+            "f": "Cinzel",
+            "fs": 11,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 300,
+            "b": true
+          },
+          {
+            "id": "nuvtlxuo",
+            "t": "text",
+            "x": 54.3,
+            "y": 184.9,
+            "w": 300,
+            "h": 59,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "block",
+              "d": 1.2,
+              "dl": 0
+            },
+            "text": "Reception",
+            "f": "Great Vibes",
+            "fs": 42,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "up6mdo0d",
+            "t": "shape",
+            "x": 54.3,
+            "y": 235.7,
+            "w": 300,
+            "h": 30,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "drift",
+              "d": 2,
+              "dl": 0
+            },
+            "sh": "orn-lotus",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "uzelalk7",
+            "t": "text",
+            "x": 54.4,
+            "y": 265.7,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "typewriter",
+              "d": 1.6,
+              "dl": 0
+            },
+            "text": "Saturday· 13 FEBRUARY 2027",
+            "f": "Cinzel",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150,
+            "b": true
+          },
+          {
+            "id": "mz93socz",
+            "t": "text",
+            "x": 44.3,
+            "y": 300,
+            "w": 320,
+            "h": 34,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "odometer",
+              "d": 2.6,
+              "dl": 0
+            },
+            "text": "07:00 PM",
+            "f": "Anton",
+            "fs": 24,
+            "c": "gold",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 70
+          },
+          {
+            "id": "467bcra0",
+            "t": "text",
+            "x": 50,
+            "y": 334,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "typewriter",
+              "d": 1.6,
+              "dl": 0
+            },
+            "text": "Onwards",
+            "f": "Cormorant Garamond",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 20,
+            "b": true,
+            "i": true
+          },
+          {
+            "id": "itfkqmcz",
+            "t": "shape",
+            "x": 104.4,
+            "y": 346.5,
+            "w": 191.2,
+            "h": 19.1,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "drift",
+              "d": 2,
+              "dl": 0
+            },
+            "sh": "orn-diamond",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "1qzoae3a",
+            "t": "shape",
+            "x": 190.2,
+            "y": 163.2,
+            "w": 28.4,
+            "h": 28.4,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "pop",
+              "d": 0.7,
+              "dl": 0
+            },
+            "sh": "ic-lotus",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "ftp9s4rt",
+            "t": "text",
+            "x": 59.9,
+            "y": 439.4,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "Venue",
+            "f": "Cinzel",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 300,
+            "b": true
+          },
+          {
+            "id": "bx44ctan",
+            "t": "text",
+            "x": 72.2,
+            "y": 461.4,
+            "w": 264.5,
+            "h": 20,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "RED ROSE PALACE",
+            "f": "Ramabhadra",
+            "fs": 14.1,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150
+          },
+          {
+            "id": "d19gj0vv",
+            "t": "text",
+            "x": 54.3,
+            "y": 486.9,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "Banjara Hills, Hyderabad",
+            "f": "Cormorant Garamond",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150,
+            "b": true
+          },
+          {
+            "id": "7fyw39f1",
+            "t": "shape",
+            "x": 111.9,
+            "y": 369.6,
+            "w": 27.6,
+            "h": 27.6,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "rise",
+              "d": 0.9,
+              "dl": 0
+            },
+            "sh": "ic-dining",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "w5x53l1t",
+            "t": "shape",
+            "x": 183.8,
+            "y": 371.1,
+            "w": 26.1,
+            "h": 26.1,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "rise",
+              "d": 0.9,
+              "dl": 0
+            },
+            "sh": "ic-music",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "ct5dctsy",
+            "t": "shape",
+            "x": 265.8,
+            "y": 369,
+            "w": 29.5,
+            "h": 29.5,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "rise",
+              "d": 0.9,
+              "dl": 0
+            },
+            "sh": "ic-dress",
+            "fill": "#7b2233",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "8vydp1iw",
+            "t": "text",
+            "x": 19.1,
+            "y": 398.5,
+            "w": 213.2,
+            "h": 16,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "DINNER",
+            "f": "DM Sans",
+            "fs": 11.4,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "jd55miuf",
+            "t": "text",
+            "x": 96.7,
+            "y": 398.5,
+            "w": 213.2,
+            "h": 16,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "MUSIC",
+            "f": "DM Sans",
+            "fs": 11.4,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "ulxciyhd",
+            "t": "text",
+            "x": 177.5,
+            "y": 398.5,
+            "w": 213.2,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "INDO-\nWESTREN",
+            "f": "DM Sans",
+            "fs": 8,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
           }
         ]
       }
@@ -1598,7 +2226,13 @@ const CONFIG = {
       "font": "Great Vibes",
       "fg": "#7b2233",
       "bg": "#6b1616",
-      "img": ""
+      "img": "",
+      "seal": "text",
+      "i1": "",
+      "i2": "",
+      "simg": "",
+      "ssz": 176,
+      "burst": "flowers"
     },
     "scroll": "pages",
     "particles": "petals"
@@ -1627,7 +2261,8 @@ const CONFIG = {
     "img-uhz7ibrd7": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-uhz7ibrd7-1790508550064.png",
     "img-uagwtwcec": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-uagwtwcec-1790509539536.png",
     "img-uw83myqn6": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-uw83myqn6-1790509574906.png",
-    "img-umpztvk1l": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-umpztvk1l-1790510759576.png"
+    "img-umpztvk1l": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-umpztvk1l-1790510759576.png",
+    "img-u8qa13df0": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/testhyd/img-u8qa13df0-1790528853684.png"
   }
 };
 (function () {
@@ -1866,28 +2501,80 @@ const CONFIG = {
     fontsReady.then(function () { startAnims(); setTimeout(showHint, 1600); });
     particles();
   }
+  /* flowers burst out of the seal when the guest taps to open */
+  function burst(kind, from) {
+    if (kind === 'none' || RM) return;
+    var cv = document.getElementById('burst'), g = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var r = from.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    var SETS = { petals: ['petal'], marigold: ['mari'], gold: ['gold'], hearts: ['heart'], flowers: ['petal', 'petal', 'mari', 'jas', 'gold'] };
+    var kinds = SETS[kind] || SETS.flowers, P = [], n = Math.min(110, Math.round(innerWidth / 3.4));
+    var COL = { petal: ['#f49aae', '#e97f98', '#fbd3dc', '#d9486a'], mari: ['#ffb000', '#ff8c00', '#ffc93c'], jas: ['#fffdf5', '#fff6dc'], gold: ['#ffe08a', '#e8b84a', '#fff1c1'], heart: ['#ff6b8a', '#e63e62', '#ff8fab'] };
+    for (var i = 0; i < n; i++) {
+      var k = kinds[i % kinds.length], a = Math.random() * Math.PI * 2, sp = 3 + Math.random() * 9;
+      P.push({ k: k, x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 4, r: Math.random() * 6, vr: (Math.random() - .5) * .3,
+        s: k === 'gold' ? 3 + Math.random() * 3 : 7 + Math.random() * 7, c: COL[k][i % COL[k].length], w: Math.random() * 6 });
+    }
+    var t0 = performance.now();
+    (function frame(t) {
+      var el = t - t0; g.clearRect(0, 0, innerWidth, innerHeight);
+      var alive = 0;
+      P.forEach(function (p) {
+        p.vy += 0.16; p.vx *= 0.985; p.vy *= 0.985; p.x += p.vx + Math.sin((el / 300) + p.w) * 0.6; p.y += p.vy; p.r += p.vr;
+        if (p.y > innerHeight + 30) return; alive++;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.globalAlpha = Math.max(0, Math.min(1, 1 - (el - 2200) / 900)); g.fillStyle = p.c;
+        if (p.k === 'petal') { g.beginPath(); g.ellipse(0, 0, p.s * .45, p.s, 0, 0, 7); g.fill(); }
+        else if (p.k === 'jas') { for (var q = 0; q < 5; q++) { g.rotate(1.2566); g.beginPath(); g.ellipse(0, -p.s * .45, p.s * .22, p.s * .45, 0, 0, 7); g.fill(); } }
+        else if (p.k === 'mari') { for (var m = 0; m < 8; m++) { g.rotate(.785); g.beginPath(); g.ellipse(0, -p.s * .38, p.s * .26, p.s * .38, 0, 0, 7); g.fill(); } g.fillStyle = '#e06d00'; g.beginPath(); g.arc(0, 0, p.s * .22, 0, 7); g.fill(); }
+        else if (p.k === 'heart') { var h = p.s * .55; g.beginPath(); g.moveTo(0, h * .6); g.bezierCurveTo(-h * 1.4, -h * .4, -h * .4, -h * 1.3, 0, -h * .45); g.bezierCurveTo(h * .4, -h * 1.3, h * 1.4, -h * .4, 0, h * .6); g.fill(); }
+        else { g.fillRect(-p.s / 2, -p.s / 5, p.s, p.s / 2.5); }
+        g.restore();
+      });
+      if (alive && el < 3200) requestAnimationFrame(frame); else g.clearRect(0, 0, innerWidth, innerHeight);
+    })(t0);
+  }
   var gate = document.getElementById('gate');
   if (GATE.on === false || !wraps.length) { gate.classList.add('gone'); begin(); }
   else {
     var img = asset(GATE.img) || (wraps[0].s.bgImg && asset(wraps[0].s.bgImg)) || '';
     var fg = GATE.fg || '#7b2233', bgc = GATE.bg || '#6b1616';
-    var fade = GATE.style === 'fade';
-    if (fade) gate.classList.add('fade');
-    var door = function (side) { return '<div class="door ' + side + '"><div class="dimg" style="' + (img ? 'background-image:url(&quot;' + img.replace(/"/g, '') + '&quot;);' : '') +
-      'background-color:' + bgc + (img ? '' : ';background-image:radial-gradient(circle at 50% 30%,rgba(255,220,150,.22),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 12px,transparent 12px 24px)') + '"></div></div>'; };
-    gate.innerHTML = door('l') + (fade ? '' : door('r')) + '<div class="ring"></div><div class="ring b"></div><div class="seal"><div class="mono"></div><div class="gsub"></div></div>';
-    var mono = gate.querySelector('.mono'), sub = gate.querySelector('.gsub');
-    mono.textContent = GATE.title || D.title || 'You are invited';
+    var style = GATE.style || 'doors';
+    var fade = style === 'fade';
+    gate.classList.add('st-' + style); if (fade) gate.classList.add('fade');
+    var bgStyle = (img ? 'background-image:url(&quot;' + img.replace(/"/g, '') + '&quot;);' : '') + 'background-color:' + bgc +
+      (img ? '' : ';background-image:radial-gradient(circle at 50% 30%,rgba(255,220,150,.22),transparent 60%),repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 12px,transparent 12px 24px)');
+    var door = function (side, cls) { return '<div class="' + (cls || 'door') + ' ' + side + '"><div class="dimg" style="' + bgStyle + '"></div></div>'; };
+    var ln = function (pts) { return '<svg class="elines" viewBox="0 0 100 100" preserveAspectRatio="none">' + pts.split(' M').map(function (p) { return '<polyline points="' + p.replace('M', '') + '" fill="none" stroke="#e8c77a" stroke-opacity=".85" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'; }).join('') + '</svg>'; };
+    var cover;
+    if (style === 'curtain') cover = door('l', 'cur') + door('r', 'cur') + '<div class="val" style="background-color:' + bgc + '"></div>';
+    else if (style === 'envelope') cover = '<div class="env bk" style="' + bgStyle + '"></div><div class="envb"><div class="env sl" style="' + bgStyle + '"></div><div class="env sr" style="' + bgStyle + '"></div><div class="env bt" style="' + bgStyle + '"></div>' + ln('0,100 50,47 100,100 M0,0 52,53 0,100 M100,0 48,53 100,100') + '</div><div class="flw"><div class="env fl" style="' + bgStyle + '"></div>' + ln('0,0.3 50,55 100,0.3') + '</div>';
+    else cover = door('l') + (fade ? '' : door('r'));
+    gate.innerHTML = cover + '<div class="ring"></div><div class="ring b"></div><div class="seal"><div class="mono"></div><div class="gsub"></div></div>';
+    var seal = gate.querySelector('.seal'), mono = gate.querySelector('.mono'), sub = gate.querySelector('.gsub');
+    var ssz = Math.max(110, Math.min(280, +GATE.ssz || 176));
+    if (ssz !== 176) Array.prototype.forEach.call(gate.querySelectorAll('.seal,.ring'), function (n) { n.style.width = n.style.height = ssz + 'px'; n.style.margin = (-ssz / 2) + 'px 0 0 ' + (-ssz / 2) + 'px'; });
     mono.style.fontFamily = AFX.fontStack(gateFont); mono.style.color = fg; sub.style.color = fg;
-    if (mono.textContent.length > 14) mono.style.fontSize = '26px';
+    var simg = GATE.seal === 'image' && asset(GATE.simg);
+    if (simg) {
+      seal.classList.add('pic'); mono.remove();
+      var si = document.createElement('img'); si.alt = ''; si.src = simg; seal.insertBefore(si, sub);
+    } else if (GATE.seal === 'initials' && (GATE.i1 || GATE.i2)) {
+      mono.classList.add('ini');
+      [GATE.i1 || '', '&', GATE.i2 || ''].forEach(function (t, i) { var sp = document.createElement('span'); sp.textContent = t; if (i === 1) sp.className = 'amp'; mono.appendChild(sp); });
+      mono.style.fontSize = Math.round(46 * ssz / 176) + 'px';
+    } else {
+      mono.textContent = GATE.title || D.title || 'You are invited';
+      if (mono.textContent.length > 14) mono.style.fontSize = '26px';
+    }
     sub.textContent = GATE.sub == null ? 'Tap to open' : GATE.sub;
-    var opened = false;
+    var opened = false, envl = style === 'envelope';
     var open = function () {
       if (opened) return; opened = true;
       playMusic();
       gate.classList.add('open');
-      setTimeout(begin, 500);
-      setTimeout(function () { gate.classList.add('gone'); }, 1900);
+      burst(GATE.burst || 'flowers', seal);
+      setTimeout(begin, envl ? 900 : 500);
+      setTimeout(function () { gate.classList.add('gone'); }, envl ? 2300 : 2000);
     };
     gate.addEventListener('click', open);
     gate.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); open(); } });
