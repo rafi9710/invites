@@ -1502,8 +1502,11 @@ const CONFIG = {
   document.getElementById('pw').style.background = D.pbg || '#f2f2f2';
 
   /* fonts: uploaded ones are embedded from our own storage, the rest come from Google Fonts */
-  var ff = '', gf = [];
+  var ff = '', gf = [], used = {};
+  // only load fonts the design really uses (the Designer keeps every font ever tried in the list)
+  (D.sections || []).forEach(function (s) { (s.els || []).forEach(function (e) { if (e.f) used[e.f] = 1; }); });
   (D.fonts || []).forEach(function (f) {
+    if (!used[f.fam]) return;
     if (f.key && asset(f.key)) ff += '@font-face{font-family:"' + String(f.fam).replace(/["\\]/g, '') + '";src:url("' + asset(f.key) + '");font-display:block}';
     else if (f.g) gf.push(f.fam);
   });
@@ -1653,10 +1656,20 @@ const CONFIG = {
   var fontsReady = new Promise(function (ok) { if (document.fonts && document.fonts.ready) document.fonts.ready.then(ok); setTimeout(ok, 2500); });
 
   /* videos only play while they are on screen */
+  // first screen's videos load straight away; the others load when the guest is one page away,
+  // so they don't all fight for the phone's data at the start (that made later pages freeze)
+  var vids = Array.prototype.slice.call(document.querySelectorAll('#pg video'));
+  var firstSw = document.querySelector('#pg .sw');
+  vids.forEach(function (v) {
+    if (firstSw && firstSw.contains(v)) return;
+    v.autoplay = false; v.removeAttribute('autoplay'); v.preload = 'metadata';
+  });
+  function wake(v) { if (v.preload !== 'auto') v.preload = 'auto'; }
   if ('IntersectionObserver' in window) {
-    var vio = new IntersectionObserver(function (es) { es.forEach(function (en) { var v = en.target; if (en.isIntersecting) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause(); }); }, { threshold: 0.02 });
-    Array.prototype.forEach.call(document.querySelectorAll('#pg video'), function (v) { vio.observe(v); });
-  }
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (en) { var v = en.target; if (en.isIntersecting) { wake(v); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause(); }); }, { threshold: 0.02 });
+    var near = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { wake(en.target); near.unobserve(en.target); } }); }, { rootMargin: '60% 0px 60% 0px' });
+    vids.forEach(function (v) { vio.observe(v); near.observe(v); });
+  } else vids.forEach(function (v) { wake(v); v.autoplay = true; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); });
 
   /* ---------------- music ---------------- */
   var bgm = document.getElementById('bgm'), mb = document.getElementById('mus');
