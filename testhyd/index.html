@@ -233,7 +233,7 @@ var AFX = (function () {
   /* ---------------- animations ---------------- */
   var ANIMS = {
     text: [['typewriter', 'Typewriter'], ['ascend', 'Ascend'], ['shift', 'Shift'], ['merge', 'Merge'], ['block', 'Block'],
-      ['burst', 'Burst'], ['bounce', 'Bounce'], ['roll', 'Roll'], ['skate', 'Skate'], ['spread', 'Spread'], ['clarify', 'Clarify']],
+      ['burst', 'Burst'], ['bounce', 'Bounce'], ['roll', 'Roll'], ['skate', 'Skate'], ['spread', 'Spread'], ['clarify', 'Clarify'], ['odometer', 'Number roll']],
     general: [['rise', 'Rise'], ['pan', 'Pan'], ['fade', 'Fade'], ['pop', 'Pop'], ['wipe', 'Wipe'], ['blur', 'Blur'],
       ['succession', 'Succession'], ['breathe', 'Breathe'], ['baseline', 'Baseline'], ['drift', 'Drift'], ['tectonic', 'Tectonic'],
       ['tumble', 'Tumble'], ['neon', 'Neon'], ['scrapbook', 'Scrapbook'], ['stomp', 'Stomp']],
@@ -243,7 +243,7 @@ var AFX = (function () {
   ANIMS.text.forEach(function (a) { TEXT_ANIMS[a[0]] = 1; ALL_ANIMS[a[0]] = 1; });
   ANIMS.general.forEach(function (a) { ALL_ANIMS[a[0]] = 1; });
   ANIMS.addon.forEach(function (a) { ADDONS[a[0]] = 1; });
-  var DEF_DUR = { typewriter: 1.6, ascend: 1.2, shift: 1.1, merge: 1.1, block: 1.2, burst: 1.2, bounce: 1.4, roll: 1.2, skate: 1.1,
+  var DEF_DUR = { odometer: 2.6, typewriter: 1.6, ascend: 1.2, shift: 1.1, merge: 1.1, block: 1.2, burst: 1.2, bounce: 1.4, roll: 1.2, skate: 1.1,
     spread: 1.4, clarify: 1.4, rise: 0.9, pan: 0.9, fade: 0.9, pop: 0.7, wipe: 1, blur: 1.1, succession: 1.1, breathe: 1.8,
     baseline: 0.9, drift: 2, tectonic: 0.9, tumble: 1, neon: 1.4, scrapbook: 1, stomp: 0.7 };
   var EASE = 'cubic-bezier(.2,.8,.2,1)';
@@ -323,8 +323,10 @@ var AFX = (function () {
         im.setAttribute('muted', ''); im.setAttribute('playsinline', ''); im.setAttribute('autoplay', ''); im.setAttribute('loop', '');
         var pst = asset('img-u' + e.src.slice(5)); if (pst) im.poster = pst;
         im.src = src;
-        var zv = e.zm || 1;
-        css(im, { objectFit: e.fit === 'contain' ? 'contain' : 'cover', objectPosition: (e.px == null ? 50 : e.px) + '% ' + (e.py == null ? 50 : e.py) + '%',
+        var zv = e.zm || 1, vpos = (e.px == null ? 50 : e.px) + '% ' + (e.py == null ? 50 : e.py) + '%';
+        // the still picture sits behind the video, so a phone that drops the paused video's frame never shows a blank hole
+        if (pst) css(im, { backgroundImage: 'url("' + pst + '")', backgroundSize: e.fit === 'contain' ? 'contain' : 'cover', backgroundPosition: vpos, backgroundRepeat: 'no-repeat' });
+        css(im, { objectFit: e.fit === 'contain' ? 'contain' : 'cover', objectPosition: vpos,
           transform: (e.fh || e.fv || zv !== 1) ? 'scale(' + ((e.fh ? -1 : 1) * zv) + ',' + ((e.fv ? -1 : 1) * zv) + ')' : '' });
       } else if (src) {
         var im = mk('img', 'afx-img', ph); im.alt = ''; im.draggable = false; im.decoding = 'async'; im.src = src;
@@ -521,6 +523,12 @@ var AFX = (function () {
     d._afxAnims = [];
     var blk = d.querySelector('.afx-blk'); if (blk) blk.remove();
   }
+  // gold foil text is painted through the text box; once letters move on their own it has to be on each letter
+  function goldEach(tx, nodes) {
+    if (!tx || tx.style.backgroundImage.indexOf('gradient') < 0) return;
+    tx.style.backgroundImage = ''; tx.style.webkitBackgroundClip = ''; tx.style.backgroundClip = '';
+    nodes.forEach(function (n) { n.style.backgroundImage = GOLD_CSS; n.style.webkitBackgroundClip = 'text'; n.style.backgroundClip = 'text'; n.style.color = 'transparent'; });
+  }
   function track(d, a) { d._afxAnims = d._afxAnims || []; d._afxAnims.push(a); return a; }
 
   /* restores a text element's DOM after a split animation (the designer needs plain text back) */
@@ -535,7 +543,33 @@ var AFX = (function () {
     var inn = d.querySelector('.afx-in'), tx = d.querySelector('.afx-tx');
     var list = [];
     if (TEXT_ANIMS[k] && tx) {
-      if (k === 'spread') {
+      if (k === 'odometer') {
+        // numbers roll like a machine counter and settle on the real value (other letters fade in)
+        restoreText(d, e); tx = d.querySelector('.afx-tx');
+        tx.style.fontVariantNumeric = 'tabular-nums';
+        var ou = splitText(tx, 'char'), digs = ou.filter(function (u) { return /^[0-9]$/.test(u.textContent); });
+        var LH = parseFloat(getComputedStyle(tx).lineHeight) || (e.fs || 24) * (e.lh || 1.4);
+        var sizes = ou.map(function (u) { return u.offsetWidth; }), goldCells = [];
+        ou.forEach(function (u, i) {
+          var ch = u.textContent;
+          if (!/^[0-9]$/.test(ch)) {
+            goldCells.push(u);
+            list.push(track(d, u.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur * 0.4, delay: delay + dur * 0.25, easing: 'ease-out', fill: 'both' })));
+            return;
+          }
+          var ri = digs.length - 1 - digs.indexOf(u), tgt = +ch, steps = 8 + Math.round(24 / (ri + 1)) + tgt, seq = [];
+          for (var j = steps; j >= 0; j--) seq.push(((tgt - j) % 10 + 10) % 10);
+          css(u, { display: 'inline-block', overflow: 'hidden', verticalAlign: 'top', height: LH + 'px', width: sizes[i] + 'px', position: 'relative' });
+          var msk = 'linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%)'; u.style.webkitMaskImage = msk; u.style.maskImage = msk;
+          u.textContent = '';
+          var strip = mk('span', 'afx-odo', u);
+          css(strip, { display: 'block', willChange: 'transform' });
+          seq.forEach(function (n) { var c = mk('span', '', strip); c.textContent = String(n); css(c, { display: 'block', height: LH + 'px', lineHeight: LH + 'px', textAlign: 'center' }); goldCells.push(c); });
+          list.push(track(d, strip.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(' + (-steps * LH) + 'px)' }],
+            { duration: dur * (0.7 + 0.3 * (1 - ri / Math.max(1, digs.length))) + ri * 120, delay: delay, easing: 'cubic-bezier(.2,.65,.15,1)', fill: 'both' })));
+        });
+        goldEach(tx, goldCells);
+      } else if (k === 'spread') {
         var ls = tx.style.letterSpacing || '0em';
         list.push(track(d, tx.animate([{ letterSpacing: '-0.35em', opacity: 0 }, { letterSpacing: ls, opacity: 1 }], { duration: dur, delay: delay, easing: EASE, fill: 'both' })));
       } else if (k === 'block') {
@@ -546,6 +580,7 @@ var AFX = (function () {
       } else {
         var byWord = (k === 'ascend' || k === 'merge');
         var units = splitText(tx, byWord ? 'word' : 'char');
+        goldEach(tx, units);
         var n = Math.max(1, units.length);
         var step0 = n > 1 ? dur / n : 0;
         var each = k === 'typewriter' ? Math.max(40, Math.min(90, step0)) : Math.max(260, dur * 0.5);
@@ -649,7 +684,8 @@ var AFX = (function () {
     var v = document.createElement('video'); v.className = 'afx-bgv';
     v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.preload = 'auto';
     ['muted', 'playsinline', 'autoplay', 'loop'].forEach(function (a) { v.setAttribute(a, ''); });
-    if (poster) v.poster = poster; v.src = src; return v;
+    if (poster) { v.poster = poster; v.style.background = 'url("' + poster + '") center/cover no-repeat'; }
+    v.src = src; return v;
   }
   return { GFONTS: GFONTS, SHAPES: SHAPES, ICONS: ICONS, DIVIDERS: DIVIDERS, drawDivider: drawDivider, bgVideo: bgVideo, FRAMES: FRAMES, maskOf: maskOf, wireRsvp: wireRsvp, injectCss: injectCss, tickAll: tickAll, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
     renderEl: renderEl, placeEl: placeEl, fillText: fillText, styleText: styleText, fontStack: fontStack,
@@ -854,6 +890,26 @@ const CONFIG = {
       },
       {
         "fam": "Bebas Neue",
+        "g": 1
+      },
+      {
+        "fam": "Libre Baskerville",
+        "g": 1
+      },
+      {
+        "fam": "Anton",
+        "g": 1
+      },
+      {
+        "fam": "Rozha One",
+        "g": 1
+      },
+      {
+        "fam": "Yeseva One",
+        "g": 1
+      },
+      {
+        "fam": "Tiro Devanagari Hindi",
         "g": 1
       }
     ],
@@ -1341,12 +1397,18 @@ const CONFIG = {
           {
             "id": "azquy47w",
             "t": "shape",
-            "x": 83,
-            "y": 604.6,
+            "x": 92.1,
+            "y": 522.3,
             "w": 242.6,
             "h": 45.5,
             "r": 0,
             "o": 1,
+            "lock": true,
+            "an": {
+              "k": "breathe",
+              "d": 1.8,
+              "dl": 0
+            },
             "sh": "rrect",
             "fill": "#7b2233",
             "st": "#c9a24d",
@@ -1357,12 +1419,18 @@ const CONFIG = {
             "id": "wib245vk",
             "t": "text",
             "x": 92.1,
-            "y": 615.4,
+            "y": 533.1,
             "w": 249.5,
             "h": 24,
             "r": 0,
             "o": 1,
+            "lock": true,
             "link": "https://share.google/6y3UFIfqWQH8wm6Mc",
+            "an": {
+              "k": "shift",
+              "d": 1.1,
+              "dl": 0
+            },
             "text": "GET DIRECTION",
             "f": "Cinzel",
             "fs": 16.9,
@@ -1375,12 +1443,13 @@ const CONFIG = {
           {
             "id": "1tvafv4k",
             "t": "shape",
-            "x": 92.1,
-            "y": 610.4,
+            "x": 96.7,
+            "y": 530.6,
             "w": 29,
             "h": 29,
             "r": 0,
             "o": 1,
+            "lock": true,
             "sh": "ic-pin",
             "fill": "#ffedd1",
             "st": "#000000",
@@ -1442,6 +1511,79 @@ const CONFIG = {
             "o": 1,
             "sh": "orn-lotus",
             "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "4hbdzegr",
+            "t": "text",
+            "x": 54.4,
+            "y": 276.4,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "text": "FRIDAY · 12 FEBRUARY 2027",
+            "f": "Cinzel",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 150,
+            "b": true
+          },
+          {
+            "id": "2xzx53rz",
+            "t": "text",
+            "x": 44.3,
+            "y": 317,
+            "w": 320,
+            "h": 34,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "odometer",
+              "d": 2.6,
+              "dl": 0
+            },
+            "text": "10:45 AM",
+            "f": "Anton",
+            "fs": 24,
+            "c": "gold",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 70
+          },
+          {
+            "id": "hzotekux",
+            "t": "text",
+            "x": 54.4,
+            "y": 363.1,
+            "w": 300,
+            "h": 22,
+            "r": 0,
+            "o": 1,
+            "text": "Vrushabha Lagnam",
+            "f": "Cormorant Garamond",
+            "fs": 16,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 20,
+            "b": true,
+            "i": true
+          },
+          {
+            "id": "shri5pg9",
+            "t": "shape",
+            "x": 104.4,
+            "y": 385.1,
+            "w": 191.2,
+            "h": 19.1,
+            "r": 0,
+            "o": 1,
+            "sh": "orn-diamond",
+            "fill": "#7b2233",
             "st": "#000000",
             "sw": 0
           }
@@ -1666,7 +1808,7 @@ const CONFIG = {
   });
   function wake(v) { if (v.preload !== 'auto') v.preload = 'auto'; }
   if ('IntersectionObserver' in window) {
-    var vio = new IntersectionObserver(function (es) { es.forEach(function (en) { var v = en.target; if (en.isIntersecting) { wake(v); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause(); }); }, { threshold: 0.02 });
+    var vio = new IntersectionObserver(function (es) { es.forEach(function (en) { var v = en.target; if (en.isIntersecting) { wake(v); var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause(); }); }, { threshold: 0.01 });
     var near = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { wake(en.target); near.unobserve(en.target); } }); }, { rootMargin: '60% 0px 60% 0px' });
     vids.forEach(function (v) { vio.observe(v); near.observe(v); });
   } else vids.forEach(function (v) { wake(v); v.autoplay = true; var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); });
