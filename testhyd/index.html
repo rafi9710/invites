@@ -202,6 +202,7 @@ var AFX = (function () {
   return D;
 })();
 
+  var ICONS = {'ic-pin': ["Map pin", "M12 21s-6.5-5.8-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.2-6.5 11-6.5 11z M14.5 10a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0"], 'ic-nav': ["Directions", "M3 11l18-8-8 18-2-8z"], 'ic-calendar': ["Calendar", "M4 6h16v15H4z M4 10.5h16 M8 3v5 M16 3v5 M8 14.5h2 M14 14.5h2 M8 17.5h2"], 'ic-clock': ["Clock", "M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0 M12 7v5l3.5 2"], 'ic-phone': ["Phone", "M5.5 3h3.5l2 5-2.5 1.5a11 11 0 0 0 6 6l1.5-2.5 5 2v3.5a2 2 0 0 1-2 2A16.5 16.5 0 0 1 3.5 5a2 2 0 0 1 2-2z"], 'ic-chat': ["Message", "M4 5h16v11H9.5L4 20z M8 9.5h8 M8 12.5h5"], 'ic-mail': ["Mail", "M3 6h18v12H3z M3 6l9 7 9-7"], 'ic-guests': ["Guests", "M12.5 7.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 1 1 7 0 M2.5 20c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5 M16 4.3a3.3 3.3 0 0 1 0 6.4 M18 14.8c2 .7 3.3 2.5 3.5 5.2"], 'ic-check': ["RSVP tick", "M4 12.5l5 5L20 6.5"], 'ic-car': ["Car", "M3 12l2-5h14l2 5v5H3z M3 12h18 M6.5 17v2.5 M17.5 17v2.5 M6 14.5h1.5 M16.5 14.5h1.5"], 'ic-parking': ["Parking", "M4 4h16v16H4z M10 17V7h3a3 3 0 0 1 0 6h-3"], 'ic-bus': ["Bus", "M5 4h14v13H5z M5 11h14 M8 17v2.5 M16 17v2.5 M8 14h1 M15 14h1"], 'ic-train': ["Train", "M6 3h12v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z M6 10h12 M9 13.5h1 M14 13.5h1 M8 17l-2 4 M16 17l2 4"], 'ic-plane': ["Flight", "M12 2c1 0 1.5 1 1.5 2v5l7 4v2l-7-2v4l2 1.5V20l-3.5-1-3.5 1v-1.5l2-1.5v-4l-7 2v-2l7-4V4c0-1 .5-2 1.5-2z"], 'ic-hotel': ["Stay", "M3 19V6 M3 15h18v4 M21 15v-3a3 3 0 0 0-3-3h-7v6 M9 11a2 2 0 1 1-4 0a2 2 0 1 1 4 0"], 'ic-home': ["Home", "M3 11l9-7 9 7 M5 10v10h14V10 M10 20v-5h4v5"], 'ic-suitcase': ["Travel", "M4 8h16v12H4z M9 8V5h6v3 M4 13h16"], 'ic-globe': ["Website", "M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0 M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18"], 'ic-camera': ["Camera", "M3 8h4l2-3h6l2 3h4v11H3z M15.5 13a3.5 3.5 0 1 1-7 0a3.5 3.5 0 1 1 7 0"], 'ic-video': ["Live video", "M3 7h13v10H3z M16 11l5-3v8l-5-3z"], 'ic-music': ["Music", "M9 18V5l11-2v13 M9 18a3 3 0 1 1-6 0a3 3 0 1 1 6 0 M20 16a3 3 0 1 1-6 0a3 3 0 1 1 6 0"], 'ic-heart': ["Heart", "M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"], 'ic-hearts': ["Two hearts", "M9 17s-5.5-3.3-5.5-7.4A3 3 0 0 1 9 7.8a3 3 0 0 1 5.5 1.8 M15 20s-5-3-5-6.6A2.8 2.8 0 0 1 15 11.8a2.8 2.8 0 0 1 5 1.6C20 17 15 20 15 20z"], 'ic-rings': ["Rings", "M13 14.5a5 5 0 1 1-10 0a5 5 0 1 1 10 0 M21 14.5a5 5 0 1 1-10 0a5 5 0 1 1 10 0 M6.5 7.5L8 5.5l1.5 2L8 9.5z"], 'ic-infinity': ["Forever", "M12 12c-2-2.5-3.5-4-6-4a4 4 0 0 0 0 8c2.5 0 4-1.5 6-4s3.5-4 6-4a4 4 0 0 1 0 8c-2.5 0-4-1.5-6-4z"], 'ic-gift': ["Gift", "M3 9h18v4H3z M5 13h14v8H5z M12 9v12 M12 9c-1.5-3-5-4-5-1.5S10 9 12 9c2 0 5 .1 5-1.5S13.5 6 12 9z"], 'ic-dining': ["Dinner", "M7 3v18 M4.5 3v5a2.5 2.5 0 0 0 5 0V3 M17.5 21V3c-2 1.5-3.5 4-3.5 7.5h3.5"], 'ic-cheers': ["Cheers", "M6 3h5l-.5 5a2 2 0 0 1-4 0z M8.5 10v8 M6.5 18h4 M13.5 3h5L18 8a2 2 0 0 1-4 0z M16 10v8 M14 18h4"], 'ic-cocktail': ["Drinks", "M4 4h16l-8 9z M12 13v7 M8 20h8"], 'ic-cake': ["Cake", "M4 21h16 M5 21v-7h14v7 M5 17c2 1 3 1 4.7 0s3 1 4.6 0 3-1 4.7 0 M12 14v-3 M12 8.5c-1-1 0-2.5 0-3.5 1 1 1 2.5 0 3.5"], 'ic-dress': ["Dress code", "M8 3l4 3 4-3 5 4-3 3-2-1.5V21H8V8.5L6 10 3 7z"], 'ic-diya': ["Diya", "M3 13c2 5.5 16 5.5 18 0z M12 12.5c-2-2-1-5 0-7 1 2 2 5 0 7z M9 19.5h6"], 'ic-kalash': ["Kalash", "M6 14c0 4 2.7 6.5 6 6.5s6-2.5 6-6.5c0-2.6-2-4.2-6-4.2S6 11.4 6 14z M8 9.8h8 M14.2 6.8a2.2 2.2 0 1 1-4.4 0a2.2 2.2 0 1 1 4.4 0 M10 9.3C8.5 7.3 6.5 6.8 4.5 7.8 6 9.3 8 9.8 10 9.3z M14 9.3c1.5-2 3.5-2.5 5.5-1.5C18 9.3 16 9.8 14 9.3z M9 15h6"], 'ic-lotus': ["Lotus", "M12 19c-2.5-3-2.5-9 0-12 2.5 3 2.5 9 0 12z M12 19c-4-.5-7-4-7.5-8 3.5.5 6 3 7.5 8z M12 19c4-.5 7-4 7.5-8-3.5.5-6 3-7.5 8z M5 19.5h14"], 'ic-mandap': ["Mandap", "M3 8l9-5 9 5z M5 8v12 M19 8v12 M9.5 8v12 M14.5 8v12 M3 20h18 M5 10.5c2.3 1.5 4.7 1.5 7 0 2.3 1.5 4.7 1.5 7 0"], 'ic-temple': ["Temple", "M6 21l2-12h8l2 12z M8.5 9l1-3h5l1 3 M10 6l.7-2h2.6L14 6 M12 4V2 M10.5 21v-4a1.5 1.5 0 0 1 3 0v4 M7 15h10"], 'ic-bell': ["Bell", "M6 16c1-1.5 1-3 1-6a5 5 0 0 1 10 0c0 3 0 4.5 1 6z M5 16h14 M12 5V3 M10.5 19a1.5 1.5 0 0 0 3 0"], 'ic-toran': ["Toran", "M3 5h18 M3 5c3 5 6 5 9 0 3 5 6 5 9 0 M7.5 8.7l-1 2.5 1 1 1-1z M16.5 8.7l-1 2.5 1 1 1-1z M12 5v6"], 'ic-haldi': ["Haldi bowl", "M4 12h16c0 4.5-3.5 8-8 8s-8-3.5-8-8z M12 12c-1-2 0-4 2-5 M8.5 12c0-1.5 1.5-2.5 3-2"], 'ic-bangles': ["Bangles", "M20 10a8 3.5 0 1 1-16 0a8 3.5 0 1 1 16 0 M20 14a8 3.5 0 1 1-16 0a8 3.5 0 1 1 16 0"], 'ic-drum': ["Dhol", "M5 8c0-2 3-3 7-3s7 1 7 3v8c0 2-3 3-7 3s-7-1-7-3z M5 8c0 2 3 3 7 3s7-1 7-3 M8 10.8v7.5 M16 10.8v7.5 M12 11v8"], 'ic-peacock': ["Peacock feather", "M6 21c3-5 5-9 7-12 M13 9c-1.5-2.5-.5-6 3-6.5 1.5 3 0 6.5-3 6.5z M15.2 6a1.2 1.2 0 1 1-2.4 0a1.2 1.2 0 1 1 2.4 0 M8.5 16.5L6 15.5 M10 14l-2.5-1 M9.5 17l2.2.8 M11 14.5l2.2.8"], 'ic-flower': ["Flower", "M14 12a2 2 0 1 1-4 0a2 2 0 1 1 4 0 M12 10c-2-2-2-5 0-6 2 1 2 4 0 6 M14 12c2-2 5-2 6 0-1 2-4 2-6 0 M12 14c2 2 2 5 0 6-2-1-2-4 0-6 M10 12c-2 2-5 2-6 0 1-2 4-2 6 0"], 'ic-rose': ["Rose", "M12 11c-3 0-4.5-2-4.5-4.5C9 5 10.5 4 12 5.5 13.5 4 15 5 16.5 6.5 16.5 9 15 11 12 11z M12 11v10 M12 16c-2-2.5-5-2.5-6-1 1.5 1.5 4 2 6 1z M12 14c2-2 4.5-2 5.5-1-1.5 1.5-3.5 2-5.5 1z"], 'ic-leaf': ["Leaf", "M5 19C5 10 11 5 20 4c0 9-5 15-15 15z M5 19l9-9"], 'ic-palm': ["Palm tree", "M12 21c0-5 .5-9 1-12 M13 9c-2-3-6-3-8-1 3 0 5 .5 8 1z M13 9c1-3 5-5 8-3-3 .5-5 1.5-8 3z M13 9c-3-1-5 1-6 4 2-2 4-3 6-4z M13 9c3 0 5 2 5 5-1.5-2-3-4-5-5z M8 21h8"], 'ic-sparkle': ["Sparkle", "M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z"], 'ic-star': ["Star", "M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.3 6.7 19.4l1.2-6L3.4 9.3l6-.7z"], 'ic-moon': ["Moon", "M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"], 'ic-sun': ["Sun", "M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0 M12 2v2 M12 20v2 M2 12h2 M20 12h2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4"], 'ic-fireworks': ["Celebration", "M12 12V4 M12 12l5.7-5.7 M12 12h8 M12 12l5.7 5.7 M12 12v8 M12 12l-5.7 5.7 M12 12H4 M12 12L6.3 6.3"]};
   var GOLD = '<linearGradient id="GID" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a3"/><stop offset=".45" stop-color="#b8893a"/><stop offset=".62" stop-color="#f3d58c"/><stop offset="1" stop-color="#9c6f24"/></linearGradient>';
   var GOLD_CSS = 'linear-gradient(135deg,#f7e3a3 0%,#c99a45 38%,#f5dc98 55%,#a97a2c 80%,#e8c77a 100%)';
   function drawDivider(svg, def, fill, gid) {
@@ -353,6 +354,27 @@ var AFX = (function () {
       var dsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); dsvg.setAttribute('class', 'afx-svg');
       drawDivider(dsvg, DIVIDERS[e.sh], e.fill === 'gold' ? 'gold' : colorOk(e.fill, '#3b2418'), 'g' + e.id);
       inn.appendChild(dsvg);
+    } else if (e.t === 'shape' && ICONS[e.sh]) {
+      // line icon: keeps its proportions, colour = line colour, sw = line weight
+      var ins = 'http://www.w3.org/2000/svg', isvg = document.createElementNS(ins, 'svg');
+      isvg.setAttribute('class', 'afx-svg'); isvg.setAttribute('viewBox', '0 0 24 24'); isvg.style.overflow = 'visible';
+      if (e.fill === 'gold') { var igd = document.createElementNS(ins, 'defs'); igd.innerHTML = GOLD.replace('GID', 'g' + e.id).replace('x1="0" y1="0" x2="1" y2="1"', 'gradientUnits="userSpaceOnUse" x1="2" y1="2" x2="22" y2="22"'); isvg.appendChild(igd); }
+      var ip = document.createElementNS(ins, 'path'); ip.setAttribute('d', ICONS[e.sh][1]); ip.setAttribute('fill', 'none');
+      ip.setAttribute('stroke', e.fill === 'gold' ? 'url(#g' + e.id + ')' : colorOk(e.fill, '#7b2233'));
+      ip.setAttribute('stroke-width', e.sw || 1.5); ip.setAttribute('stroke-linecap', 'round'); ip.setAttribute('stroke-linejoin', 'round');
+      isvg.appendChild(ip); inn.appendChild(isvg);
+    } else if (e.t === 'shape' && (e.sh === 'rect' || e.sh === 'rrect')) {
+      // real-size rectangle so rounded corners stay round at any size (and the Corners slider works)
+      var rns = 'http://www.w3.org/2000/svg', rsvg = document.createElementNS(rns, 'svg');
+      rsvg.setAttribute('class', 'afx-svg'); rsvg.style.overflow = 'visible';
+      if (e.fill === 'gold') { var rgd = document.createElementNS(rns, 'defs'); rgd.innerHTML = GOLD.replace('GID', 'g' + e.id); rsvg.appendChild(rgd); }
+      var rad = e.rad != null ? +e.rad : (e.sh === 'rrect' ? Math.round(Math.min(e.w || 100, e.h || 100) * 0.14) : 0);
+      var rr = document.createElementNS(rns, 'rect');
+      rr.setAttribute('width', '100%'); rr.setAttribute('height', '100%');
+      rr.setAttribute('rx', rad); rr.setAttribute('ry', rad);
+      rr.setAttribute('fill', e.fill === 'gold' ? 'url(#g' + e.id + ')' : colorOk(e.fill, '#c9a24d'));
+      if (e.sw) { rr.setAttribute('stroke', colorOk(e.st, '#000000')); rr.setAttribute('stroke-width', e.sw); }
+      rsvg.appendChild(rr); inn.appendChild(rsvg);
     } else if (e.t === 'shape') {
       var sh = SHAPES[e.sh] || SHAPES.rect;
       var ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
@@ -629,7 +651,7 @@ var AFX = (function () {
     ['muted', 'playsinline', 'autoplay', 'loop'].forEach(function (a) { v.setAttribute(a, ''); });
     if (poster) v.poster = poster; v.src = src; return v;
   }
-  return { GFONTS: GFONTS, SHAPES: SHAPES, DIVIDERS: DIVIDERS, drawDivider: drawDivider, bgVideo: bgVideo, FRAMES: FRAMES, maskOf: maskOf, wireRsvp: wireRsvp, injectCss: injectCss, tickAll: tickAll, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
+  return { GFONTS: GFONTS, SHAPES: SHAPES, ICONS: ICONS, DIVIDERS: DIVIDERS, drawDivider: drawDivider, bgVideo: bgVideo, FRAMES: FRAMES, maskOf: maskOf, wireRsvp: wireRsvp, injectCss: injectCss, tickAll: tickAll, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
     renderEl: renderEl, placeEl: placeEl, fillText: fillText, styleText: styleText, fontStack: fontStack,
     play: play, stop: stop, prepare: prepare, unprepare: unprepare, startLoop: startLoop, restoreText: restoreText, gfontUrl: gfontUrl };
 })();
@@ -828,6 +850,10 @@ const CONFIG = {
       },
       {
         "fam": "Amita",
+        "g": 1
+      },
+      {
+        "fam": "Bebas Neue",
         "g": 1
       }
     ],
@@ -1313,36 +1339,111 @@ const CONFIG = {
             "rad": 0
           },
           {
-            "id": "o24rtuz7",
+            "id": "azquy47w",
             "t": "shape",
-            "x": 126,
-            "y": 608,
-            "w": 156.7,
-            "h": 26.1,
+            "x": 83,
+            "y": 604.6,
+            "w": 242.6,
+            "h": 45.5,
             "r": 0,
             "o": 1,
             "sh": "rrect",
             "fill": "#7b2233",
             "st": "#c9a24d",
-            "sw": 2
+            "sw": 2.5,
+            "rad": 23
           },
           {
-            "id": "8zd10e6u",
+            "id": "wib245vk",
             "t": "text",
-            "x": 54.3,
-            "y": 612.1,
-            "w": 300,
-            "h": 18,
+            "x": 92.1,
+            "y": 615.4,
+            "w": 249.5,
+            "h": 24,
             "r": 0,
             "o": 1,
             "link": "https://share.google/6y3UFIfqWQH8wm6Mc",
-            "text": "GET DIRECTIONS",
-            "f": "DM Sans",
-            "fs": 13,
-            "c": "#ffffff",
+            "text": "GET DIRECTION",
+            "f": "Cinzel",
+            "fs": 16.9,
+            "c": "#ffedd1",
             "al": "center",
             "lh": 1.4,
-            "ls": 100
+            "ls": 200,
+            "b": true
+          },
+          {
+            "id": "1tvafv4k",
+            "t": "shape",
+            "x": 92.1,
+            "y": 610.4,
+            "w": 29,
+            "h": 29,
+            "r": 0,
+            "o": 1,
+            "sh": "ic-pin",
+            "fill": "#ffedd1",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "hghfo8i9",
+            "t": "text",
+            "x": 54.3,
+            "y": 165.2,
+            "w": 300,
+            "h": 15,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "merge",
+              "d": 1.1,
+              "dl": 0
+            },
+            "text": "THE AUSPICIOUS MOMENT",
+            "f": "Cinzel",
+            "fs": 11,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 300,
+            "b": true
+          },
+          {
+            "id": "o9dkxx8p",
+            "t": "text",
+            "x": 54.3,
+            "y": 193.5,
+            "w": 300,
+            "h": 59,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "block",
+              "d": 1.2,
+              "dl": 0
+            },
+            "text": "Muhurhtam",
+            "f": "Great Vibes",
+            "fs": 42,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "5ujndn6u",
+            "t": "shape",
+            "x": 54.3,
+            "y": 237.5,
+            "w": 300,
+            "h": 30,
+            "r": 0,
+            "o": 1,
+            "sh": "orn-lotus",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
           }
         ]
       }
