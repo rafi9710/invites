@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>You are invited</title>
+<meta property="og:title" content="You are invited">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ffffff">
+<!-- BLANK CANVAS layout: every section and element comes from CONFIG.design (made in the Designer) -->
+<style>
+html,body{margin:0;padding:0}
+body{background:#f2f2f2;-webkit-text-size-adjust:100%;overflow-x:hidden}
+#pg{margin:0 auto;position:relative}
+.sw{position:relative;overflow:hidden}
+.sec{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden}
+.sec .bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.afx-el.link{cursor:pointer}
+#mus{position:fixed;right:14px;bottom:14px;z-index:50;width:44px;height:44px;border-radius:50%;border:0;display:none;
+  background:rgba(20,20,20,.72);color:#fff;font-size:20px;line-height:44px;text-align:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#mus.show{display:block}#mus.off{opacity:.55}
+#pw{text-align:center;font:12px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;color:#777;padding:18px 12px 26px}
+#pw a{color:#8a6a2b;text-decoration:none;font-weight:600}
+#pw img{height:18px;vertical-align:-4px;margin-right:6px}
+</style>
+</head>
+<body>
+<div id="pg"></div>
+<div id="pw"></div>
+<button id="mus" type="button" aria-label="Music on or off">&#9835;</button>
+<audio id="bgm" loop preload="none"></audio>
+<script>/* AFX canvas core - shared by the designer and the published invite.
+   Renders one design element to DOM and runs the Canva-style animations. */
+var AFX = (function () {
+  'use strict';
+  var GFONTS = [["DM Sans","Sans"],["Poppins","Sans"],["Montserrat","Sans"],["Lato","Sans"],["Open Sans","Sans"],["Raleway","Sans"],["Josefin Sans","Sans"],["Oswald","Sans"],["Bebas Neue","Display"],["Anton","Display"],["Playfair Display","Serif"],["Cormorant Garamond","Serif"],["Cinzel","Serif"],["Cinzel Decorative","Serif"],["Marcellus","Serif"],["Lora","Serif"],["Libre Baskerville","Serif"],["EB Garamond","Serif"],["Italiana","Serif"],["Bodoni Moda","Serif"],["Yeseva One","Display"],["Abril Fatface","Display"],["Philosopher","Sans"],["Great Vibes","Script"],["Dancing Script","Script"],["Parisienne","Script"],["Allura","Script"],["Pinyon Script","Script"],["Alex Brush","Script"],["Tangerine","Script"],["Sacramento","Script"],["Satisfy","Script"],["Kaushan Script","Script"],["Pacifico","Script"],["Rozha One","Hindi"],["Tiro Devanagari Hindi","Hindi"],["Noto Sans Devanagari","Hindi"],["Noto Serif Devanagari","Hindi"],["Amita","Hindi"],["Kalam","Hindi"],["Baloo 2","Hindi"],["Noto Sans Telugu","Telugu"],["Noto Serif Telugu","Telugu"],["Ramabhadra","Telugu"],["Mandali","Telugu"],["Suranna","Telugu"],["Gidugu","Telugu"],["Mallanna","Telugu"],["NTR","Telugu"],["Timmana","Telugu"],["Noto Sans Tamil","Tamil"],["Noto Serif Tamil","Tamil"],["Catamaran","Tamil"],["Noto Sans Kannada","Kannada"],["Noto Serif Kannada","Kannada"]];
+
+  /* ---------------- shapes (100 x 100 box, stretched to the element) ---------------- */
+  function starPath(n, inner) {
+    var pts = [], i, a, r;
+    for (i = 0; i < n * 2; i++) {
+      a = Math.PI * i / n - Math.PI / 2; r = i % 2 ? inner : 50;
+      pts.push((50 + r * Math.cos(a)).toFixed(2) + ' ' + (50 + r * Math.sin(a)).toFixed(2));
+    }
+    return 'M' + pts.join('L') + 'Z';
+  }
+  function polyPath(n, rot) {
+    var pts = [], i, a;
+    for (i = 0; i < n; i++) {
+      a = 2 * Math.PI * i / n + (rot || 0) - Math.PI / 2;
+      pts.push((50 + 50 * Math.cos(a)).toFixed(2) + ' ' + (50 + 50 * Math.sin(a)).toFixed(2));
+    }
+    return 'M' + pts.join('L') + 'Z';
+  }
+  var SHAPES = {
+    rect: ['Square', 'M0 0H100V100H0Z'],
+    rrect: ['Rounded', 'M14 0H86Q100 0 100 14V86Q100 100 86 100H14Q0 100 0 86V14Q0 0 14 0Z'],
+    circle: ['Circle', 'M50 0A50 50 0 1 1 49.99 0Z'],
+    triangle: ['Triangle', 'M50 0L100 100H0Z'],
+    diamond: ['Diamond', 'M50 0L100 50L50 100L0 50Z'],
+    pentagon: ['Pentagon', polyPath(5)],
+    hexagon: ['Hexagon', 'M25 0H75L100 50L75 100H25L0 50Z'],
+    octagon: ['Octagon', polyPath(8, Math.PI / 8)],
+    star: ['Star', starPath(5, 20)],
+    star6: ['Star 6', starPath(6, 28)],
+    star4: ['Sparkle', starPath(4, 14)],
+    burst: ['Burst', starPath(12, 38)],
+    heart: ['Heart', 'M50 94C22 72 0 54 0 30C0 12 13 0 29 0C39 0 46 6 50 14C54 6 61 0 71 0C87 0 100 12 100 30C100 54 78 72 50 94Z'],
+    arrowR: ['Arrow right', 'M0 32H62V8L100 50L62 92V68H0Z'],
+    arrowL: ['Arrow left', 'M100 32H38V8L0 50L38 92V68H100Z'],
+    arrowU: ['Arrow up', 'M32 100V38H8L50 0L92 38H68V100Z'],
+    arrowD: ['Arrow down', 'M32 0V62H8L50 100L92 62H68V0Z'],
+    plus: ['Plus', 'M36 0H64V36H100V64H64V100H36V64H0V36H36Z'],
+    bubble: ['Speech bubble', 'M8 0H92Q100 0 100 8V64Q100 72 92 72H42L20 98L25 72H8Q0 72 0 64V8Q0 0 8 0Z'],
+    cloud: ['Cloud', 'M24 86C10 86 0 76 0 63C0 51 9 42 20 41C21 25 34 13 50 13C63 13 74 21 78 33C91 34 100 45 100 58C100 73 88 86 73 86Z'],
+    arch: ['Arch', 'M0 100V50A50 50 0 0 1 100 50V100Z'],
+    moon: ['Moon', 'M62 2A48 48 0 1 0 98 62A38 38 0 1 1 62 2Z'],
+    drop: ['Drop', 'M50 0C50 0 88 44 88 66A38 34 0 0 1 12 66C12 44 50 0 50 0Z'],
+    line: ['Line', 'M0 0H100V100H0Z']
+  };
+
+  /* ---------------- animations ---------------- */
+  var ANIMS = {
+    text: [['typewriter', 'Typewriter'], ['ascend', 'Ascend'], ['shift', 'Shift'], ['merge', 'Merge'], ['block', 'Block'],
+      ['burst', 'Burst'], ['bounce', 'Bounce'], ['roll', 'Roll'], ['skate', 'Skate'], ['spread', 'Spread'], ['clarify', 'Clarify']],
+    general: [['rise', 'Rise'], ['pan', 'Pan'], ['fade', 'Fade'], ['pop', 'Pop'], ['wipe', 'Wipe'], ['blur', 'Blur'],
+      ['succession', 'Succession'], ['breathe', 'Breathe'], ['baseline', 'Baseline'], ['drift', 'Drift'], ['tectonic', 'Tectonic'],
+      ['tumble', 'Tumble'], ['neon', 'Neon'], ['scrapbook', 'Scrapbook'], ['stomp', 'Stomp']],
+    addon: [['rotate', 'Rotate'], ['flicker', 'Flicker'], ['pulse', 'Pulse'], ['wiggle', 'Wiggle']]
+  };
+  var TEXT_ANIMS = {}, ALL_ANIMS = {}, ADDONS = {};
+  ANIMS.text.forEach(function (a) { TEXT_ANIMS[a[0]] = 1; ALL_ANIMS[a[0]] = 1; });
+  ANIMS.general.forEach(function (a) { ALL_ANIMS[a[0]] = 1; });
+  ANIMS.addon.forEach(function (a) { ADDONS[a[0]] = 1; });
+  var DEF_DUR = { typewriter: 1.6, ascend: 1.2, shift: 1.1, merge: 1.1, block: 1.2, burst: 1.2, bounce: 1.4, roll: 1.2, skate: 1.1,
+    spread: 1.4, clarify: 1.4, rise: 0.9, pan: 0.9, fade: 0.9, pop: 0.7, wipe: 1, blur: 1.1, succession: 1.1, breathe: 1.8,
+    baseline: 0.9, drift: 2, tectonic: 0.9, tumble: 1, neon: 1.4, scrapbook: 1, stomp: 0.7 };
+  var EASE = 'cubic-bezier(.2,.8,.2,1)';
+
+  function css(el, o) { for (var k in o) el.style[k] = o[k]; return el; }
+  function mk(tag, cls, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+
+  function colorOk(c, def) { return (typeof c === 'string' && c) ? c : def; }
+  function mix(c, pct) { return 'color-mix(in srgb, ' + c + ' ' + pct + '%, transparent)'; }
+
+  /* text effect styles (Canva "Effects") */
+  function applyFx(tx, e) {
+    var fx = e.fx || {}, k = fx.k || 'none', n = fx.n == null ? 50 : fx.n, fc = colorOk(fx.c, 'rgba(0,0,0,.45)'), c = colorOk(e.c, '#000000');
+    var s = (e.fs || 24) / 24, off;
+    tx.style.textShadow = ''; tx.style.webkitTextStroke = ''; tx.style.background = ''; tx.style.padding = '';
+    tx.style.borderRadius = ''; tx.style.webkitBoxDecorationBreak = ''; tx.style.boxDecorationBreak = '';
+    if (k === 'shadow') { off = (n / 50) * 3 * s; tx.style.textShadow = off.toFixed(1) + 'px ' + off.toFixed(1) + 'px ' + (off * 1.4).toFixed(1) + 'px ' + fc; }
+    else if (k === 'lift') tx.style.textShadow = '0 ' + (0.06 * n * s).toFixed(1) + 'px ' + (0.3 * n * s).toFixed(1) + 'px rgba(0,0,0,' + (0.2 + n / 250).toFixed(2) + ')';
+    else if (k === 'hollow') { tx.style.webkitTextStroke = Math.max(1, s * (0.6 + n / 40)).toFixed(1) + 'px ' + c; tx.style.color = 'transparent'; }
+    else if (k === 'splice') { tx.style.webkitTextStroke = Math.max(1, s).toFixed(1) + 'px ' + c; tx.style.color = 'transparent'; off = (n / 50) * 3 * s; tx.style.textShadow = off.toFixed(1) + 'px ' + off.toFixed(1) + 'px 0 ' + colorOk(fx.c, '#ffb3c7'); }
+    else if (k === 'echo') { off = (n / 50) * 3 * s; tx.style.textShadow = [1, 2, 3].map(function (i) { return (off * i).toFixed(1) + 'px ' + (off * i).toFixed(1) + 'px 0 ' + mix(c, 60 - i * 15); }).join(','); }
+    else if (k === 'glitch') { off = (n / 50) * 2.5 * s; tx.style.textShadow = (-off).toFixed(1) + 'px 0 ' + colorOk(fx.c, '#00e5ff') + ',' + off.toFixed(1) + 'px 0 #ff2bd6'; }
+    else if (k === 'neon') { var g = colorOk(fx.c, c); tx.style.textShadow = '0 0 ' + (2 * s) + 'px #fff,0 0 ' + (n / 10 * s).toFixed(1) + 'px ' + g + ',0 0 ' + (n / 4 * s).toFixed(1) + 'px ' + g + ',0 0 ' + (n / 2 * s).toFixed(1) + 'px ' + g; }
+    else if (k === 'background') {
+      tx.style.background = colorOk(fx.c, '#ffe066');
+      tx.style.padding = (0.15 * (e.fs || 24)).toFixed(1) + 'px ' + (0.3 * (e.fs || 24)).toFixed(1) + 'px';
+      tx.style.borderRadius = (n / 100 * 0.5 * (e.fs || 24)).toFixed(1) + 'px';
+      tx.style.webkitBoxDecorationBreak = 'clone'; tx.style.boxDecorationBreak = 'clone';
+    }
+  }
+
+  function fontStack(f) { return f ? "'" + String(f).replace(/['\\]/g, '') + "', 'DM Sans', sans-serif" : "'DM Sans', sans-serif"; }
+
+  /* fills a .tx node with the element's text (plain or as a bullet list) */
+  function fillText(tx, e) {
+    tx.textContent = '';
+    var txt = String(e.text == null ? '' : e.text);
+    if (e.list) {
+      txt.split('\n').forEach(function (line) { var li = mk('div', 'li', tx); li.textContent = line || '\u200b'; });
+    } else tx.textContent = txt;
+  }
+  function styleText(tx, e) {
+    css(tx, {
+      fontFamily: fontStack(e.f), fontSize: (e.fs || 24) + 'px', color: colorOk(e.c, '#000000'),
+      fontWeight: e.b ? '700' : '400', fontStyle: e.i ? 'italic' : 'normal',
+      textDecoration: [e.u ? 'underline' : '', e.s ? 'line-through' : ''].join(' ').trim() || 'none',
+      textTransform: e.up ? 'uppercase' : 'none', textAlign: e.al || 'center',
+      lineHeight: String(e.lh || 1.4), letterSpacing: ((e.ls || 0) / 1000) + 'em'
+    });
+    applyFx(tx, e);
+  }
+
+  /* one element -> DOM:  .el (position + rotation) > .lp (loop add-on) > .in (entrance anim) > content */
+  function renderEl(e, asset) {
+    var d = mk('div', 'afx-el t-' + e.t); d.setAttribute('data-id', e.id);
+    var lp = mk('div', 'afx-lp', d), inn = mk('div', 'afx-in', lp);
+    placeEl(d, e);
+    if (e.t === 'text') {
+      var tx = mk('div', 'afx-tx' + (e.list ? ' list' : ''), inn);
+      fillText(tx, e); styleText(tx, e);
+    } else if (e.t === 'image') {
+      var src = asset(e.src);
+      if (src) {
+        var im = mk('img', 'afx-img', inn); im.alt = ''; im.draggable = false; im.decoding = 'async'; im.src = src;
+        css(im, { objectFit: e.fit === 'contain' ? 'contain' : 'cover', borderRadius: (e.rad || 0) + 'px',
+          transform: (e.fh || e.fv) ? 'scale(' + (e.fh ? -1 : 1) + ',' + (e.fv ? -1 : 1) + ')' : '' });
+      } else mk('div', 'afx-missing', inn).textContent = 'image';
+    } else if (e.t === 'shape') {
+      var sh = SHAPES[e.sh] || SHAPES.rect;
+      var ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+      svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('class', 'afx-svg');
+      var p = document.createElementNS(ns, 'path'); p.setAttribute('d', sh[1]);
+      p.setAttribute('fill', colorOk(e.fill, '#c9a24d'));
+      if (e.sw) { p.setAttribute('stroke', colorOk(e.st, '#000000')); p.setAttribute('stroke-width', e.sw); p.setAttribute('vector-effect', 'non-scaling-stroke'); }
+      svg.appendChild(p); inn.appendChild(svg);
+    }
+    return d;
+  }
+  function placeEl(d, e) {
+    css(d, { left: e.x + 'px', top: e.y + 'px', width: e.w + 'px',
+      height: e.t === 'text' ? 'auto' : e.h + 'px',
+      transform: e.r ? 'rotate(' + e.r + 'deg)' : '', opacity: e.o == null ? '' : String(e.o) });
+  }
+
+  /* ---------------- running animations (Web Animations API) ---------------- */
+  function splitText(tx, mode) {
+    // wraps words (and chars) in spans so they can move one by one; returns the units
+    var units = [];
+    var lines = tx.querySelectorAll('.li').length ? Array.prototype.slice.call(tx.querySelectorAll('.li')) : [tx];
+    lines.forEach(function (holder) {
+      var txt = holder.textContent; holder.textContent = '';
+      txt.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          var nl = part.split('\n');
+          nl.forEach(function (sp, i) { if (i) holder.appendChild(document.createElement('br')); if (sp) holder.appendChild(document.createTextNode(sp)); });
+          return;
+        }
+        var w = mk('span', 'afx-w', holder);
+        if (mode === 'word') { var wi = mk('span', 'afx-wi', w); wi.textContent = part; units.push(wi); }
+        else Array.from(part).forEach(function (ch) { var c = mk('span', 'afx-c', w); c.textContent = ch; units.push(c); });
+      });
+    });
+    return units;
+  }
+
+  function keyframes(k) {
+    switch (k) {
+      case 'rise': return [{ transform: 'translateY(40px)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+      case 'pan': return [{ transform: 'translateX(-60px)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+      case 'fade': return [{ opacity: 0 }, { opacity: 1 }];
+      case 'pop': return [{ transform: 'scale(.4)', opacity: 0 }, { transform: 'scale(1.08)', opacity: 1, offset: 0.7 }, { transform: 'scale(1)', opacity: 1 }];
+      case 'wipe': return [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }];
+      case 'blur': return [{ filter: 'blur(14px)', opacity: 0 }, { filter: 'blur(0)', opacity: 1 }];
+      case 'succession': return [{ transform: 'scale(1.35)', filter: 'blur(8px)', opacity: 0 }, { transform: 'none', filter: 'blur(0)', opacity: 1 }];
+      case 'breathe': return [{ transform: 'scale(.82)', opacity: 0 }, { transform: 'scale(1.02)', opacity: 1, offset: 0.75 }, { transform: 'scale(1)', opacity: 1 }];
+      case 'baseline': return [{ clipPath: 'inset(0 0 100% 0)', transform: 'translateY(40%)' }, { clipPath: 'inset(0 0 0 0)', transform: 'none' }];
+      case 'drift': return [{ transform: 'translateX(-28px)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+      case 'tectonic': return [{ transform: 'translateY(-60px)', opacity: 0 }, { transform: 'translateY(6px)', opacity: 1, offset: 0.65 }, { transform: 'translateY(-2px)', offset: 0.85 }, { transform: 'none', opacity: 1 }];
+      case 'tumble': return [{ transform: 'rotate(-120deg) scale(.2)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+      case 'neon': return [{ opacity: 0 }, { opacity: 0.9, offset: 0.1 }, { opacity: 0.1, offset: 0.2 }, { opacity: 1, offset: 0.35 }, { opacity: 0.3, offset: 0.45 }, { opacity: 1, offset: 0.6 }, { opacity: 0.6, offset: 0.7 }, { opacity: 1 }];
+      case 'scrapbook': return [{ transform: 'rotate(-14deg) scale(1.25)', opacity: 0 }, { transform: 'rotate(6deg) scale(.95)', opacity: 1, offset: 0.45 }, { transform: 'rotate(-3deg) scale(1.02)', offset: 0.75 }, { transform: 'none', opacity: 1 }];
+      case 'stomp': return [{ transform: 'scale(2.6)', opacity: 0 }, { transform: 'scale(.92)', opacity: 1, offset: 0.6 }, { transform: 'scale(1.03)', offset: 0.8 }, { transform: 'scale(1)', opacity: 1 }];
+    }
+    return [{ opacity: 0 }, { opacity: 1 }];
+  }
+
+  function stop(d) {
+    if (!d) return;
+    d._afxAnims = d._afxAnims || [];
+    d._afxAnims.forEach(function (a) { try { a.cancel(); } catch (x) {} });
+    d._afxAnims = [];
+    var blk = d.querySelector('.afx-blk'); if (blk) blk.remove();
+  }
+  function track(d, a) { d._afxAnims = d._afxAnims || []; d._afxAnims.push(a); return a; }
+
+  /* restores a text element's DOM after a split animation (the designer needs plain text back) */
+  function restoreText(d, e) { var tx = d.querySelector('.afx-tx'); if (tx && e) { fillText(tx, e); styleText(tx, e); } }
+
+  /* plays the entrance animation of element DOM d with settings e.an; resolves when done */
+  function play(d, e, opts) {
+    opts = opts || {};
+    stop(d);
+    var an = e.an; if (!an || !ALL_ANIMS[an.k]) { startLoop(d, e); return Promise.resolve(); }
+    var k = an.k, dur = (an.d || DEF_DUR[k] || 1) * 1000, delay = (opts.noDelay ? 0 : (an.dl || 0)) * 1000;
+    var inn = d.querySelector('.afx-in'), tx = d.querySelector('.afx-tx');
+    var list = [];
+    if (TEXT_ANIMS[k] && tx) {
+      if (k === 'spread') {
+        var ls = tx.style.letterSpacing || '0em';
+        list.push(track(d, tx.animate([{ letterSpacing: '-0.35em', opacity: 0 }, { letterSpacing: ls, opacity: 1 }], { duration: dur, delay: delay, easing: EASE, fill: 'both' })));
+      } else if (k === 'block') {
+        var blk = mk('div', 'afx-blk', inn); blk.style.background = tx.style.color && tx.style.color !== 'transparent' ? tx.style.color : '#000';
+        list.push(track(d, blk.animate([{ transform: 'scaleX(0)', transformOrigin: 'left' }, { transform: 'scaleX(1)', transformOrigin: 'left', offset: 0.5 },
+          { transform: 'scaleX(1)', transformOrigin: 'right', offset: 0.5001 }, { transform: 'scaleX(0)', transformOrigin: 'right' }], { duration: dur, delay: delay, easing: 'ease-in-out', fill: 'both' })));
+        list.push(track(d, tx.animate([{ opacity: 0 }, { opacity: 0, offset: 0.5 }, { opacity: 1, offset: 0.5001 }, { opacity: 1 }], { duration: dur, delay: delay, fill: 'both' })));
+      } else {
+        var byWord = (k === 'ascend' || k === 'merge');
+        var units = splitText(tx, byWord ? 'word' : 'char');
+        var n = Math.max(1, units.length);
+        var each = k === 'typewriter' ? 1 : Math.max(260, dur * 0.5);
+        var step = n > 1 ? Math.max(0, (dur - each)) / (n - 1) : 0;
+        var order = units.map(function (u, i) { return i; });
+        if (k === 'burst' || k === 'clarify') order.sort(function () { return Math.random() - 0.5; });
+        units.forEach(function (u, i) {
+          var kf, pos = order[i], ease = EASE;
+          if (k === 'typewriter') kf = [{ opacity: 0 }, { opacity: 1 }];
+          else if (k === 'ascend') { u.parentNode.classList.add('clip'); kf = [{ transform: 'translateY(110%)' }, { transform: 'none' }]; }
+          else if (k === 'shift') kf = [{ transform: 'translateX(-0.5em)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+          else if (k === 'merge') kf = [{ transform: 'translateX(' + (i % 2 ? '' : '-') + '1.4em)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+          else if (k === 'burst') kf = [{ transform: 'scale(0) rotate(' + Math.round(Math.random() * 180 - 90) + 'deg)', opacity: 0 }, { transform: 'scale(1.2)', opacity: 1, offset: 0.7 }, { transform: 'none', opacity: 1 }];
+          else if (k === 'bounce') { kf = [{ transform: 'translateY(-1.1em)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1, offset: 0.45 }, { transform: 'translateY(-0.3em)', offset: 0.65 }, { transform: 'translateY(0)', offset: 0.82 }, { transform: 'translateY(-0.08em)', offset: 0.92 }, { transform: 'none', opacity: 1 }]; ease = 'ease-out'; }
+          else if (k === 'roll') kf = [{ transform: 'perspective(300px) rotateX(-90deg) translateY(0.4em)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+          else if (k === 'skate') kf = [{ transform: 'translateX(1.6em) skewX(-30deg)', opacity: 0 }, { transform: 'none', opacity: 1 }];
+          else if (k === 'clarify') kf = [{ filter: 'blur(10px)', opacity: 0 }, { filter: 'blur(0)', opacity: 1 }];
+          else kf = [{ opacity: 0 }, { opacity: 1 }];
+          list.push(track(d, u.animate(kf, { duration: each, delay: delay + pos * step, easing: k === 'typewriter' ? 'steps(1,end)' : ease, fill: 'both' })));
+        });
+      }
+    } else {
+      list.push(track(d, inn.animate(keyframes(TEXT_ANIMS[k] ? 'fade' : k), { duration: dur, delay: delay, easing: k === 'scrapbook' ? 'steps(5,end)' : EASE, fill: 'both' })));
+    }
+    return Promise.all(list.map(function (a) { return a.finished.catch(function () {}); })).then(function () {
+      if (opts.restore) { stop(d); restoreText(d, e); }
+      startLoop(d, e);
+    });
+  }
+
+  /* add-on effects keep running after the entrance */
+  function startLoop(d, e) {
+    var k = e.ad; if (!k || !ADDONS[k]) return null;
+    var lp = d.querySelector('.afx-lp'), kf, o;
+    if (k === 'rotate') { kf = [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }]; o = { duration: 8000, iterations: Infinity, easing: 'linear' }; }
+    else if (k === 'flicker') { kf = [{ opacity: 1 }, { opacity: 0.35, offset: 0.1 }, { opacity: 1, offset: 0.2 }, { opacity: 0.8, offset: 0.5 }, { opacity: 1, offset: 0.55 }, { opacity: 1 }]; o = { duration: 2200, iterations: Infinity }; }
+    else if (k === 'pulse') { kf = [{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }, { transform: 'scale(1)' }]; o = { duration: 1600, iterations: Infinity, easing: 'ease-in-out' }; }
+    else { kf = [{ transform: 'rotate(0)' }, { transform: 'rotate(-4deg)' }, { transform: 'rotate(4deg)' }, { transform: 'rotate(-2deg)' }, { transform: 'rotate(0)' }]; o = { duration: 1200, iterations: Infinity, easing: 'ease-in-out' }; }
+    return track(d, lp.animate(kf, o));
+  }
+
+  /* hidden state before the entrance runs (so things do not flash) */
+  function prepare(d, e) {
+    if (!e.an || !ALL_ANIMS[e.an.k]) return;
+    var inn = d.querySelector('.afx-in'); if (inn) inn.style.opacity = '0';
+  }
+  function unprepare(d) { var inn = d.querySelector('.afx-in'); if (inn) inn.style.opacity = ''; }
+
+  function gfontUrl(families) {
+    var ok = {}; GFONTS.forEach(function (g) { ok[g[0]] = 1; });
+    var fams = families.filter(function (f) { return ok[f]; });
+    if (!fams.length) return '';
+    return 'https://fonts.googleapis.com/css2?' + fams.map(function (f) { return 'family=' + encodeURIComponent(f).replace(/%20/g, '+'); }).join('&') + '&display=swap';
+  }
+
+  var CSS = '.afx-el{position:absolute;box-sizing:border-box;transform-origin:50% 50%}' +
+    '.afx-lp,.afx-in{position:relative;width:100%;height:100%}' +
+    '.t-text .afx-lp,.t-text .afx-in{height:auto}' +
+    '.afx-tx{white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;-webkit-font-smoothing:antialiased}' +
+    '.afx-tx.list .li{position:relative;padding-left:1.15em}.afx-tx.list .li:before{content:"\\2022";position:absolute;left:.25em}' +
+    '.afx-img{display:block;width:100%;height:100%;user-select:none;-webkit-user-drag:none}' +
+    '.afx-svg{display:block;width:100%;height:100%;overflow:visible}' +
+    '.afx-w{display:inline-block;white-space:nowrap}.afx-w.clip{overflow:hidden;vertical-align:bottom}' +
+    '.afx-c,.afx-wi{display:inline-block;white-space:pre}' +
+    '.afx-blk{position:absolute;inset:0;transform:scaleX(0);transform-origin:left;z-index:2}' +
+    '.afx-missing{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#999;font:12px sans-serif;' +
+    'background:repeating-linear-gradient(45deg,#eee 0 10px,#f7f7f7 10px 20px)}';
+  function injectCss() {
+    if (document.getElementById('afx-core-css')) return;
+    var s = document.createElement('style'); s.id = 'afx-core-css'; s.textContent = CSS; document.head.appendChild(s);
+  }
+
+  return { GFONTS: GFONTS, SHAPES: SHAPES, injectCss: injectCss, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
+    renderEl: renderEl, placeEl: placeEl, fillText: fillText, styleText: styleText, fontStack: fontStack,
+    play: play, stop: stop, prepare: prepare, unprepare: unprepare, startLoop: startLoop, restoreText: restoreText, gfontUrl: gfontUrl };
+})();
+</script>
+<script>
+const CONFIG = {
+  "groom": "",
+  "bride": "",
+  "groomFull": "Arjun Ramanathan",
+  "brideFull": "Meenakshi Subramanian",
+  "dateLong": "Friday, 12 February 2027",
+  "dateShort": "",
+  "weddingAt": "2027-02-12T07:30:00+05:30",
+  "blessing": "With the blessings of the Almighty and our beloved elders",
+  "grandparents": "Late Sri. A. Ramanathan & Smt. R. Valliammai",
+  "parents": "Mr. R. Subramanian & Mrs. S. Lakshmi",
+  "inviteLine": "cordially invite you to grace the auspicious wedding ceremony of their beloved daughter",
+  "skyLine": "Two hearts, one home",
+  "skySub": "Rooted in tradition",
+  "coupleSub": "Together, with the blessings of our families",
+  "storyTitle": "Our Story",
+  "story": "Two families from the same old streets of Karaikudi, one chance meeting at a cousin's wedding, and a hundred evenings of long phone calls later — we are ready to begin our forever. We would be honoured to have you with us.",
+  "events": [
+    {
+      "name": "Nichayathartham",
+      "date": "Thursday, 11 February 2027",
+      "time": "6:00 PM onwards",
+      "place": "",
+      "map": ""
+    },
+    {
+      "name": "Muhurtham",
+      "date": "Friday, 12 February 2027",
+      "time": "7:30 AM – 9:00 AM",
+      "place": "",
+      "map": ""
+    },
+    {
+      "name": "Reception",
+      "date": "Friday, 12 February 2027",
+      "time": "7:00 PM onwards",
+      "place": "",
+      "map": ""
+    }
+  ],
+  "venue": {
+    "name": "Sri Lakshmi Vilas Mahal",
+    "address": "Kanadukathan, Karaikudi, Tamil Nadu",
+    "map": "https://maps.google.com/?q=Kanadukathan+Karaikudi"
+  },
+  "thankYouLine": "Your presence and blessings will make our day complete.",
+  "from": "With love, the Subramanian & Ramanathan families",
+  "images": {},
+  "videos": {},
+  "music": "",
+  "petals": true,
+  "birds": true,
+  "poweredBy": {
+    "text": "AfterFX Templates",
+    "url": "https://afterfxtemplates.com",
+    "whatsapp": "918971738710"
+  },
+  "topLine": "",
+  "layout": "canvas",
+  "faq": [],
+  "pack": "blank",
+  "lang": "en",
+  "fontStyle": 0,
+  "labels": {
+    "open": "Open Invitation",
+    "scroll": "Scroll",
+    "weds": "weds",
+    "invites": "invites",
+    "celebrations": "Celebrations",
+    "wedding": "Wedding",
+    "location": "Location",
+    "mapBtn": "Click for location",
+    "evMap": "Location",
+    "thankYou": "Thank You",
+    "days": "Days",
+    "hrs": "Hrs",
+    "min": "Min",
+    "sec": "Sec",
+    "rsvpTitle": "Will you join us?",
+    "rsvpName": "Your name",
+    "rsvpYes": "Joyfully accept",
+    "rsvpNo": "Regretfully decline",
+    "rsvpGuests": "Number of guests",
+    "rsvpPhone": "Phone (optional)",
+    "rsvpMsg": "Wishes for the couple (optional)",
+    "rsvpSend": "Send RSVP",
+    "rsvpThanks": "Thank you! Your response has been received.",
+    "today": "Today is the day",
+    "followingEvents": "On the following events",
+    "timeline": "Wedding Timeline",
+    "timelineSub": "Mark your calendars — we can't wait to celebrate with you",
+    "seeRoute": "See the route",
+    "meetCouple": "Meet the Bride & Groom",
+    "gallery": "Moments",
+    "gallerySub": "A few of our favourite memories",
+    "thingsToKnow": "Things to know",
+    "countdown": "The countdown begins",
+    "addCal": "Add to calendar"
+  },
+  "rsvp": {
+    "on": false,
+    "note": ""
+  },
+  "theme": "maroon",
+  "symbolSize": "md",
+  "fontNames": "",
+  "fontBody": "",
+  "fontCustom": "",
+  "brand": {
+    "on": false,
+    "name": "",
+    "url": "",
+    "whatsapp": ""
+  },
+  "design": {
+    "w": 400,
+    "title": "You are invited",
+    "pbg": "#f2f2f2",
+    "fonts": [
+      {
+        "fam": "DM Sans",
+        "g": 1
+      },
+      {
+        "fam": "Great Vibes",
+        "g": 1
+      },
+      {
+        "fam": "Cinzel",
+        "g": 1
+      },
+      {
+        "fam": "Poppins",
+        "g": 1
+      },
+      {
+        "fam": "Montserrat",
+        "g": 1
+      },
+      {
+        "fam": "Lato",
+        "g": 1
+      },
+      {
+        "fam": "Open Sans",
+        "g": 1
+      },
+      {
+        "fam": "Josefin Sans",
+        "g": 1
+      }
+    ],
+    "sections": [
+      {
+        "id": "s1",
+        "h": 660,
+        "bg": "#ffffff",
+        "bgImg": "",
+        "bgFit": "cover",
+        "els": [
+          {
+            "id": "xiid5sty",
+            "t": "image",
+            "x": 0,
+            "y": -4,
+            "w": 401.8,
+            "h": 669.7,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "drift",
+              "d": 2,
+              "dl": 0
+            },
+            "src": "img-uqfwinm89",
+            "fit": "cover",
+            "rad": 0
+          },
+          {
+            "id": "vgfeihde",
+            "t": "text",
+            "x": 52.2,
+            "y": 113.7,
+            "w": 320,
+            "h": 34,
+            "r": 0,
+            "o": 1,
+            "text": "Your paragraph text",
+            "f": "DM Sans",
+            "fs": 24,
+            "c": "#000000",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          }
+        ]
+      },
+      {
+        "id": "dm4i5y3q",
+        "h": 660,
+        "bg": "#ffffff",
+        "bgImg": "",
+        "bgFit": "cover",
+        "els": [
+          {
+            "id": "adbb9nbm",
+            "t": "image",
+            "x": -0.5,
+            "y": 0,
+            "w": 401.1,
+            "h": 665.6,
+            "r": 0,
+            "o": 1,
+            "src": "img-uqfwinm89",
+            "fit": "cover",
+            "rad": 0
+          }
+        ]
+      }
+    ]
+  },
+  "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/bfe3f880ce56a62add81",
+  "rsvpId": "bfe3f880ce56a62add81",
+  "fonts": {
+    "body": "Cormorant Garamond",
+    "disp": "Pinyon Script",
+    "q": ""
+  },
+  "gallery": [],
+  "symbol": "",
+  "studioLogo": "",
+  "fontFile": "",
+  "assets": {
+    "img-uqfwinm89": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/abcdfgh/img-uqfwinm89-1790485688685.png",
+    "img-u13a0xrsc": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/abcdfgh/img-u13a0xrsc-1790485881143.png"
+  }
+};
+(function () {
+  AFX.injectCss();
+  var D = CONFIG.design || { w: 400, sections: [] };
+  var W = D.w || 400, ASSETS = CONFIG.assets || {};
+  var asset = function (k) { return ASSETS[k] || ''; };
+  document.body.style.background = D.pbg || '#f2f2f2';
+
+  /* fonts: the uploaded ones are embedded from our own storage, the rest come from Google Fonts */
+  var ff = '', gf = [];
+  (D.fonts || []).forEach(function (f) {
+    if (f.key && asset(f.key)) ff += '@font-face{font-family:"' + String(f.fam).replace(/["\\]/g, '') + '";src:url("' + asset(f.key) + '");font-display:block}';
+    else if (f.g) gf.push(f.fam);
+  });
+  if (gf.indexOf('DM Sans') < 0) gf.push('DM Sans');
+  if (ff) { var st = document.createElement('style'); st.textContent = ff; document.head.appendChild(st); }
+  var gu = AFX.gfontUrl(gf);
+  if (gu) { var ln = document.createElement('link'); ln.rel = 'stylesheet'; ln.href = gu; document.head.appendChild(ln); }
+
+  var pg = document.getElementById('pg'), wraps = [], all = [];
+  (D.sections || []).forEach(function (s) {
+    var sw = document.createElement('div'); sw.className = 'sw';
+    var sec = document.createElement('div'); sec.className = 'sec';
+    sec.style.width = W + 'px'; sec.style.height = s.h + 'px'; sec.style.background = s.bg || '#ffffff';
+    if (s.bgImg && asset(s.bgImg)) {
+      var bg = document.createElement('div'); bg.className = 'bg';
+      bg.style.backgroundImage = 'url("' + asset(s.bgImg) + '")';
+      if (s.bgFit === 'contain') { bg.style.backgroundSize = 'contain'; bg.style.backgroundRepeat = 'no-repeat'; }
+      sec.appendChild(bg);
+    }
+    (s.els || []).forEach(function (e) {
+      var d = AFX.renderEl(e, asset);
+      if (e.link) {
+        d.classList.add('link');
+        d.addEventListener('click', function () { window.open(e.link, '_blank', 'noopener'); });
+      }
+      AFX.prepare(d, e);
+      sec.appendChild(d); all.push([d, e]);
+    });
+    sw.appendChild(sec); pg.appendChild(sw); wraps.push([sw, sec, s]);
+  });
+
+  function fit() {
+    var vw = Math.min(document.documentElement.clientWidth || innerWidth, 520), k = vw / W;
+    pg.style.width = vw + 'px';
+    wraps.forEach(function (x) { x[0].style.height = (x[2].h * k) + 'px'; x[1].style.transform = 'scale(' + k + ')'; });
+  }
+  fit(); addEventListener('resize', fit);
+
+  /* entrance animations start when each element scrolls into view */
+  function go() {
+    var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (ents) {
+      ents.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var pair = en.target._afx; AFX.unprepare(pair[0]); AFX.play(pair[0], pair[1]);
+      });
+    }, { threshold: 0.12 }) : null;
+    all.forEach(function (p) {
+      p[0]._afx = p;
+      if (io && p[1].an) io.observe(p[0]); else { AFX.unprepare(p[0]); AFX.play(p[0], p[1]); }
+    });
+  }
+  var started = false;
+  function start() { if (started) return; started = true; go(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
+  setTimeout(start, 2500);
+
+  /* music */
+  var bgm = document.getElementById('bgm'), mb = document.getElementById('mus');
+  if (CONFIG.music) {
+    bgm.src = CONFIG.music; mb.classList.add('show', 'off');
+    var tryPlay = function () { bgm.play().then(function () { mb.classList.remove('off'); }).catch(function () {}); };
+    mb.onclick = function (ev) { ev.stopPropagation(); if (bgm.paused) tryPlay(); else { bgm.pause(); mb.classList.add('off'); } };
+    var first = function () { removeEventListener('pointerdown', first, true); if (bgm.paused) tryPlay(); };
+    addEventListener('pointerdown', first, true);
+  }
+
+  /* powered by */
+  var pb = CONFIG.poweredBy;
+  if (pb && pb.text) {
+    var el = document.getElementById('pw'), esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    var safe = function (u) { return /^https?:\/\//i.test(u || '') ? u : ''; };
+    var logo = pb.logo ? '<img src="' + esc(pb.logo) + '" alt="">' : '';
+    var nm = safe(pb.url) ? '<a target="_blank" rel="noopener" href="' + esc(safe(pb.url)) + '">' + esc(pb.text) + '</a>' : '<b>' + esc(pb.text) + '</b>';
+    var wa = pb.whatsapp ? ' &middot; <a target="_blank" rel="noopener" href="https://wa.me/' + esc(String(pb.whatsapp).replace(/\D/g, '')) + '">WhatsApp</a>' : '';
+    el.innerHTML = logo + 'Powered by ' + nm + wa;
+  }
+})();
+</script>
+</body>
+</html>
