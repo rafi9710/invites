@@ -286,6 +286,15 @@ var AFX = (function () {
     baseline: 0.9, drift: 2, tectonic: 0.9, tumble: 1, neon: 1.4, scrapbook: 1, stomp: 0.7 };
   var EASE = 'cubic-bezier(.2,.8,.2,1)';
 
+  // soft (feathered) edges: shapes get a real blur, pictures get a fading mask
+  function feather(inn, e) {
+    var f = +e.fe || 0; if (!f) return;
+    if (e.t === 'shape') { inn.style.filter = 'blur(' + f + 'px)'; return; }
+    var w = Math.max(1, e.w || 100), h = Math.max(1, e.h || 100);
+    var fx = Math.max(0, 100 - (f * 200 / w)), fy = Math.max(0, 100 - (f * 200 / h));
+    var m = 'radial-gradient(ellipse ' + fx.toFixed(1) + '% ' + fy.toFixed(1) + '% at 50% 50%, #000 55%, transparent 100%)';
+    inn.style.webkitMaskImage = m; inn.style.maskImage = m;
+  }
   function css(el, o) { for (var k in o) el.style[k] = o[k]; return el; }
   function mk(tag, cls, parent) { var e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
 
@@ -372,6 +381,7 @@ var AFX = (function () {
         css(im, { objectFit: e.fit === 'contain' ? 'contain' : 'cover', objectPosition: (e.px == null ? 50 : e.px) + '% ' + (e.py == null ? 50 : e.py) + '%',
           transform: (e.fh || e.fv || zm !== 1) ? 'scale(' + ((e.fh ? -1 : 1) * zm) + ',' + ((e.fv ? -1 : 1) * zm) + ')' : '' });
       } else mk('div', 'afx-missing', ph).textContent = fr ? 'Drop a photo here' : 'image';
+      feather(ph, e);
     } else if (e.t === 'rsvp') {
       var rb = mk('div', 'afx-rsvp ' + (e.mode === 'form' ? 'formmode' : 'btnmode'), inn);
       rsvpStyle(rb, e);
@@ -393,7 +403,10 @@ var AFX = (function () {
     } else if (e.t === 'shape' && DIVIDERS[e.sh]) {
       var dsvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); dsvg.setAttribute('class', 'afx-svg');
       drawDivider(dsvg, DIVIDERS[e.sh], e.fill === 'gold' ? 'gold' : colorOk(e.fill, '#3b2418'), 'g' + e.id);
-      inn.appendChild(dsvg);
+      inn.appendChild(dsvg); feather(dsvg, e);
+    } else if (e.t === 'shape' && SEALS[e.sh]) {
+      var ssvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); ssvg.setAttribute('class', 'afx-svg');
+      drawSeal(ssvg, e.sh, e.fill, 's' + e.id); inn.appendChild(ssvg); feather(ssvg, e);
     } else if (e.t === 'shape' && ICONS[e.sh]) {
       // line icon: keeps its proportions, colour = line colour, sw = line weight
       var ins = 'http://www.w3.org/2000/svg', isvg = document.createElementNS(ins, 'svg');
@@ -402,7 +415,7 @@ var AFX = (function () {
       var ip = document.createElementNS(ins, 'path'); ip.setAttribute('d', ICONS[e.sh][1]); ip.setAttribute('fill', 'none');
       ip.setAttribute('stroke', e.fill === 'gold' ? 'url(#g' + e.id + ')' : colorOk(e.fill, '#7b2233'));
       ip.setAttribute('stroke-width', e.sw || 1.5); ip.setAttribute('stroke-linecap', 'round'); ip.setAttribute('stroke-linejoin', 'round');
-      isvg.appendChild(ip); inn.appendChild(isvg);
+      isvg.appendChild(ip); inn.appendChild(isvg); feather(isvg, e);
     } else if (e.t === 'shape' && (e.sh === 'rect' || e.sh === 'rrect')) {
       // real-size rectangle so rounded corners stay round at any size (and the Corners slider works)
       var rns = 'http://www.w3.org/2000/svg', rsvg = document.createElementNS(rns, 'svg');
@@ -414,7 +427,7 @@ var AFX = (function () {
       rr.setAttribute('rx', rad); rr.setAttribute('ry', rad);
       rr.setAttribute('fill', e.fill === 'gold' ? 'url(#g' + e.id + ')' : colorOk(e.fill, '#c9a24d'));
       if (e.sw) { rr.setAttribute('stroke', colorOk(e.st, '#000000')); rr.setAttribute('stroke-width', e.sw); }
-      rsvg.appendChild(rr); inn.appendChild(rsvg);
+      rsvg.appendChild(rr); inn.appendChild(rsvg); feather(rsvg, e);
     } else if (e.t === 'shape') {
       var sh = SHAPES[e.sh] || SHAPES.rect;
       var ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
@@ -423,9 +436,111 @@ var AFX = (function () {
       var p = document.createElementNS(ns, 'path'); p.setAttribute('d', sh[1]);
       p.setAttribute('fill', e.fill === 'gold' ? 'url(#g' + e.id + ')' : colorOk(e.fill, '#c9a24d'));
       if (e.sw) { p.setAttribute('stroke', colorOk(e.st, '#000000')); p.setAttribute('stroke-width', e.sw); p.setAttribute('vector-effect', 'non-scaling-stroke'); }
-      svg.appendChild(p); inn.appendChild(svg);
+      svg.appendChild(p); inn.appendChild(svg); feather(svg, e);
     }
     return d;
+  }
+
+  /* ---- wax seals (drawn, so any colour and size works) ---- */
+  function shade(hex, p) {
+    var h = (hex || '#8e1b2e').replace('#', ''); if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    var n = parseInt(h, 16), r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+    var f = function (v) { v = p > 0 ? v + (255 - v) * p : v * (1 + p); return Math.max(0, Math.min(255, Math.round(v))); };
+    return '#' + ((1 << 24) + (f(r) << 16) + (f(g) << 8) + f(b)).toString(16).slice(1);
+  }
+  // wavy wax edge
+  function blob(cx, cy, rad, pts, wob, seed) {
+    var d = '', n = pts, sd = seed || 1;
+    for (var i = 0; i < n; i++) {
+      var a = i / n * Math.PI * 2;
+      sd = (sd * 9301 + 49297) % 233280; var j = sd / 233280;
+      var r = rad + (j - 0.5) * wob;
+      var x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r * 0.985;
+      if (!i) d = 'M' + x.toFixed(2) + ' ' + y.toFixed(2);
+      else {
+        var pa = (i - 0.5) / n * Math.PI * 2, pr = rad + wob * 0.18;
+        d += ' Q' + (cx + Math.cos(pa) * pr).toFixed(2) + ' ' + (cy + Math.sin(pa) * pr).toFixed(2) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2);
+      }
+    }
+    return d + ' Z';
+  }
+  function ring(cx, cy, r, n, dot) {
+    var d = '';
+    for (var i = 0; i < n; i++) { var a = i / n * Math.PI * 2; d += 'M' + (cx + Math.cos(a) * r).toFixed(2) + ' ' + (cy + Math.sin(a) * r).toFixed(2) + 'm' + (-dot) + ' 0a' + dot + ' ' + dot + ' 0 1 0 ' + (dot * 2) + ' 0a' + dot + ' ' + dot + ' 0 1 0 ' + (-dot * 2) + ' 0'; }
+    return d;
+  }
+  function laurel(cx, cy, r) {
+    var d = '';
+    [-1, 1].forEach(function (sgn) {
+      for (var i = 0; i < 7; i++) {
+        var a = (Math.PI / 2) + sgn * (0.42 + i * 0.26), x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+        var ax = Math.cos(a + sgn * 0.55) * 7.4, ay = Math.sin(a + sgn * 0.55) * 7.4;
+        d += 'M' + x.toFixed(2) + ' ' + y.toFixed(2) + 'q' + (ax * 0.4 - ay * 0.45).toFixed(2) + ' ' + (ay * 0.4 + ax * 0.45).toFixed(2) + ' ' + ax.toFixed(2) + ' ' + ay.toFixed(2) +
+             'q' + (ay * 0.45 - ax * 0.6).toFixed(2) + ' ' + (-ax * 0.45 - ay * 0.6).toFixed(2) + ' ' + (-ax).toFixed(2) + ' ' + (-ay).toFixed(2) + 'Z';
+      }
+    });
+    return d;
+  }
+  function rosePath(cx, cy, r) {
+    var d = '', turns = 3.2, steps = 130;
+    for (var i = 0; i <= steps; i++) {
+      var t = i / steps, a = t * turns * Math.PI * 2, rr = r * (0.12 + 0.88 * t);
+      var x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr * 0.97;
+      d += (i ? 'L' : 'M') + x.toFixed(2) + ' ' + y.toFixed(2);
+    }
+    return d;
+  }
+  var SEALS = {
+    'seal-classic': ['Wax seal - plain', function (c) {
+      return '<path d="' + blob(50, 50, 44, 26, 3.4, 7) + '" fill="url(#B)"/>' +
+        '<path d="' + blob(50, 50, 35, 22, 1.4, 31) + '" fill="none" stroke="' + c.dk + '" stroke-opacity=".45" stroke-width="1.6"/>' +
+        '<path d="' + blob(50, 50, 31, 22, 1.2, 12) + '" fill="url(#I)"/>'; }],
+    'seal-rope': ['Wax seal - beaded', function (c) {
+      return '<path d="' + blob(50, 50, 44, 28, 3, 3) + '" fill="url(#B)"/>' +
+        '<path d="' + ring(50, 50, 36.5, 30, 2.5) + '" fill="' + c.lt + '" fill-opacity=".55"/>' +
+        '<circle cx="50" cy="50" r="30.5" fill="url(#I)"/>' +
+        '<circle cx="50" cy="50" r="30.5" fill="none" stroke="' + c.dk + '" stroke-opacity=".4" stroke-width="1.2"/>'; }],
+    'seal-laurel': ['Wax seal - laurel', function (c) {
+      return '<path d="' + blob(50, 50, 44, 26, 3.2, 19) + '" fill="url(#B)"/>' +
+        '<circle cx="50" cy="50" r="34" fill="none" stroke="' + c.dk + '" stroke-opacity=".38" stroke-width="1.4"/>' +
+        '<path d="' + laurel(50, 50, 29) + '" fill="' + c.dk + '" fill-opacity=".5"/>' +
+        '<circle cx="50" cy="50" r="21" fill="url(#I)"/>'; }],
+    'seal-rose': ['Wax seal - rose', function (c) {
+      return '<path d="' + blob(50, 50, 44, 24, 3.6, 41) + '" fill="url(#B)"/>' +
+        '<path d="' + rosePath(50, 50, 33) + '" fill="none" stroke="' + c.dk + '" stroke-opacity=".55" stroke-width="3.4" stroke-linecap="round"/>' +
+        '<path d="' + rosePath(50, 50, 33) + '" fill="none" stroke="' + c.lt + '" stroke-opacity=".38" stroke-width="1.1"/>'; }],
+    'seal-scallop': ['Wax seal - scalloped', function (c) {
+      var d = '', n = 18, R = 43;
+      for (var i = 0; i < n; i++) {
+        var a = i / n * Math.PI * 2, a2 = (i + 1) / n * Math.PI * 2, am = (a + a2) / 2;
+        var x1 = 50 + Math.cos(a) * R, y1 = 50 + Math.sin(a) * R, x2 = 50 + Math.cos(a2) * R, y2 = 50 + Math.sin(a2) * R;
+        var mx = 50 + Math.cos(am) * (R + 5.5), my = 50 + Math.sin(am) * (R + 5.5);
+        d += (i ? '' : 'M' + x1.toFixed(2) + ' ' + y1.toFixed(2)) + 'Q' + mx.toFixed(2) + ' ' + my.toFixed(2) + ' ' + x2.toFixed(2) + ' ' + y2.toFixed(2);
+      }
+      return '<path d="' + d + 'Z" fill="url(#B)"/>' +
+        '<circle cx="50" cy="50" r="33" fill="none" stroke="' + c.dk + '" stroke-opacity=".4" stroke-width="1.5"/>' +
+        '<circle cx="50" cy="50" r="29" fill="url(#I)"/>'; }],
+    'seal-oval': ['Wax seal - oval', function (c) {
+      return '<path d="' + blob(50, 50, 40, 26, 3, 55) + '" fill="url(#B)" transform="translate(50 50) scale(1 1.16) translate(-50 -50)"/>' +
+        '<ellipse cx="50" cy="50" rx="30" ry="35" fill="none" stroke="' + c.dk + '" stroke-opacity=".42" stroke-width="1.5"/>' +
+        '<ellipse cx="50" cy="50" rx="26" ry="30.5" fill="none" stroke="' + c.lt + '" stroke-opacity=".4" stroke-width="1"/>' +
+        '<ellipse cx="50" cy="50" rx="24" ry="28" fill="url(#I)"/>'; }]
+  };
+  function drawSeal(svg, key, fill, gid) {
+    var base = fill === 'gold' ? '#c9a24d' : colorOk(fill, '#8e1b2e');
+    gid = String(gid || 's').replace(/[^A-Za-z0-9_-]/g, '');
+    var c = { lt: shade(base, 0.42), dk: shade(base, -0.42), dk2: shade(base, -0.62) };
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.innerHTML =
+      '<defs><radialGradient id="B' + gid + '" cx="36%" cy="30%" r="78%">' +
+      '<stop offset="0" stop-color="' + shade(base, 0.55) + '"/><stop offset=".42" stop-color="' + base + '"/>' +
+      '<stop offset=".82" stop-color="' + c.dk + '"/><stop offset="1" stop-color="' + c.dk2 + '"/></radialGradient>' +
+      '<radialGradient id="I' + gid + '" cx="42%" cy="38%" r="70%">' +
+      '<stop offset="0" stop-color="' + c.dk + '"/><stop offset=".65" stop-color="' + base + '"/><stop offset="1" stop-color="' + shade(base, 0.25) + '"/></radialGradient></defs>' +
+      SEALS[key][1](c).replace(/url\(#B\)/g, 'url(#B' + gid + ')').replace(/url\(#I\)/g, 'url(#I' + gid + ')') +
+      '<ellipse cx="38" cy="30" rx="17" ry="11" fill="#fff" fill-opacity=".17" transform="rotate(-24 38 30)"/>';
+    return svg;
   }
   /* ---------------- RSVP (form on the page, or a button that opens it) ---------------- */
   function rsvpStyle(box, e) {
@@ -682,6 +797,7 @@ var AFX = (function () {
 
   var CSS = '.afx-el{position:absolute;box-sizing:border-box;transform-origin:50% 50%}' +
     '.afx-lp,.afx-in{position:relative;width:100%;height:100%}' +
+    '.t-shape .afx-in>svg{overflow:visible}' +
     '.t-text .afx-lp,.t-text .afx-in{height:auto}' +
     '.afx-tx{white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;-webkit-font-smoothing:antialiased}' +
     '.afx-tx.list .li{position:relative;padding-left:1.15em}.afx-tx.list .li:before{content:"\\2022";position:absolute;left:.25em}' +
@@ -725,7 +841,7 @@ var AFX = (function () {
     if (poster) { v.poster = poster; v.style.background = 'url("' + poster + '") center/cover no-repeat'; }
     v.src = src; return v;
   }
-  return { GFONTS: GFONTS, SHAPES: SHAPES, ICONS: ICONS, DIVIDERS: DIVIDERS, drawDivider: drawDivider, bgVideo: bgVideo, FRAMES: FRAMES, maskOf: maskOf, wireRsvp: wireRsvp, injectCss: injectCss, tickAll: tickAll, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
+  return { GFONTS: GFONTS, SHAPES: SHAPES, ICONS: ICONS, SEALS: SEALS, drawSeal: drawSeal, feather: feather, DIVIDERS: DIVIDERS, drawDivider: drawDivider, bgVideo: bgVideo, FRAMES: FRAMES, maskOf: maskOf, wireRsvp: wireRsvp, injectCss: injectCss, tickAll: tickAll, ANIMS: ANIMS, TEXT_ANIMS: TEXT_ANIMS, ALL_ANIMS: ALL_ANIMS, ADDONS: ADDONS, DEF_DUR: DEF_DUR,
     renderEl: renderEl, placeEl: placeEl, fillText: fillText, styleText: styleText, fontStack: fontStack,
     play: play, stop: stop, prepare: prepare, unprepare: unprepare, startLoop: startLoop, restoreText: restoreText, gfontUrl: gfontUrl };
 })();
@@ -831,7 +947,7 @@ const CONFIG = {
     "addCal": "Add to calendar"
   },
   "rsvp": {
-    "on": false,
+    "on": true,
     "note": ""
   },
   "theme": "maroon",
@@ -990,7 +1106,8 @@ const CONFIG = {
             "o": 1,
             "src": "vid-uxtl1qdna",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "cz6p9l59",
@@ -1009,7 +1126,7 @@ const CONFIG = {
             "text": "Manohar",
             "f": "Philosopher",
             "fs": 46.5,
-            "c": "#ffedd1",
+            "c": "#ffffff",
             "al": "center",
             "lh": 1.4,
             "ls": 50,
@@ -1036,7 +1153,7 @@ const CONFIG = {
             "text": "Varshitha",
             "f": "Philosopher",
             "fs": 46.5,
-            "c": "#ffedd1",
+            "c": "#ffffff",
             "al": "center",
             "lh": 1.4,
             "ls": 60,
@@ -1063,7 +1180,7 @@ const CONFIG = {
             "text": "&",
             "f": "Kaushan Script",
             "fs": 46.5,
-            "c": "#ffedd1",
+            "c": "#ffffff",
             "al": "center",
             "lh": 1.4,
             "ls": 0,
@@ -1082,6 +1199,7 @@ const CONFIG = {
             "h": 21.1,
             "r": 0,
             "o": 1,
+            "fe": 0,
             "sh": "orn-lotus",
             "fill": "#7b2233",
             "st": "#000000",
@@ -1108,12 +1226,7 @@ const CONFIG = {
             "al": "center",
             "lh": 1.4,
             "ls": 110,
-            "b": true,
-            "fx": {
-              "k": "shadow",
-              "n": 50,
-              "c": ""
-            }
+            "b": true
           }
         ]
       },
@@ -1133,6 +1246,7 @@ const CONFIG = {
             "h": 30,
             "r": 0,
             "o": 1,
+            "fe": 0,
             "sh": "orn-lotus",
             "fill": "gold",
             "st": "#000000",
@@ -1149,7 +1263,8 @@ const CONFIG = {
             "o": 1,
             "src": "img-uagwtwcec",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "ufjie9b5",
@@ -1194,7 +1309,8 @@ const CONFIG = {
             },
             "src": "img-ukhe9towy",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "s52wpkxw",
@@ -1271,7 +1387,8 @@ const CONFIG = {
             "lock": true,
             "src": "vid-uwczo6yfg",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "cnirzuqx",
@@ -1310,6 +1427,7 @@ const CONFIG = {
               "d": 0.9,
               "dl": 0
             },
+            "fe": 0,
             "sh": "orn-leaf",
             "fill": "#7b2233",
             "st": "#000000",
@@ -1356,6 +1474,7 @@ const CONFIG = {
             "src": "img-uzxv3k9cw",
             "fit": "cover",
             "rad": 0,
+            "fe": 0,
             "fr": "polaroid"
           },
           {
@@ -1376,6 +1495,7 @@ const CONFIG = {
             "src": "img-uhz7ibrd7",
             "fit": "cover",
             "rad": 0,
+            "fe": 0,
             "fr": "polaroid"
           },
           {
@@ -1442,7 +1562,8 @@ const CONFIG = {
             "o": 1,
             "src": "img-uagwtwcec",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "ic5efuwq",
@@ -1455,7 +1576,8 @@ const CONFIG = {
             "o": 1,
             "src": "img-umpztvk1l",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "azquy47w",
@@ -1472,6 +1594,7 @@ const CONFIG = {
               "d": 1.8,
               "dl": 0
             },
+            "fe": 0,
             "sh": "rrect",
             "fill": "#7b2233",
             "st": "#c9a24d",
@@ -1513,6 +1636,7 @@ const CONFIG = {
             "r": 0,
             "o": 1,
             "lock": true,
+            "fe": 0,
             "sh": "ic-pin",
             "fill": "#ffedd1",
             "st": "#000000",
@@ -1577,6 +1701,7 @@ const CONFIG = {
               "d": 2,
               "dl": 0
             },
+            "fe": 0,
             "sh": "orn-lotus",
             "fill": "gold",
             "st": "#000000",
@@ -1665,6 +1790,7 @@ const CONFIG = {
               "d": 2,
               "dl": 0
             },
+            "fe": 0,
             "sh": "orn-diamond",
             "fill": "#7b2233",
             "st": "#000000",
@@ -1684,6 +1810,7 @@ const CONFIG = {
               "d": 0.7,
               "dl": 0
             },
+            "fe": 0,
             "sh": "ic-lotus",
             "fill": "#7b2233",
             "st": "#000000",
@@ -1777,7 +1904,8 @@ const CONFIG = {
             "o": 1,
             "src": "img-u8qa13df0",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "8u47kapz",
@@ -1790,7 +1918,8 @@ const CONFIG = {
             "o": 1,
             "src": "img-umpztvk1l",
             "fit": "cover",
-            "rad": 0
+            "rad": 0,
+            "fe": 0
           },
           {
             "id": "ubtfcr2e",
@@ -1807,6 +1936,7 @@ const CONFIG = {
               "d": 1.8,
               "dl": 0
             },
+            "fe": 0,
             "sh": "rrect",
             "fill": "#7b2233",
             "st": "#c9a24d",
@@ -1848,6 +1978,7 @@ const CONFIG = {
             "r": 0,
             "o": 1,
             "lock": true,
+            "fe": 0,
             "sh": "ic-pin",
             "fill": "#ffedd1",
             "st": "#000000",
@@ -1912,6 +2043,7 @@ const CONFIG = {
               "d": 2,
               "dl": 0
             },
+            "fe": 0,
             "sh": "orn-lotus",
             "fill": "gold",
             "st": "#000000",
@@ -2000,6 +2132,7 @@ const CONFIG = {
               "d": 2,
               "dl": 0
             },
+            "fe": 0,
             "sh": "orn-diamond",
             "fill": "#7b2233",
             "st": "#000000",
@@ -2019,6 +2152,7 @@ const CONFIG = {
               "d": 0.7,
               "dl": 0
             },
+            "fe": 0,
             "sh": "ic-lotus",
             "fill": "#7b2233",
             "st": "#000000",
@@ -2106,6 +2240,7 @@ const CONFIG = {
               "d": 0.9,
               "dl": 0
             },
+            "fe": 0,
             "sh": "ic-dining",
             "fill": "#7b2233",
             "st": "#000000",
@@ -2125,6 +2260,7 @@ const CONFIG = {
               "d": 0.9,
               "dl": 0
             },
+            "fe": 0,
             "sh": "ic-music",
             "fill": "#7b2233",
             "st": "#000000",
@@ -2144,6 +2280,7 @@ const CONFIG = {
               "d": 0.9,
               "dl": 0
             },
+            "fe": 0,
             "sh": "ic-dress",
             "fill": "#7b2233",
             "st": "#000000",
@@ -2216,6 +2353,291 @@ const CONFIG = {
             "ls": 0
           }
         ]
+      },
+      {
+        "id": "dwqh8a90",
+        "h": 668,
+        "bg": "#ffffff",
+        "bgImg": "",
+        "bgFit": "cover",
+        "els": [
+          {
+            "id": "le31q9z7",
+            "t": "image",
+            "x": -0.5,
+            "y": -22.4,
+            "w": 403.8,
+            "h": 717.5,
+            "r": 0,
+            "o": 1,
+            "src": "img-uagwtwcec",
+            "fit": "cover",
+            "rad": 0,
+            "fe": 0
+          },
+          {
+            "id": "wad3ev34",
+            "t": "shape",
+            "x": -27.6,
+            "y": -22.4,
+            "w": 420.6,
+            "h": 715.1,
+            "r": 0,
+            "o": 0.9,
+            "fe": 65,
+            "sh": "circle",
+            "fill": "#ffedd1",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "a08u8yjn",
+            "t": "shape",
+            "x": 182.7,
+            "y": 31.5,
+            "w": 44,
+            "h": 44,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "pop",
+              "d": 0.7,
+              "dl": 0
+            },
+            "fe": 0,
+            "sh": "ic-rings",
+            "fill": "#c9a24d",
+            "st": "#000000",
+            "sw": 1.5
+          },
+          {
+            "id": "pfp6u08o",
+            "t": "text",
+            "x": 51.4,
+            "y": 82.6,
+            "w": 300,
+            "h": 31,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "fade",
+              "d": 0.9,
+              "dl": 0
+            },
+            "text": "WE CANNOT WAIT TO CELEBRATE WITH YOU",
+            "f": "Cinzel",
+            "fs": 11,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 320,
+            "b": true
+          },
+          {
+            "id": "1d570ztj",
+            "t": "text",
+            "x": 10.2,
+            "y": 121.9,
+            "w": 360,
+            "h": 90,
+            "r": 0,
+            "o": 1,
+            "text": "Save the Date",
+            "f": "Great Vibes",
+            "fs": 64,
+            "c": "#c9a24d",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "9te3mi13",
+            "t": "shape",
+            "x": 54.7,
+            "y": 196.9,
+            "w": 300,
+            "h": 30,
+            "r": 0,
+            "o": 1,
+            "fe": 0,
+            "sh": "orn-lotus",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "kxfcx9jq",
+            "t": "countdown",
+            "x": 44.3,
+            "y": 226.9,
+            "w": 340,
+            "h": 49,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "rise",
+              "d": 0.9,
+              "dl": 0
+            },
+            "date": "2027-02-13T19:00:00+05:30",
+            "f": "Cinzel",
+            "fs": 35,
+            "c": "#7b2233",
+            "lc": "",
+            "lbl": "Days,Hours,Mins,Secs",
+            "done": "Today is the day!",
+            "sep": true,
+            "b": true
+          },
+          {
+            "id": "drlfg330",
+            "t": "shape",
+            "x": 54.7,
+            "y": 298.4,
+            "w": 300,
+            "h": 30,
+            "r": 0,
+            "o": 1,
+            "fe": 0,
+            "sh": "orn-dots",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "y4dxk750",
+            "t": "text",
+            "x": 50,
+            "y": 336.4,
+            "w": 300,
+            "h": 18,
+            "r": 0,
+            "o": 1,
+            "text": "WILL YOU JOIN US?",
+            "f": "Cinzel",
+            "fs": 13,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 320,
+            "b": true
+          },
+          {
+            "id": "z2nsjx32",
+            "t": "text",
+            "x": 50,
+            "y": 363.9,
+            "w": 300,
+            "h": 42,
+            "r": 0,
+            "o": 1,
+            "text": "Kindly let us know by 20 January \n so we can keep a seat for you",
+            "f": "Cormorant Garamond",
+            "fs": 15,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 20,
+            "i": true
+          },
+          {
+            "id": "od4h0jho",
+            "t": "rsvp",
+            "x": 94.2,
+            "y": 413.5,
+            "w": 220,
+            "h": 50,
+            "r": 0,
+            "o": 1,
+            "an": {
+              "k": "pop",
+              "d": 0.7,
+              "dl": 0
+            },
+            "mode": "button",
+            "f": "DM Sans",
+            "fs": 15,
+            "c": "#3b2418",
+            "bc": "#7b2233",
+            "btc": "#ffffff",
+            "cb": "#fffaf2",
+            "btn": "RSVP"
+          },
+          {
+            "id": "9ed6fqbo",
+            "t": "shape",
+            "x": 102.6,
+            "y": 470.3,
+            "w": 211.6,
+            "h": 21.2,
+            "r": 0,
+            "o": 1,
+            "fe": 0,
+            "sh": "orn-heart",
+            "fill": "gold",
+            "st": "#000000",
+            "sw": 0
+          },
+          {
+            "id": "7nl28ebh",
+            "t": "text",
+            "x": 64.3,
+            "y": 498,
+            "w": 300,
+            "h": 18,
+            "r": 0,
+            "o": 1,
+            "text": "With love",
+            "f": "Cormorant Garamond",
+            "fs": 13,
+            "c": "#c9a24d",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 320,
+            "b": true,
+            "i": true,
+            "fx": {
+              "k": "hollow",
+              "n": 50,
+              "c": ""
+            }
+          },
+          {
+            "id": "xbipwfco",
+            "t": "text",
+            "x": 20,
+            "y": 523.1,
+            "w": 360,
+            "h": 49,
+            "r": 0,
+            "o": 1,
+            "text": "Manohar  &  Varshitha",
+            "f": "Great Vibes",
+            "fs": 35,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 0
+          },
+          {
+            "id": "pp80y01g",
+            "t": "text",
+            "x": 58.4,
+            "y": 572.1,
+            "w": 300,
+            "h": 21,
+            "r": 0,
+            "o": 1,
+            "text": "Your presence is our greatest blessing",
+            "f": "Cormorant Garamond",
+            "fs": 15,
+            "c": "#7b2233",
+            "al": "center",
+            "lh": 1.4,
+            "ls": 20,
+            "i": true
+          }
+        ]
       }
     ],
     "gate": {
@@ -2227,7 +2649,7 @@ const CONFIG = {
       "fg": "#7b2233",
       "bg": "#6b1616",
       "img": "",
-      "seal": "text",
+      "seal": "image",
       "i1": "",
       "i2": "",
       "simg": "",
