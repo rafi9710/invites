@@ -100,7 +100,12 @@ section{position:relative;width:100%;overflow:hidden}
 #hero .scene{animation:kb 22s ease-in-out infinite alternate;transform-origin:50% 70%}
 @keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.12)}}
 #hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,240,220,.92) 0%,rgba(250,240,220,.55) 30%,transparent 52%)}
+.symbol{display:block;margin:0 auto 6px;width:auto;object-fit:contain}
+.hide{display:none!important}
+.symbol.sm{height:52px} .symbol.md{height:72px} .symbol.lg{height:96px}
+@media (max-height:700px){.symbol.sm{height:44px}.symbol.md{height:58px}.symbol.lg{height:74px}}
 #hero .txt{position:absolute;left:0;right:0;top:9%;text-align:center;color:var(--ink)}
+#hero.hassym .txt{top:1.5%}
 .caps{font-family:var(--serif);font-weight:500;letter-spacing:.32em;text-transform:uppercase}
 #hero .name{font-size:clamp(30px,9vw,42px);line-height:1.05}
 #hero .weds{font-family:var(--script);font-size:clamp(30px,9vw,40px);color:var(--gold);line-height:1;margin:4px 0}
@@ -182,7 +187,7 @@ canvas.petals{position:absolute;inset:0;width:100%;height:100%;pointer-events:no
 .archwrap::before{content:"";position:absolute;inset:0;background:
   repeating-linear-gradient(45deg,rgba(0,0,0,.06) 0 6px,transparent 6px 12px)}
 .arch{position:relative;width:100%}
-.arch svg{display:block;width:100%;height:auto}
+.arch > .archsvg{display:block;width:100%;height:auto}
 .arch .inner{position:absolute;left:12%;right:12%;top:24%;bottom:4%;display:flex;flex-direction:column;align-items:center;text-align:center}
 .tiles{height:16px;background:
   repeating-linear-gradient(90deg,var(--teal) 0 10px,#e9dcc0 10px 12px,var(--maroon) 12px 22px,#e9dcc0 22px 24px);
@@ -227,6 +232,7 @@ canvas.petals{position:absolute;inset:0;width:100%;height:100%;pointer-events:no
 @keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(.25)}}
 .powered{background:var(--maroon-dd);color:#c9a978;text-align:center;padding:14px 16px 18px;font:12px/1.6 system-ui,sans-serif;letter-spacing:.02em}
 .powered a{color:#f3d58f;text-decoration:none;font-weight:600}
+.powered .pblogo{height:46px;width:auto;max-width:70%;object-fit:contain;margin-bottom:8px}
 .powered .cta{display:inline-block;margin-top:6px;padding:6px 14px;border:1px solid rgba(243,213,143,.45);border-radius:20px;font-size:11.5px}
 footer{background:var(--maroon-d);color:#e9cf98;text-align:center;padding:22px 16px 28px;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
 footer .script{font-family:var(--script);font-size:28px;letter-spacing:0;text-transform:none;color:#f5dfae;display:block;margin-bottom:4px}
@@ -312,6 +318,7 @@ body.indic #openBtn{font-size:16px}
     <div class="scene" data-img="mansion" data-label="images/01-mansion.jpg"></div>
     <div class="veil"></div>
     <div class="txt">
+      <img class="symbol rv hide" id="hSym" alt="">
       <div class="topline rv" id="hTop"></div>
       <div class="caps name rv" id="h1"></div>
       <div class="weds rv d1" data-l="weds">weds</div>
@@ -449,8 +456,8 @@ body.indic #openBtn{font-size:16px}
    CONFIG — change only this block for each client
    ========================================================= */
 const CONFIG = {
-  "groom": "Harish ",
-  "bride": "Meenakashi",
+  "groom": "Harish",
+  "bride": "Meenakshi",
   "groomFull": "Sri Rama",
   "brideFull": "Seethamma",
   "dateLong": "Friday, 12 February 2027",
@@ -459,7 +466,7 @@ const CONFIG = {
   "blessing": "With the blessings of the Almighty and our beloved elders",
   "grandparents": "Late Sri. A. Ramanathan & Smt. R. Valliammai",
   "parents": "Mr. R. Subramanian & Mrs. S. Lakshmi",
-  "inviteLine": "cordially invite you to grace the auspicious wedding ceremony of their beloved daughter",
+  "inviteLine": "కావున తామెల్లరు తప్పక విచ్చేసి కాబోయే నూతన వధూవరులను ఆశీర్వదించు కోరుచున్నాము",
   "skyLine": "Two hearts, one home",
   "skySub": "Rooted in tradition",
   "coupleSub": "Together, with the blessings of our families",
@@ -517,6 +524,10 @@ const CONFIG = {
     "url": "https://afterfxtemplates.com",
     "whatsapp": "918971738710"
   },
+  "topLine": "Om Shree Ganehsaya Namaha ",
+  "layout": "chettinad",
+  "faq": [],
+  "pack": "default",
   "lang": "en",
   "fontStyle": 0,
   "labels": {
@@ -543,20 +554,44 @@ const CONFIG = {
     "rsvpMsg": "Wishes for the couple (optional)",
     "rsvpSend": "Send RSVP",
     "rsvpThanks": "Thank you! Your response has been received.",
-    "today": "Today is the day"
+    "today": "Today is the day",
+    "followingEvents": "On the following events",
+    "timeline": "Wedding Timeline",
+    "timelineSub": "Mark your calendars â€” we can't wait to celebrate with you",
+    "seeRoute": "See the route",
+    "meetCouple": "Meet the Bride & Groom",
+    "gallery": "Moments",
+    "gallerySub": "A few of our favourite memories",
+    "thingsToKnow": "Things to know",
+    "countdown": "The countdown begins",
+    "addCal": "Add to calendar"
   },
   "rsvp": {
     "on": true,
     "note": ""
   },
   "theme": "maroon",
+  "symbolSize": "sm",
+  "fontNames": "",
+  "fontBody": "",
+  "fontCustom": "",
+  "brand": {
+    "on": true,
+    "name": "",
+    "url": "",
+    "whatsapp": ""
+  },
   "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/23d85782ab3881aeac17",
   "rsvpId": "23d85782ab3881aeac17",
   "fonts": {
-    "name": "Classic script",
     "body": "Cormorant Garamond",
-    "disp": "Pinyon Script"
-  }
+    "disp": "Pinyon Script",
+    "q": ""
+  },
+  "gallery": [],
+  "symbol": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/seetha-rama/img-symbol-1790149293712.webp",
+  "studioLogo": "",
+  "fontFile": ""
 };
 
 /* =========================================================
@@ -590,16 +625,41 @@ document.querySelectorAll('[data-ph]').forEach(el => { el.placeholder = L[el.dat
 if (CONFIG.lang && CONFIG.lang !== 'en'){
   document.documentElement.lang = CONFIG.lang;
   document.body.classList.add('indic');
-  const F = CONFIG.fonts || {};
-  if (F.body){
-    const ln = document.createElement('link'); ln.rel = 'stylesheet';
-    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q || '').replace(/[^A-Za-z0-9+&=:;@]/g, '') + '&display=swap';
-    document.head.appendChild(ln);
-    const r = document.documentElement.style;
-    r.setProperty('--serif', `'${F.body}',Georgia,serif`);
-    r.setProperty('--script', `'${F.disp || F.body}',Georgia,serif`);
-  }
 }
+// fonts: language preset, the designer's own picks, and an uploaded font file
+function applyFonts(){
+  const F = CONFIG.fonts || {}, r = document.documentElement.style;
+  if (F.q){
+    const ln = document.createElement('link'); ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q).replace(/[^A-Za-z0-9+&=:;@,.]/g, '') + '&display=swap';
+    document.head.appendChild(ln);
+  }
+  let body = F.body || '', disp = F.disp || body;
+  if (CONFIG.fontFile && CONFIG.fontCustom){
+    const st = document.createElement('style');
+    st.textContent = "@font-face{font-family:'AfxCustom';src:url('" + String(CONFIG.fontFile).replace(/'/g, '') + "');font-display:swap}";
+    document.head.appendChild(st);
+    if (CONFIG.fontCustom === 'names' || CONFIG.fontCustom === 'both') disp = 'AfxCustom';
+    if (CONFIG.fontCustom === 'body' || CONFIG.fontCustom === 'both') body = 'AfxCustom';
+  }
+  if (body) r.setProperty('--serif', "'" + body + "',Georgia,serif");
+  if (disp) r.setProperty('--script', "'" + disp + "',Georgia,serif");
+}
+// the small symbol above the names (Ganesha, a cross, a crescent…)
+function applySymbol(){
+  const el = document.getElementById('hSym'); if (!el) return;
+  if (!CONFIG.symbol){ el.remove(); return; }
+  const hero = document.getElementById('hero');
+  el.classList.add(['sm', 'md', 'lg'].indexOf(CONFIG.symbolSize) >= 0 ? CONFIG.symbolSize : 'md');
+  // the names move up only once the symbol has really loaded, so a missing file changes nothing
+  el.onload = () => { el.classList.remove('hide'); if (hero) hero.classList.add('hassym'); };
+  el.onerror = () => { el.remove(); if (hero) hero.classList.remove('hassym'); };
+  el.src = CONFIG.symbol;
+  if (el.complete && el.naturalWidth) el.onload();
+}
+applyFonts();
+applySymbol();
+
 
 // top line
 set('hTop', CONFIG.topLine || '');
@@ -720,12 +780,17 @@ if (CONFIG.birds !== false && !matchMedia('(prefers-reduced-motion: reduce)').ma
   const pb = CONFIG.poweredBy; const el = $('#powered');
   if (!pb || !pb.text){ el.remove(); return; }
   const wa = pb.whatsapp ? `<br><a class="cta" target="_blank" rel="noopener" href="https://wa.me/${encodeURIComponent(String(pb.whatsapp).replace(/\D/g, ''))}?text=${encodeURIComponent('Hi, I saw a wedding invite made by you and I want one like this')}">Want an invite like this? Chat on WhatsApp</a>` : '';
-  el.innerHTML = `Powered by <a target="_blank" rel="noopener" href="${esc(safeUrl(pb.url))}">${esc(pb.text)}</a>${wa}`;
+  const logo = pb.logo ? `<img class="pblogo" src="${esc(pb.logo)}" alt=""><br>` : '';
+  const nm = pb.url ? `<a target="_blank" rel="noopener" href="${esc(safeUrl(pb.url))}">${esc(pb.text)}</a>` : `<b>${esc(pb.text)}</b>`;
+  el.innerHTML = `${logo}Powered by ${nm}${wa}`;
 })();
 
 // cusped Chettinad arch (multifoil opening inside a maroon frame)
+// where the cusped dome ends and the straight sides begin — capped so a tall arch
+// keeps the same dome and only its sides grow
+const archSpring = (W, H) => Math.min(H * 0.30, W * 0.48);
 function archPath(W, H){
-  const L = 34, R = W - 34, spring = H * 0.30, peak = H * 0.05, cx = W / 2;
+  const L = 34, R = W - 34, spring = archSpring(W, H), peak = Math.min(H * 0.05, W * 0.08), cx = W / 2;
   const n = 7, pts = [];
   for (let i = 0; i <= n; i++){
     const t = (i / n) * Math.PI / 2;
@@ -741,8 +806,9 @@ function archPath(W, H){
   }
   return d + ` L${R} ${H} Z`;
 }
-document.querySelectorAll('.archsvg').forEach(svg => {
-  const [,, W, H] = svg.getAttribute('viewBox').split(' ').map(Number);
+function drawArch(svg, H){
+  const W = +svg.getAttribute('viewBox').split(' ')[2] || 400;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const d = archPath(W, H);
   svg.innerHTML = `
     <defs>
@@ -754,7 +820,34 @@ document.querySelectorAll('.archsvg').forEach(svg => {
     <path d="${d}" fill="url(#pg${H})"/>
     <path d="${d}" fill="none" stroke="#b8893a" stroke-width="3"/>
     <path d="${d}" fill="none" stroke="#e2bf73" stroke-width="1" stroke-dasharray="1 7" stroke-linecap="round" transform="translate(${W*0.02} ${H*0.012}) scale(.96 .985)"/>`;
-});
+}
+// the arch grows taller when there are many events, so nothing spills out of the frame
+function fitArches(){
+  document.querySelectorAll('.arch').forEach(arch => {
+    const svg = arch.querySelector('.archsvg'), inner = arch.querySelector('.inner');
+    if (!svg) return;
+    const vb = svg.getAttribute('viewBox').split(' ').map(Number), W = vb[2];
+    const baseH = +(svg.dataset.baseh || (svg.dataset.baseh = vb[3]));
+    let H = baseH;
+    if (inner){
+      const wpx = arch.clientWidth || 1, u = W / wpx;        // viewBox units per pixel
+      const cs = getComputedStyle(inner);
+      const top = parseFloat(cs.top) || 0, bottom = parseFloat(cs.bottom) || 0;
+      const needPx = inner.scrollHeight + top + bottom + 12; // content + the same top/bottom breathing room
+      H = Math.max(Math.round(needPx * u), Math.round(W * 1.35));   // grows with the text, never squashes the dome
+      // text starts just under the dome, wherever the dome ends
+      inner.style.top = ((archSpring(W, H) + W * 0.06) / H * 100).toFixed(2) + '%';
+    }
+    if (+svg.dataset.drawn !== H){ svg.dataset.drawn = H; drawArch(svg, H); }
+  });
+}
+document.querySelectorAll('.archsvg').forEach(svg => drawArch(svg, +svg.getAttribute('viewBox').split(' ')[3]));
+function refitArches(){ for (let i = 0; i < 3; i++) fitArches(); }   // each pass changes the padding, so settle it
+refitArches();
+addEventListener('resize', refitArches);
+addEventListener('load', refitArches);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(refitArches);
+setTimeout(refitArches, 600);
 
 // torn paper edge on the parchment card
 (function(){
@@ -874,7 +967,8 @@ if (DEMO){
     @keyframes tapfx{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.5);opacity:0}}
     .finger{position:fixed;z-index:98;left:50%;width:46px;height:46px;margin-left:-23px;border-radius:50%;pointer-events:none;opacity:0;
     background:radial-gradient(circle,rgba(255,255,255,.8) 0 40%,rgba(255,255,255,.25) 60%,transparent 70%);box-shadow:0 2px 10px rgba(0,0,0,.25);transition:opacity .3s}
-    .finger.on{opacity:1}`;
+    .finger.on{opacity:1}
+    #rForm input.typing{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,137,58,.25)}`;
   document.head.appendChild(st);
   $('#openBtn').addEventListener('pointerdown', e => tapFx(e.currentTarget));
 }
@@ -897,7 +991,7 @@ const yOf = (el, mode) => { if (!el) return null; const r = el.getBoundingClient
   return mode === 'top' || r.height > innerHeight ? top - (mode === 'top' ? 0 : 20) : top - (innerHeight - r.height) / 2; };
 async function visit(sel, pause, mode){ const el = typeof sel === 'string' ? document.querySelector(sel) : sel; const y = yOf(el, mode);
   if (y == null) return; await glide(y, Math.min(3200, Math.max(1400, Math.abs(y - scrollY) * 2.2))); await wait(pause); }
-async function typeInto(inp, text){ inp.focus(); for (const ch of text){ inp.value += ch; await wait(110); } inp.blur(); }
+async function typeInto(inp, text){ inp.classList.add('typing'); for (const ch of text){ inp.value += ch; await wait(110); } inp.classList.remove('typing'); }  // no focus(): a real phone would open its keyboard
 async function runDemo(){
   await wait(1500);
   await visit('#parch', 3200);
