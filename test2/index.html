@@ -466,7 +466,7 @@ const CONFIG = {
     "door": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-door-1790834799486.webp",
     "sky": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-sky-1790834800816.webp",
     "gopuram": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-gopuram-1790834801642.webp",
-    "cloud": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-cloud-1790834802510.webp",
+    "cloud": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-cloud-1790859547900.webp",
     "tree": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-tree-1790834803496.webp",
     "pillar": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-pillar-1790834804398.webp",
     "toran": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-toran-1790834806375.webp",
@@ -794,20 +794,18 @@ const op = (el, v) => { if (el) el.style.opacity = v; };
     tf(TL, `translate(${-80 * z}%,${80 * (1 - tr)}%) scale(${1 + .9 * z})`);
     tf(TR, `translate(${80 * z}%,${80 * (1 - tr)}%) scale(${1 + .9 * z})`);
     CL.forEach(c => { tf(c, `translateX(${c.dataset.dx * 1.6 * seg(t, 0, 7)}px) scale(${1 + .6 * cf})`); op(c, 1 - cf); });
-    op(H, 1 - seg(t, 0, .4)); op(FL, seg(t, 6.3, 6.8));
+    op(H, 1 - seg(t, 0, .4)); op(FL, .35 * seg(t, 5.6, 6.8));
   });
 })();
 
 // 2 · invite: pillars slide in, arch rises, toran drops, lines appear one by one
 (function(){
-  const W = $('#iWin'), PL = $('#invite .pillar.l'), PR = $('#invite .pillar.r'), TO = $('#toran'), LN = $$('#invite .ln');
-  const T = 1.2 + .42 * Math.max(0, LN.length - 1) + .6 + 1;
-  $('#invite').style.height = Math.round(170 + LN.length * 16) + 'vh';
+  const LN = $$('#invite .ln');
+  // the card arrives fully built (pillars, arch, toran) so the hand-off from the hero has no empty screen; only the lines reveal
+  const T = .42 * Math.max(0, LN.length - 1) + .1 + .8;
+  $('#invite').style.height = Math.round(140 + LN.length * 14) + 'vh';
   scene('invite', T, t => {
-    const a = eOut(seg(t, 0, 1));
-    tf(W, `translateY(${14 * (1 - a)}%)`); tf(PL, `translateX(${-45 * (1 - a)}%)`); tf(PR, `translateX(${45 * (1 - a)}%)`);
-    tf(TO, `translateY(${-110 * (1 - eBack(seg(t, .3, 1.4)))}%)`);
-    LN.forEach((l, i) => { const q = eOut(seg(t, 1.2 + .42 * i, 1.8 + .42 * i)); op(l, q); tf(l, `translateY(${24 * (1 - q)}px)`); });
+    LN.forEach((l, i) => { const q = eOut(seg(t, .42 * i - .5, .42 * i + .1)); op(l, q); tf(l, `translateY(${24 * (1 - q)}px)`); });
   });
 })();
 
