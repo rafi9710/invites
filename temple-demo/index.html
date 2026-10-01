@@ -1,0 +1,615 @@
+<title>Arjun &amp; Meghana Invite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&family=Noto+Serif+Telugu:wght@400;600&family=Pinyon+Script&display=swap">
+<style>
+/* Layout: one phone-width column (max 440px) of scroll-driven "scenes". Each scene = tall wrapper + sticky 100svh stage whose layers are scrubbed by scroll (GSAP ScrollTrigger). Single deliberate look (temple invite), so no dark-theme swap. */
+:root{
+  color-scheme: light;
+  --sky-1:#1c66cf; --sky-2:#4c9fea; --sky-3:#a6d8f8;
+  --cream:#fff4de; --cream-2:#f6e3bf; --wall:#f1dfbd;
+  --ink:#4a2316; --ink-soft:#7a4a32;
+  --gold:#c39236; --gold-2:#f0c865; --gold-3:#8a6020;
+  --maroon:#5a0b18; --maroon-2:#7a1527; --maroon-3:#3d0710;
+  --vermilion:#d8432c; --teal:#2b7fa8; --rose:#e86fa0; --leaf:#3f8f3a; --wa:#1f9d55;
+  --f-display:'Marcellus','Cormorant Garamond',Georgia,serif;
+  --f-script:'Pinyon Script','Snell Roundhand','Apple Chancery',cursive;
+  --f-body:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --f-te:'Noto Serif Telugu','Gautami','Nirmala UI',serif;
+  --col:440px;
+}
+*{box-sizing:border-box}
+html{background:var(--maroon-3)}
+body{margin:0;background:radial-gradient(120% 60% at 50% 0%,#6d1222 0%,var(--maroon-3) 70%) fixed,var(--maroon-3);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html.locked, html.locked body{overflow:hidden;height:100%}
+main{position:relative;max-width:var(--col);margin:0 auto;background:var(--cream);overflow-x:clip;box-shadow:0 0 80px rgba(0,0,0,.45)}
+svg{display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px}
+
+/* ---------- shared scene mechanics ---------- */
+.scene{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.layer{position:absolute;will-change:transform}
+.layer img,.fimg{display:block;width:100%;height:auto}
+.flip img,img.flip{transform:scaleX(-1)}
+.te{font-family:var(--f-te)}
+.script{font-family:var(--f-script);font-weight:400;line-height:1}
+.caps{font-family:var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- doors (opening) ---------- */
+#doors{position:fixed;inset:0;z-index:50;display:flex;justify-content:center;background:var(--maroon-3)}
+#doors .frame{position:relative;width:100%;max-width:var(--col);height:100%;perspective:1400px;overflow:hidden;background:#1a0306}
+.door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;background:#4a1708;transform-style:preserve-3d;backface-visibility:hidden}
+.door .img{position:absolute;inset:0;background:url(assets/door.webp) right center/auto 100% no-repeat}
+.door.r .img{transform:scaleX(-1)}
+.door.l::after{content:"";position:absolute;right:0;top:0;bottom:0;width:8px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.6))}
+.door.l{left:0;transform-origin:0 50%}
+.door.r{right:0;transform-origin:100% 50%}
+.door-copy{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-56%);width:min(84%,340px);text-align:center;color:var(--cream);
+  padding:28px 22px 26px;background:radial-gradient(120% 100% at 50% 0%,rgba(90,11,24,.94),rgba(45,6,12,.94));border:1px solid rgba(240,200,101,.55);border-radius:180px 180px 14px 14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 5px rgba(90,11,24,.9),inset 0 0 0 6px rgba(240,200,101,.35)}
+.door-copy .te{font-size:14px;color:var(--gold-2);letter-spacing:.04em}
+.door-copy .script{font-size:40px;color:var(--gold-2);margin:10px 0 6px}
+.door-copy .caps{font-size:25px;line-height:1.2;color:#fff}
+.door-copy .amp{font-family:var(--f-script);font-size:26px;color:var(--gold-2);display:block;line-height:1.1;text-transform:none;letter-spacing:0}
+.door-copy .date{font-size:15px;margin-top:10px;letter-spacing:.06em;color:#f3dcc0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--f-display);font-size:14px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:0;border-radius:999px;padding:13px 24px;transition:transform .2s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:linear-gradient(180deg,#f7d87e,#d3a03e);color:var(--maroon-3);box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-maroon{background:var(--maroon);color:var(--gold-2);box-shadow:0 4px 12px rgba(90,11,24,.25)}
+.btn-wa{background:var(--wa);color:#fff;box-shadow:0 6px 16px rgba(31,157,85,.3)}
+.door-copy .btn{margin-top:20px}
+
+/* ---------- 1 · HERO: gopuram rises, then we fly into its doorway ---------- */
+#hero{height:330vh}
+#hero .sky{position:absolute;inset:0;background:url(assets/hero_sky.webp) center bottom/cover no-repeat,linear-gradient(180deg,var(--sky-1),var(--sky-3))}
+#hero .sky::after{content:"";position:absolute;inset:0 0 55% 0;background:linear-gradient(180deg,rgba(14,60,140,.35),transparent)}
+.cloud{position:absolute}
+.h-names{position:absolute;left:0;right:0;top:9%;text-align:center;color:#fff;text-shadow:0 2px 14px rgba(10,40,100,.35)}
+.h-names .te{font-size:13px;letter-spacing:.06em;opacity:.95}
+.h-names .caps{font-size:clamp(38px,11vw,50px);line-height:1.05;letter-spacing:.06em}
+.h-names .weds{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 4px;font-family:var(--f-script);font-size:28px}
+.h-names .weds::before,.h-names .weds::after{content:"";width:46px;height:1px;background:rgba(255,255,255,.75)}
+.h-gopuram{left:50%;bottom:0;width:92%;filter:drop-shadow(0 -6px 30px rgba(255,240,200,.35))}
+.h-tree{bottom:-3%;width:66%}
+.h-tree.l{left:-12%}.h-tree.r{right:-12%}
+.h-hint{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#fff;font-family:var(--f-display);font-size:12px;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4);z-index:5}
+.h-hint i{display:block;width:12px;height:12px;margin:8px auto 0;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(6px) rotate(45deg)}}
+.h-flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,#fffaf0,#f7e6c6);opacity:0;pointer-events:none;z-index:6}
+
+/* ---------- 2 · INVITE CARD in a temple arch ---------- */
+#invite{height:300vh}
+#invite .wall{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,#fbefd6,var(--wall) 75%)}
+.pillar{position:absolute;top:0;bottom:0;width:18%;background:url(assets/pillar.webp) center top/100% auto repeat-y;filter:drop-shadow(0 6px 12px rgba(90,40,10,.3))}
+.pillar.l{left:0}.pillar.r{right:0}
+.toran{top:0;left:0;right:0;z-index:3}
+.arch-win{position:absolute;left:19%;right:19%;bottom:0;display:flex;flex-direction:column;filter:drop-shadow(0 10px 24px rgba(120,70,20,.22))}
+#invite .arch-win{top:13%}
+.arch-top{width:100%;height:auto;margin-bottom:-1px}
+.arch-body{flex:1;background:var(--cream);box-shadow:inset 2px 0 0 var(--gold),inset -2px 0 0 var(--gold)}
+.inv-copy{position:absolute;left:0;right:0;top:5%;bottom:4%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;padding-inline:14px;color:var(--ink)}
+.inv-copy .te{font-size:12px;color:var(--vermilion)}
+.inv-copy .ganesha{width:64px}
+.inv-copy .ganesha img{width:100%;height:auto;display:block}
+.inv-copy p{margin:0;font-size:15px;line-height:1.35;color:var(--ink-soft);text-wrap:balance}
+.inv-copy .script.big{font-size:clamp(50px,15vw,64px);color:var(--teal);margin:2px 0}
+.inv-copy .names{font-family:var(--f-display);font-size:clamp(26px,8vw,34px);letter-spacing:.08em;color:#b8822c;line-height:1.05}
+.inv-copy .names .script{display:block;font-size:28px;color:var(--vermilion);letter-spacing:0;margin:4px 0}
+.inv-copy .parents{font-size:13.5px;line-height:1.35;color:var(--ink-soft)}
+.inv-copy .rule{width:70%;height:10px;background:radial-gradient(circle,var(--gold) 0 3px,transparent 3.5px) center/14px 10px no-repeat,linear-gradient(var(--gold),var(--gold)) center/100% 1px no-repeat}
+.inv-copy .when{font-family:var(--f-display);font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--maroon)}
+
+/* ---------- 3 · EVENTS ---------- */
+#events{position:relative;background:var(--cream);padding:0 0 0}
+.lotus-band{display:block;width:100%;height:auto;padding:14px 0 4px}
+.ev-head{text-align:center;padding:6px 20px 8px}
+.ev-head .script{font-size:44px;color:var(--teal)}
+.ev-head p{margin:6px 0 0;color:var(--ink-soft);font-size:16px}
+.ev-list{display:grid;gap:18px;padding:18px 20px 34px}
+.ev{background:#fffaf0;border:1px solid rgba(195,146,54,.55);border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(120,70,20,.12)}
+.ev-art{position:relative;aspect-ratio:16/8;background-size:cover;background-position:center}
+.ev-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(40,8,4,.72))}
+.ev-art .te{position:absolute;left:16px;bottom:10px;z-index:1;font-size:20px;font-weight:600;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.ev-body{padding:16px 18px 18px;display:grid;gap:4px}
+.ev-body h3{margin:0;font-family:var(--f-display);font-weight:400;font-size:21px;letter-spacing:.04em;color:var(--maroon)}
+.ev-meta{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:16px;color:var(--ink-soft)}
+.ev-meta b{font-family:var(--f-display);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-3);padding-top:4px}
+.ev-body .btn{justify-self:start;margin-top:10px;padding:10px 18px;font-size:12px}
+.cloud-edge{display:block;width:100%;height:auto;margin-bottom:-2px}
+
+/* ---------- 4 · STORYBOOK: camera pans down a layered temple scene ---------- */
+#story{height:420vh;background:#bfe6fb}
+.world{position:absolute;left:0;right:0;top:0;height:200%;will-change:transform}
+.w-sky{position:absolute;left:0;right:0;top:0;height:47%;background:linear-gradient(180deg,#7cc4f2 0%,#b7e2fb 60%,#e3f4fd 100%)}
+.w-floor{position:absolute;left:0;right:0;top:44%;bottom:0;background:url(assets/story_floor.webp) center top/cover no-repeat,#e8c68d}
+.w-floor::before{content:"";position:absolute;left:0;right:0;top:0;height:60px;background:linear-gradient(180deg,#e3f4fd,rgba(227,244,253,0))}
+.st-caption{position:absolute;left:0;right:0;top:12%;z-index:8;text-align:center;padding-inline:20px;color:var(--maroon);pointer-events:none}
+.st-caption .script{font-size:40px;color:var(--maroon)}
+.st-caption .te{font-size:18px;color:var(--vermilion);font-weight:600}
+.st-caption p{margin:6px 0 0;font-family:var(--f-display);letter-spacing:.14em;text-transform:uppercase;font-size:13px}
+.st-caption.two{top:auto;bottom:7%}
+.st-caption .pnl{display:inline-block;padding:12px 26px 14px;border-radius:120px 120px 18px 18px;background:rgba(255,244,222,.9);border:1px solid rgba(195,146,54,.6);box-shadow:0 10px 30px rgba(90,40,10,.18)}
+.petal{position:absolute;top:-30px;width:12px;height:16px;border-radius:70% 0 70% 0;opacity:.9;z-index:7;animation:fall linear infinite}
+@keyframes fall{0%{transform:translate(0,-20px) rotate(0)}100%{transform:translate(40px,115svh) rotate(540deg)}}
+
+/* ---------- 5 · MEET THE BRIDE & GROOM (maroon + gold) ---------- */
+.maroon{position:relative;background:
+  radial-gradient(circle at 25% 20%,rgba(240,200,101,.07) 0 30px,transparent 31px) 0 0/90px 90px,
+  radial-gradient(circle at 75% 70%,rgba(240,200,101,.06) 0 18px,transparent 19px) 0 0/90px 90px,
+  linear-gradient(180deg,var(--maroon-2),var(--maroon));color:var(--cream)}
+#couple{padding:40px 0 0;overflow:hidden}
+.mt-head{text-align:center;color:var(--gold-2);position:relative;z-index:2}
+.mt-head .script{font-size:30px}
+.mt-head .script.lg{font-size:50px;margin-top:4px}
+.lantern{position:absolute;top:0;width:54px;transform-origin:50% 0;animation:swing 4.5s ease-in-out infinite;z-index:1}
+.lantern.l{left:14px}.lantern.r{right:14px;animation-delay:-2.2s}
+@keyframes swing{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-4deg)}}
+.m-arch{position:relative;margin:26px 22px 0;display:flex;flex-direction:column}
+.m-arch .arch-body{padding:6px 22px 30px;color:var(--ink);text-align:center}
+.m-arch p{margin:0 auto;max-width:34ch;font-size:16.5px;line-height:1.45;color:var(--ink-soft)}
+.gframe{position:relative;width:76%;margin:22px auto 0;padding:12px;background:linear-gradient(135deg,#f9dc84,#b98327 40%,#f6d57a 60%,#a8741f);border-radius:6px;box-shadow:0 14px 30px rgba(60,20,0,.35)}
+.gframe .ph{position:relative;border:3px solid #7a5216;overflow:hidden}
+.gframe .ph img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.ph-empty{aspect-ratio:4/5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.18) 0 10px,transparent 10px 20px),linear-gradient(160deg,#f6e3bf,#e2bf82);color:#8a6020;font-family:var(--f-display);font-size:10px;letter-spacing:.2em;text-transform:uppercase;text-align:center}
+.ph-empty svg{width:34%;height:auto;opacity:.7}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.duo div{min-width:0}
+.duo .caps{font-size:19px;color:var(--maroon)}
+.duo small{display:block;font-size:14px;line-height:1.3;color:var(--ink-soft)}
+
+/* ---------- 6 · VENUE ---------- */
+#venue{padding:36px 0 0;text-align:center;overflow:hidden}
+#venue .script{font-size:46px;color:var(--gold-2)}
+.v-name{font-family:var(--f-display);font-size:20px;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding-inline:24px;margin-top:8px;text-wrap:balance}
+.v-addr{color:#f0d6b8;font-size:16px;margin-top:4px}
+#venue .btn{margin-top:18px}
+.venue-gold{display:block;width:100%;height:auto;margin-top:26px;mix-blend-mode:screen}
+
+/* ---------- 7 · RSVP behind opening curtains ---------- */
+#rsvp{height:240vh}
+#rsvp .stage{background:linear-gradient(180deg,var(--maroon),var(--maroon-3))}
+#rsvp .arch-win{top:16%;left:9%;right:9%;bottom:7%}
+.bells{position:absolute;top:22px;left:0;right:0;display:flex;justify-content:space-around;z-index:4;padding-inline:8%}
+.bells svg{width:22px;transform-origin:50% 0;animation:swing 3.2s ease-in-out infinite}
+.bells svg:nth-child(even){animation-delay:-1.6s}
+.rs-copy{position:absolute;left:0;right:0;top:16%;bottom:6%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding-inline:28px;color:var(--ink)}
+.rs-copy .script{font-size:clamp(48px,14vw,60px);color:var(--maroon)}
+.rs-copy p{margin:0;max-width:30ch;font-size:16.5px;color:var(--ink-soft)}
+.rs-copy .tag{font-family:var(--f-display);font-size:19px;letter-spacing:.06em;color:var(--gold-3)}
+.rs-copy small{font-size:13.5px;color:var(--ink-soft)}
+.curtain{position:absolute;top:0;bottom:0;width:51%;z-index:5;display:flex;flex-direction:column;filter:drop-shadow(0 0 16px rgba(0,0,0,.55))}
+.curtain .body{flex:1;background-size:100% 100%}
+.curtain .fr{aspect-ratio:440/114;background-size:100% 100%}
+.curtain.l{left:0}.curtain.r{right:0}
+.curtain.l .body{background-image:url(assets/curtain_body_l.webp)}.curtain.r .body{background-image:url(assets/curtain_body_r.webp)}
+.curtain.l .fr{background-image:url(assets/curtain_fringe_l.webp)}.curtain.r .fr{background-image:url(assets/curtain_fringe_r.webp)}
+.valance{position:absolute;left:0;right:0;top:0;z-index:6}
+.valance img{display:block;width:100%;height:auto}
+
+/* ---------- 8 · COUNTDOWN + 9 · MAGIC (embossed paper) ---------- */
+.paper{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#fdf3e1,#f3e2c4 90%)}
+.paper .emb{position:absolute;pointer-events:none;filter:drop-shadow(1.5px 1.5px 0 rgba(255,255,255,.9)) drop-shadow(-1px -1px 0 rgba(150,105,50,.18))}
+#countdown{padding:56px 20px 30px;text-align:center}
+#countdown .script{position:relative;font-size:46px;color:var(--maroon)}
+.cd{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:340px;margin:22px auto 0}
+.cd div{background:rgba(255,255,255,.75);border:1px solid rgba(195,146,54,.45);border-radius:12px;padding:12px 4px 8px;box-shadow:0 6px 14px rgba(120,70,20,.1)}
+.cd b{display:block;font-family:var(--f-display);font-weight:400;font-size:28px;color:var(--maroon);font-variant-numeric:tabular-nums}
+.cd span{font-size:11px;font-family:var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-3)}
+.cd-date{position:relative;margin-top:16px;color:var(--ink-soft);font-size:16px}
+#magic{height:78svh;min-height:520px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.mg-hint{position:absolute;left:0;right:0;top:9%;text-align:center;z-index:3;pointer-events:none}
+.mg-hint .script{font-size:40px;color:var(--maroon)}
+.mg-hint small{display:block;font-family:var(--f-display);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-3);margin-top:6px}
+.pc{position:absolute;left:0;top:0;width:96px;padding:6px 6px 16px;background:#fffdf8;box-shadow:0 8px 20px rgba(60,30,10,.28);border-radius:2px;will-change:transform;pointer-events:none}
+.pc img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.pc .ph-empty{aspect-ratio:1}
+footer{background:var(--maroon-3);color:#e9cfae;text-align:center;padding:34px 20px 40px;font-size:15px}
+footer .script{font-size:30px;color:var(--gold-2)}
+footer .made{margin-top:14px;font-family:var(--f-display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#b9946a}
+footer .made a{color:var(--gold-2);text-decoration:none}
+
+@media (prefers-reduced-motion: reduce){
+  .petal,.lantern,.bells svg,.h-hint i{animation:none}
+}
+</style>
+
+<!-- ================= TEMPLE DOORS (tap to open) ================= -->
+<div id="doors" role="dialog" aria-label="Wedding invitation cover">
+  <div class="frame">
+    <div class="door l"><span class="img"></span></div>
+    <div class="door r"><span class="img"></span></div>
+    <div class="door-copy">
+      <div class="te">॥ శ్రీరస్తు · శుభమస్తు · అవిఘ్నమస్తు ॥</div>
+      <div class="script">You're invited</div>
+      <div class="caps">Arjun <span class="amp">&amp;</span> Meghana</div>
+      <div class="date">14 · 02 · 2027 &nbsp;·&nbsp; Hyderabad</div>
+      <button class="btn btn-gold" id="openBtn" type="button">Open invitation</button>
+    </div>
+  </div>
+</div>
+
+<main id="app">
+
+  <!-- 1 · HERO -->
+  <section class="scene" id="hero" aria-label="Arjun weds Meghana">
+    <div class="stage">
+      <div class="sky"></div>
+      <div class="layer cloud" data-dx="-60" style="left:-12%;top:31%;width:52%"><img src="assets/cloud.webp" alt=""></div>
+      <div class="layer cloud flip" data-dx="70" style="right:-14%;top:40%;width:46%"><img src="assets/cloud.webp" alt=""></div>
+      <div class="layer cloud flip" data-dx="-40" style="left:-4%;top:3%;width:34%"><img src="assets/cloud.webp" alt=""></div>
+      <div class="layer cloud" data-dx="50" style="right:-6%;top:6%;width:30%"><img src="assets/cloud.webp" alt=""></div>
+      <div class="h-names layer">
+        <div class="te">॥ శ్రీరస్తు శుభమస్తు ॥</div>
+        <div class="caps">Arjun</div>
+        <div class="weds">weds</div>
+        <div class="caps">Meghana</div>
+      </div>
+      <div class="layer h-gopuram" id="hGopuram"><img src="assets/hero_gopuram.webp" alt=""></div>
+      <div class="layer h-tree l" id="treeL"><img src="assets/tree.webp" alt=""></div>
+      <div class="layer h-tree r flip" id="treeR"><img src="assets/tree.webp" alt=""></div>
+      <div class="h-hint">Scroll slowly<i></i></div>
+      <div class="h-flash"></div>
+    </div>
+  </section>
+
+  <!-- 2 · INVITE CARD -->
+  <section class="scene" id="invite" aria-label="Invitation">
+    <div class="stage">
+      <div class="wall"></div>
+      <div class="pillar l"></div><div class="pillar r"></div>
+      <div class="arch-win">
+        <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#c39236" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+        <div class="arch-body"></div>
+        <div class="inv-copy">
+          <div class="ln ganesha"><img src="assets/ganesha.webp" alt="Lord Ganesha"></div>
+          <div class="ln te">॥ శ్రీ గణేశాయ నమః ॥</div>
+          <p class="ln">With the blessings of the Almighty and our elders, we joyfully</p>
+          <div class="ln script big">Invite</div>
+          <p class="ln">you and your family to the wedding of</p>
+          <div class="ln names">Arjun<span class="script">&amp;</span>Meghana</div>
+          <div class="ln parents">son of Smt. Padma &amp; Sri Venkat Rao<br>daughter of Smt. Sujatha &amp; Sri Ravi Reddy</div>
+          <div class="ln rule"></div>
+          <div class="ln when">Sunday · 14 February 2027</div>
+        </div>
+      </div>
+      <div class="layer toran" id="toran"><img src="assets/toran.webp" alt=""></div>
+    </div>
+  </section>
+
+  <!-- 3 · EVENTS -->
+  <section id="events" aria-label="Wedding events">
+    <img class="lotus-band" src="assets/lotus_border.webp" alt="">
+    <div class="ev-head">
+      <div class="script">On the following events</div>
+      <p>Three days of rituals, music and family. Every one of them is better with you there.</p>
+    </div>
+    <div class="ev-list" id="evList"></div>
+    <svg class="cloud-edge" viewBox="0 0 400 70" width="100%" aria-hidden="true"><rect y="0" width="400" height="70" fill="#7cc4f2"/><path d="M0,0 H400 V20 C380,44 350,40 336,30 C318,50 282,48 270,32 C250,52 214,50 204,30 C186,48 150,48 140,30 C120,50 86,46 76,28 C58,46 22,44 0,26 Z" fill="#fff4de"/></svg>
+  </section>
+
+  <!-- 4 · STORYBOOK -->
+  <section class="scene" id="story" aria-label="The wedding moment">
+    <div class="stage">
+      <div class="world" id="world">
+        <div class="w-sky"></div>
+        <div class="w-floor"></div>
+        <div class="layer s-cloud" style="left:-10%;top:4%;width:48%"><img src="assets/cloud.webp" alt=""></div>
+        <div class="layer s-cloud flip" style="right:-12%;top:10%;width:44%"><img src="assets/cloud.webp" alt=""></div>
+        <div class="layer s-cloud" style="left:32%;top:1%;width:28%"><img src="assets/cloud.webp" alt=""></div>
+        <div class="layer s-back" style="left:-8%;top:31.5%;width:42%"><img src="assets/story_gopuram_side.webp" alt=""></div>
+        <div class="layer s-back flip" style="right:-8%;top:31.5%;width:42%"><img src="assets/story_gopuram_side.webp" alt=""></div>
+        <div class="layer" id="sMain" style="left:14%;top:19.5%;width:72%"><img src="assets/story_gopuram.webp" alt=""></div>
+        <div class="layer" id="sMandapam" style="left:-26%;top:46.5%;width:152%"><img src="assets/mandapam.webp" alt=""></div>
+        <div class="layer" id="sCouple" style="left:29%;top:52.5%;width:42%"><img src="assets/couple.webp" alt="Bride and groom exchanging garlands"></div>
+        <div class="layer" id="leafL" style="left:-14%;top:55%;width:40%"><img src="assets/banana.webp" alt=""></div>
+        <div class="layer flip" id="leafR" style="right:-14%;top:55%;width:40%"><img src="assets/banana.webp" alt=""></div>
+        <div class="layer" id="sLotus" style="left:-45%;width:190%;bottom:0"><img src="assets/lotus_border.webp" alt=""></div>
+      </div>
+      <div class="st-caption one"><div class="pnl"><div class="script">Two families,</div><p>one sacred promise</p></div></div>
+      <div class="st-caption two"><div class="pnl"><div class="te">సుముహూర్తం</div><div class="script">Sumuhurtham</div><p>10:32 AM · Sunday, 14 February</p></div></div>
+      <div id="petals"></div>
+    </div>
+  </section>
+
+  <!-- 5 · MEET THE BRIDE & GROOM -->
+  <section id="couple" class="maroon" aria-label="Meet the bride and groom">
+    <div class="lantern l"><img class="fimg" src="assets/lantern.webp" alt=""></div><div class="lantern r"><img class="fimg" src="assets/lantern.webp" alt=""></div>
+    <div class="mt-head"><div class="script">Meet the</div><div class="script lg">Bride &amp; Groom</div></div>
+    <div class="m-arch">
+      <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#f0c865" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+      <div class="arch-body">
+        <p>They met at a friend's sangeet in Bengaluru, argued about the best biryani in Hyderabad, and have been settling it ever since. Now the families are settling it together.</p>
+        <div class="gframe" id="frame"><div class="ph" id="framePh"></div></div>
+        <div class="duo">
+          <div><div class="caps">Meghana</div><small>daughter of Smt. Sujatha &amp; Sri Ravi Reddy</small></div>
+          <div><div class="caps">Arjun</div><small>son of Smt. Padma &amp; Sri Venkat Rao</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · VENUE -->
+  <section id="venue" class="maroon" aria-label="Venue">
+    <div class="script">The Venue</div>
+    <div class="v-name">Sri Lakshmi Narasimha Kalyana Mandapam</div>
+    <div class="v-addr">Road No. 12, Banjara Hills, Hyderabad</div>
+    <a class="btn btn-gold" href="https://maps.google.com/?q=Banjara+Hills+Hyderabad" target="_blank" rel="noopener">Open in Google Maps</a>
+    <img class="venue-gold" id="venueGold" src="assets/venue_gold.webp" alt="">
+  </section>
+
+  <!-- 7 · RSVP -->
+  <section class="scene" id="rsvp" aria-label="RSVP">
+    <div class="stage">
+      <div class="bells" id="bells"></div>
+      <div class="arch-win">
+        <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#f0c865" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+        <div class="arch-body"></div>
+      </div>
+      <div class="rs-copy">
+        <div class="r-ln script">Will you join us?</div>
+        <p class="r-ln">Your blessings will make our day complete. Please let us know by 31 January.</p>
+        <a class="r-ln btn btn-wa" href="https://wa.me/918971738710?text=Namaste!%20We%20will%20attend%20Arjun%20%26%20Meghana's%20wedding%20on%2014%20Feb." target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>
+          RSVP on WhatsApp</a>
+        <div class="r-ln" style="width:60%;height:10px;background:radial-gradient(circle,var(--gold) 0 3px,transparent 3.5px) center/14px 10px no-repeat,linear-gradient(var(--gold),var(--gold)) center/100% 1px no-repeat"></div>
+        <small class="r-ln">Share your photos with</small>
+        <div class="r-ln tag">#ArjunWedsMeghana</div>
+      </div>
+      <div class="valance"><img src="assets/curtain_valance.webp" alt=""></div>
+      <div class="curtain l" id="curL"><div class="body"></div><div class="fr"></div></div>
+      <div class="curtain r" id="curR"><div class="body"></div><div class="fr"></div></div>
+    </div>
+  </section>
+
+  <!-- 8 · COUNTDOWN -->
+  <section id="countdown" class="paper" aria-label="Countdown">
+    <div class="emb" id="emb1" style="width:420px;left:-150px;top:-120px;opacity:.9"></div>
+    <div class="script">Counting the days</div>
+    <div class="cd" aria-live="polite">
+      <div><b id="cdD">00</b><span>Days</span></div>
+      <div><b id="cdH">00</b><span>Hours</span></div>
+      <div><b id="cdM">00</b><span>Mins</span></div>
+      <div><b id="cdS">00</b><span>Secs</span></div>
+    </div>
+    <div class="cd-date">until the Sumuhurtham · 14 Feb 2027, 10:32 AM IST</div>
+  </section>
+
+  <!-- 9 · MAGIC -->
+  <section id="magic" class="paper" aria-label="Tap for a photo surprise" tabindex="0">
+    <div class="emb" id="emb2" style="width:460px;right:-190px;bottom:-140px;opacity:.9"></div>
+    <div class="mg-hint" id="mgHint"><div class="script">Touch here for magic</div><small>Tap anywhere</small></div>
+  </section>
+
+  <footer>
+    <div class="script">With love,</div>
+    <div>the Rao &amp; Reddy families</div>
+    <div class="made">Invitation by <a href="https://afterfxtemplates.com" target="_blank" rel="noopener">AfterFX Templates</a></div>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* =====================================================================
+   CLIENT PHOTOS — fill these later, nothing else needs changing.
+   couple : one 4:5 photo for the gold frame
+   magic  : 8–12 photos for "Touch here for magic"
+   Example:  couple: 'assets/couple_photo.jpg',
+             magic: ['assets/magic_01.jpg','assets/magic_02.jpg', ...]
+   ===================================================================== */
+const PHOTOS = {
+  couple: '',
+  magic: []
+};
+const MAGIC_SLOTS = 10;   // placeholder cards shown while PHOTOS.magic is empty
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+function mandala(color = '#b98a4a', rings = 6) {
+  let s = '';
+  for (let k = 1; k <= rings; k++) {
+    const R = k * 15, n = 8 + k * 4;
+    s += `<circle r="${R - 4}" fill="none" stroke="${color}" stroke-width=".8"/>`;
+    for (let i = 0; i < n; i++) s += `<ellipse cx="0" cy="${-R}" rx="${2 + k*.7}" ry="${5 + k*.8}" fill="none" stroke="${color}" stroke-width=".9" transform="rotate(${i*360/n})"/>`;
+  }
+  return `<svg viewBox="-100 -100 200 200" width="100%" aria-hidden="true">${s}</svg>`;
+}
+function bell() {
+  return `<svg viewBox="0 0 22 70" aria-hidden="true"><line x1="11" y1="0" x2="11" y2="40" stroke="#d9a947" stroke-width="1.5"/><path d="M3,62 Q3,44 11,42 Q19,44 19,62 Z" fill="#e2b24e" stroke="#8a5a14"/><rect x="1" y="61" width="20" height="3" rx="1.5" fill="#a8741f"/><circle cx="11" cy="67" r="2.6" fill="#a8741f"/></svg>`;
+}
+const CAM = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 4 7.2 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.2L15 4H9Zm3 5a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+const slot = label => `<div class="ph-empty">${CAM}<span>${label}</span></div>`;
+
+/* ---------- mount ---------- */
+$('#framePh').innerHTML = PHOTOS.couple ? `<img src="${PHOTOS.couple}" alt="Arjun and Meghana">` : slot('Couple photo');
+$('#bells').innerHTML = Array.from({ length: 7 }, bell).join('');
+$('#emb1').innerHTML = mandala('#c9a36a', 7); $('#emb2').innerHTML = mandala('#c9a36a', 7);
+(() => { // falling petals in storybook
+  const box = $('#petals'), cols = ['#f39a1d', '#f7c531', '#e0302f', '#f29bb6'];
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement('span'); p.className = 'petal';
+    p.style.left = (Math.random() * 100) + '%'; p.style.background = cols[i % 4];
+    p.style.animationDuration = (6 + Math.random() * 6) + 's'; p.style.animationDelay = (-Math.random() * 12) + 's';
+    box.appendChild(p);
+  }
+})();
+
+/* ---------- events ---------- */
+const MAP = 'https://maps.google.com/?q=Banjara+Hills+Hyderabad';
+const EVENTS = [
+  { te: 'మెహందీ', name: 'Mehendi', date: 'Friday, 12 Feb 2027', time: '4:00 PM onwards', venue: 'Bride\'s residence, Jubilee Hills', img: 'assets/ev_mehendi.webp' },
+  { te: 'పెళ్ళికూతురు · పెళ్ళికొడుకు', name: 'Pellikuthuru & Pellikoduku', date: 'Saturday, 13 Feb 2027', time: '9:00 AM', venue: 'Both family homes', img: 'assets/ev_haldi.webp' },
+  { te: 'సుముహూర్తం', name: 'Muhurtham', date: 'Sunday, 14 Feb 2027', time: '10:32 AM', venue: 'Sri Lakshmi Narasimha Kalyana Mandapam', img: 'assets/ev_muhurtham.webp' },
+  { te: 'విందు', name: 'Reception', date: 'Sunday, 14 Feb 2027', time: '7:30 PM onwards', venue: 'Same venue, lawn', img: 'assets/ev_reception.webp' },
+];
+$('#evList').innerHTML = EVENTS.map(e => `
+  <article class="ev">
+    <div class="ev-art" style="background-image:url(${e.img})"><div class="te">${e.te}</div></div>
+    <div class="ev-body">
+      <h3>${e.name}</h3>
+      <div class="ev-meta"><b>When</b><span>${e.date} · ${e.time}</span><b>Where</b><span>${e.venue}</span></div>
+      <a class="btn btn-maroon" href="${MAP}" target="_blank" rel="noopener">View location</a>
+    </div>
+  </article>`).join('');
+
+/* ---------- countdown ---------- */
+const WED = new Date('2027-02-14T10:32:00+05:30').getTime();
+const pad = n => String(n).padStart(2, '0');
+function tick() {
+  let d = Math.max(0, WED - Date.now()) / 1000;
+  $('#cdD').textContent = Math.floor(d / 86400); d %= 86400;
+  $('#cdH').textContent = pad(Math.floor(d / 3600)); d %= 3600;
+  $('#cdM').textContent = pad(Math.floor(d / 60));
+  $('#cdS').textContent = pad(Math.floor(d % 60));
+}
+tick(); setInterval(tick, 1000);
+
+/* =====================================================================
+   MOTION — scroll-scrubbed timelines + smooth scroll
+   ===================================================================== */
+try { history.scrollRestoration = 'manual'; } catch (e) {}
+window.scrollTo(0, 0);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasGsap = !!(window.gsap && window.ScrollTrigger);
+let lenis = null;
+
+function unlock() {
+  document.documentElement.classList.remove('locked');
+  if (lenis) lenis.start();
+  if (hasGsap) ScrollTrigger.refresh();
+}
+document.documentElement.classList.add('locked');
+
+$('#openBtn').addEventListener('click', () => {
+  const doors = $('#doors');
+  if (!hasGsap || reduce) { doors.hidden = true; unlock(); return; }
+  gsap.timeline({ onComplete: () => { doors.hidden = true; } })
+    .to('.door-copy', { opacity: 0, y: -14, duration: .45, ease: 'power2.in' })
+    .to('.door.l', { rotateY: -108, duration: 1.5, ease: 'power3.inOut' }, .3)
+    .to('.door.r', { rotateY: 108, duration: 1.5, ease: 'power3.inOut' }, .3)
+    .to('#doors', { opacity: 0, duration: .6 }, 1.25)
+    .add(unlock, .9);
+});
+
+if (hasGsap) {
+  gsap.registerPlugin(ScrollTrigger);
+  if (window.Lenis && !reduce) {
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true, wheelMultiplier: 0.9 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+    lenis.stop();
+  }
+  const scrub = reduce ? true : 0.9;
+  function scene(id, build) {
+    const el = document.getElementById(id);
+    const tl = gsap.timeline({ defaults: { ease: 'none' } });
+    build(tl, el);
+    ScrollTrigger.create({ trigger: el, start: 'top top', end: 'bottom bottom', scrub, animation: tl });
+  }
+
+  /* 1 · Hero: gopuram rises over the names, then camera flies into its doorway */
+  scene('hero', (tl, el) => {
+    const g = $('#hGopuram', el), names = $('.h-names', el), tL = $('#treeL', el), tR = $('#treeR', el), clouds = $$('.cloud', el);
+    gsap.set(g, { xPercent: -50, yPercent: 60, transformOrigin: '50% 90%' });
+    gsap.set([tL, tR], { yPercent: 80 });
+    tl.to('.h-hint', { opacity: 0, duration: .4 }, 0)
+      .to(g, { yPercent: 0, duration: 4 }, 0)
+      .to(names, { yPercent: -45, duration: 4 }, 0)
+      .to([tL, tR], { yPercent: 0, duration: 3 }, .5)
+      .to(clouds, { x: i => clouds[i].dataset.dx * 1.6, duration: 7 }, 0)
+      .to(names, { opacity: 0, duration: 1.2 }, 3.4)
+      .to(g, { scale: 6, yPercent: -50, duration: 3, ease: 'power2.in' }, 4)
+      .to(tL, { xPercent: -80, scale: 1.9, duration: 3, ease: 'power2.in' }, 4)
+      .to(tR, { xPercent: 80, scale: 1.9, duration: 3, ease: 'power2.in' }, 4)
+      .to(clouds, { scale: 1.6, opacity: 0, duration: 2 }, 4.4)
+      .to('.h-flash', { opacity: 1, duration: .5 }, 6.3);
+  });
+
+  /* 2 · Invite: pillars slide in, arch rises, toran drops, lines reveal one by one */
+  scene('invite', (tl, el) => {
+    tl.fromTo($('.arch-win', el), { yPercent: 14 }, { yPercent: 0, duration: 1, ease: 'power2.out' }, 0)
+      .fromTo($('.pillar.l', el), { xPercent: -45 }, { xPercent: 0, duration: 1, ease: 'power2.out' }, 0)
+      .fromTo($('.pillar.r', el), { xPercent: 45 }, { xPercent: 0, duration: 1, ease: 'power2.out' }, 0)
+      .fromTo('#toran', { yPercent: -110 }, { yPercent: 0, duration: 1.1, ease: 'back.out(1.4)' }, .3)
+      .fromTo($$('.ln', el), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .6, stagger: .42, ease: 'power2.out' }, 1.2)
+      .to({}, { duration: 1.2 });
+  });
+
+  /* 3 · Event cards float up as they enter */
+  $$('.ev').forEach((c, i) => gsap.from(c, { y: 70, opacity: 0, rotate: i % 2 ? 1.5 : -1.5, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: c, start: 'top 92%', once: true } }));
+  gsap.from('.ev-head', { y: 30, opacity: 0, duration: .8, scrollTrigger: { trigger: '.ev-head', start: 'top 90%', once: true } });
+
+  /* 4 · Storybook: camera pans down; each layer moves at its own speed (parallax) */
+  scene('story', (tl, el) => {
+    tl.to('#world', { yPercent: -46, duration: 6 }, 0)
+      .to($$('.s-cloud', el), { yPercent: 160, duration: 6 }, 0)
+      .to($$('.s-back', el), { yPercent: 14, duration: 6 }, 0)
+      .to('#sMain', { yPercent: 6, scale: 1.04, duration: 6 }, 0)
+      .to('#leafL', { yPercent: -14, rotate: -5, duration: 6 }, 0)
+      .to('#leafR', { yPercent: -14, rotate: 5, duration: 6 }, 0)
+      .to('#sLotus', { yPercent: -70, duration: 6 }, 0)
+      .fromTo('#sCouple', { scale: .9, yPercent: 6 }, { scale: 1, yPercent: 0, duration: 2.4, ease: 'power1.out' }, 2)
+      .fromTo('.st-caption.one', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .7 }, .3)
+      .to('.st-caption.one', { opacity: 0, y: -20, duration: .6 }, 2.1)
+      .fromTo('.st-caption.two', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .7 }, 3.9)
+      .to({}, { duration: .6 });
+  });
+
+  /* 5 · Gold frame slides down into the arch */
+  gsap.fromTo('#frame', { yPercent: -35, rotate: -4, scale: .9 }, { yPercent: 0, rotate: 0, scale: 1, ease: 'none', scrollTrigger: { trigger: '#couple', start: 'top 70%', end: 'center 45%', scrub } });
+  gsap.from('.mt-head', { y: 30, opacity: 0, duration: .9, scrollTrigger: { trigger: '#couple', start: 'top 80%', once: true } });
+
+  /* 6 · Gold temples rise */
+  gsap.fromTo('#venueGold', { yPercent: 35, opacity: .3 }, { yPercent: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: '#venue', start: 'top 80%', end: 'bottom bottom', scrub } });
+
+  /* 7 · Curtains open */
+  scene('rsvp', (tl, el) => {
+    tl.to('#curL', { xPercent: -104, duration: 2, ease: 'power2.inOut' }, .2)
+      .to('#curR', { xPercent: 104, duration: 2, ease: 'power2.inOut' }, .2)
+      .fromTo($$('.r-ln', el), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .5, stagger: .25 }, 1.4)
+      .to({}, { duration: .8 });
+  });
+
+  gsap.from('#countdown .cd > div', { y: 30, opacity: 0, stagger: .1, duration: .7, scrollTrigger: { trigger: '#countdown', start: 'top 75%', once: true } });
+}
+
+/* 9 · Touch for magic: photos burst from your finger, then settle into a heart */
+(() => {
+  const box = $('#magic'), list = PHOTOS.magic.length ? PHOTOS.magic : Array(MAGIC_SLOTS).fill('');
+  const N = list.length, cards = [];
+  list.forEach((src, i) => {
+    const c = document.createElement('div'); c.className = 'pc';
+    c.innerHTML = src ? `<img src="${src}" alt="">` : slot('Photo ' + String(i + 1).padStart(2, '0'));
+    box.appendChild(c); cards.push(c);
+  });
+  const size = () => ({ w: box.clientWidth, h: box.clientHeight });
+  const pile = () => { const { w, h } = size(); cards.forEach((c, i) => {
+    const x = w / 2 - 48 + (i % 3 - 1) * 6, y = h * .52 - 55 + i * 1.5, r = (i * 37 % 24) - 12;
+    if (window.gsap) gsap.set(c, { x, y, rotate: r }); else c.style.transform = `translate(${x}px,${y}px) rotate(${r}deg)`; }); };
+  pile();
+  let state = 0;
+  const heart = i => { const t = (i / N) * Math.PI * 2, { w, h } = size(), s = Math.min(w, h) / 40;
+    return { x: w / 2 + 16 * Math.pow(Math.sin(t), 3) * s - 48, y: h * .56 - (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * s - 56 }; };
+  function magic(px, py) {
+    if (!window.gsap) return;
+    gsap.to('#mgHint', { opacity: .25, duration: .4 });
+    const { w, h } = size();
+    cards.forEach((c, i) => {
+      gsap.killTweensOf(c);
+      const tl = gsap.timeline();
+      tl.set(c, { x: px - 48, y: py - 55, scale: .2, rotate: 0 })
+        .to(c, { x: 10 + Math.random() * (w - 116), y: 20 + Math.random() * (h - 150), scale: 1, rotate: Math.random() * 60 - 30, duration: .7, ease: 'power3.out', delay: i * .03 });
+      if (state === 0) { const p = heart(i); tl.to(c, { x: p.x, y: p.y, rotate: Math.random() * 20 - 10, duration: 1.1, ease: 'power3.inOut' }, '+=.25'); }
+    });
+    state = 1 - state;
+  }
+  box.addEventListener('click', e => { const r = box.getBoundingClientRect(); magic(e.clientX - r.left, e.clientY - r.top); });
+  box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const { w, h } = size(); magic(w / 2, h / 2); } });
+  addEventListener('resize', () => { if (state === 0) pile(); });
+})();
+</script>
