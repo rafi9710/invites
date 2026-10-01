@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding Invitation</title>
+<meta name="theme-color" content="#3d0710">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Marcellus&family=Noto+Serif+Telugu:wght@400;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TEMPLE GOPURAM — scroll-scrubbed web invitation (AfterFX Invite Studio layout 5)
+   One phone-width column; each "scene" = tall section + sticky 100svh stage
+   whose layers are moved by scroll progress (own engine, no libraries).
+   ========================================================= */
+:root{
+  --cream:#fff4de; --wall:#f1dfbd;
+  --ink:#4a2316; --ink-soft:#7a4a32;
+  --gold:#c39236; --gold-2:#f0c865; --gold-3:#8a6020;
+  --maroon:#5a0b18; --maroon-2:#7a1527; --maroon-3:#3d0710;
+  --vermilion:#d8432c; --teal:#2b7fa8; --wa:#1f9d55;
+  --f-names:'Marcellus','Cormorant Garamond',Georgia,serif;
+  --f-script:'Pinyon Script','Snell Roundhand',cursive;
+  --f-body:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --f-te:'Noto Serif Telugu','Gautami','Nirmala UI',serif;
+  --col:460px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--maroon-3)}
+body{background:radial-gradient(120% 60% at 50% 0%,var(--maroon-2) 0%,var(--maroon-3) 70%) fixed,var(--maroon-3);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden;height:100vh}
+#app{position:relative;max-width:var(--col);margin:0 auto;background:var(--cream);overflow:clip;box-shadow:0 0 80px rgba(0,0,0,.45)}
+img{display:block;max-width:100%}
+a{color:inherit}
+.scene{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.layer{position:absolute;will-change:transform}
+.layer img{width:100%;height:auto}
+.flip img,img.flip{transform:scaleX(-1)}
+.script{font-family:var(--f-script),var(--f-body);font-weight:400;line-height:1.05}
+.caps{font-family:var(--f-names);letter-spacing:.08em;text-transform:uppercase}
+.te{font-family:var(--f-te),var(--f-body)}
+.rv{opacity:0;transform:translateY(30px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--f-names);font-size:13px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:0;border-radius:999px;padding:12px 22px}
+.btn:active{transform:scale(.97)}
+.btn svg{width:16px;height:16px}
+.btn-gold{background:linear-gradient(180deg,#f7d87e,#d3a03e);color:var(--maroon-3);box-shadow:0 6px 18px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-maroon{background:var(--maroon);color:var(--gold-2);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.rule{width:70%;height:10px;background:radial-gradient(circle,var(--gold) 0 3px,transparent 3.5px) center/14px 10px no-repeat,linear-gradient(var(--gold),var(--gold)) center/100% 1px no-repeat}
+.missing{background:linear-gradient(160deg,#f6e3bf,#e2bf82)}
+
+/* ---------- doors ---------- */
+#gate{position:fixed;inset:0;z-index:60;display:flex;justify-content:center;background:var(--maroon-3);transition:opacity .7s ease .9s}
+#gate .wrap{position:relative;width:100%;max-width:var(--col);height:100%;perspective:1400px;overflow:hidden;background:#1a0306}
+.door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;background:#5a1c0a;transition:transform 1.5s cubic-bezier(.65,0,.35,1) .3s;backface-visibility:hidden}
+.door .img{position:absolute;inset:0;background-position:right center;background-size:auto 100%;background-repeat:no-repeat}
+.door.r .img{transform:scaleX(-1)}
+.door.l{left:0;transform-origin:0 50%}.door.r{right:0;transform-origin:100% 50%}
+.door.l::after{content:"";position:absolute;right:0;top:0;bottom:0;width:8px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.6))}
+.gcopy{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-56%);width:min(84%,340px);text-align:center;color:var(--cream);transition:opacity .45s,transform .45s;
+  padding:28px 20px 26px;background:radial-gradient(120% 100% at 50% 0%,rgba(90,11,24,.94),rgba(45,6,12,.94));border:1px solid rgba(240,200,101,.55);border-radius:180px 180px 14px 14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 5px rgba(90,11,24,.9),inset 0 0 0 6px rgba(240,200,101,.35)}
+.gcopy .tl{font-size:14px;color:var(--gold-2);letter-spacing:.03em}
+.gcopy .script{font-size:38px;color:var(--gold-2);margin:10px 0 6px}
+.gcopy .caps{font-size:24px;line-height:1.2;color:#fff}
+.gcopy .amp{display:block;font-family:var(--f-script),var(--f-body);font-size:26px;color:var(--gold-2);line-height:1.1;text-transform:none;letter-spacing:0}
+.gcopy .date{font-size:15px;margin-top:10px;letter-spacing:.06em;color:#f3dcc0}
+.gcopy .btn{margin-top:20px}
+#gate.open .door.l{transform:rotateY(-108deg)}#gate.open .door.r{transform:rotateY(108deg)}
+#gate.open .gcopy{opacity:0;transform:translate(-50%,-62%)}
+#gate.open{opacity:0;pointer-events:none}#gate.gone{display:none}
+
+/* ---------- 1 · hero ---------- */
+#hero{height:330vh}
+#hero .sky{position:absolute;inset:0;background:linear-gradient(180deg,#1c66cf,#4c9fea 48%,#a6d8f8);background-size:cover;background-position:center bottom}
+#hero .sky::after{content:"";position:absolute;inset:0 0 55% 0;background:linear-gradient(180deg,rgba(14,60,140,.35),transparent)}
+.h-names{position:absolute;left:0;right:0;top:9%;text-align:center;color:#fff;text-shadow:0 2px 14px rgba(10,40,100,.4);padding-inline:16px}
+.h-names .tl{font-size:13px;letter-spacing:.05em;opacity:.95;margin-bottom:4px}
+.h-names .caps{font-size:clamp(34px,10.5vw,50px);line-height:1.05;letter-spacing:.06em;text-wrap:balance}
+.h-names .weds{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 4px;font-family:var(--f-script),var(--f-body);font-size:28px}
+.h-names .weds::before,.h-names .weds::after{content:"";width:46px;height:1px;background:rgba(255,255,255,.75)}
+.h-gopuram{left:50%;bottom:0;width:92%;transform-origin:50% 90%;transform:translate(-50%,60%);filter:drop-shadow(0 -6px 30px rgba(255,240,200,.35))}
+.h-tree{bottom:-3%;width:66%}.h-tree.l{left:-12%}.h-tree.r{right:-12%}
+.h-hint{position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#fff;font-family:var(--f-names);font-size:12px;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4);z-index:5}
+.h-hint i{display:block;width:12px;height:12px;margin:8px auto 0;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(6px) rotate(45deg)}}
+.h-flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 55%,#fffaf0,#f7e6c6);opacity:0;pointer-events:none;z-index:6}
+
+/* ---------- 2 · invite card ---------- */
+#invite .wall{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,#fbefd6,var(--wall) 75%)}
+.pillar{position:absolute;top:0;bottom:0;width:18%;background-position:center top;background-size:100% auto;background-repeat:repeat-y;filter:drop-shadow(0 6px 12px rgba(90,40,10,.3))}
+.pillar.l{left:0}.pillar.r{right:0}
+.toran{top:0;left:0;right:0;z-index:3}
+.arch-win{position:absolute;left:19%;right:19%;bottom:0;display:flex;flex-direction:column;filter:drop-shadow(0 10px 24px rgba(120,70,20,.22))}
+#invite .arch-win{top:13%}
+.arch-top{display:block;width:100%;height:auto;margin-bottom:-1px}
+.arch-body{flex:1;background:var(--cream);box-shadow:inset 2px 0 0 var(--gold),inset -2px 0 0 var(--gold)}
+.inv-copy{position:absolute;left:0;right:0;top:5%;bottom:3%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding-inline:12px;color:var(--ink)}
+.inv-copy .sym{width:60px;height:auto}.inv-copy .sym.sm{width:44px}.inv-copy .sym.lg{width:84px}
+.inv-copy p{font-size:14.5px;line-height:1.35;color:var(--ink-soft);text-wrap:balance}
+.inv-copy .grand{font-size:13px;font-style:italic}
+.inv-copy .parents{font-size:15.5px;color:var(--maroon);font-weight:600}
+.inv-copy .names{font-family:var(--f-names);font-size:clamp(20px,6.2vw,27px);letter-spacing:.06em;color:#b8822c;line-height:1.15;text-wrap:balance}
+.inv-copy .names .amp{display:block;font-family:var(--f-script),var(--f-body);font-size:28px;color:var(--vermilion);letter-spacing:0;margin:2px 0}
+.inv-copy .when{font-family:var(--f-names);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--maroon)}
+
+/* ---------- 3 · events ---------- */
+#events{position:relative;background:var(--cream)}
+.lotus-band{width:100%;height:auto;padding:14px 0 4px}
+.ev-head{text-align:center;padding:6px 20px 8px}
+.ev-head .script{font-size:42px;color:var(--teal)}
+.ev-list{display:grid;gap:18px;padding:18px 20px 34px}
+.ev{background:#fffaf0;border:1px solid rgba(195,146,54,.55);border-radius:16px;overflow:hidden;box-shadow:0 10px 26px rgba(120,70,20,.12)}
+.ev-art{position:relative;aspect-ratio:16/8;background:linear-gradient(135deg,var(--maroon-2),var(--maroon)) center/cover no-repeat}
+.ev-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(40,8,4,.72))}
+.ev-art .n{position:absolute;left:16px;right:16px;bottom:10px;z-index:1;font-family:var(--f-names);font-size:21px;letter-spacing:.04em;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.ev-body{padding:14px 18px 18px;display:grid;gap:4px}
+.ev-meta{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:16px;color:var(--ink-soft)}
+.ev-meta b{font-family:var(--f-names);font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-3);padding-top:4px}
+.ev-body .btn{justify-self:start;margin-top:10px;padding:10px 18px;font-size:12px}
+.cloud-edge{display:block;width:100%;height:auto;margin-bottom:-2px}
+
+/* ---------- 4 · storybook ---------- */
+#story{height:420vh;background:#bfe6fb}
+.world{position:absolute;left:0;right:0;top:0;height:200%;will-change:transform}
+.w-sky{position:absolute;left:0;right:0;top:0;height:47%;background:linear-gradient(180deg,#7cc4f2 0%,#b7e2fb 60%,#e3f4fd 100%)}
+.w-floor{position:absolute;left:0;right:0;top:44%;bottom:0;background:#e8c68d center top/cover no-repeat}
+.w-floor::before{content:"";position:absolute;left:0;right:0;top:0;height:60px;background:linear-gradient(180deg,#e3f4fd,rgba(227,244,253,0))}
+.st-cap{position:absolute;left:0;right:0;top:12%;z-index:8;text-align:center;padding-inline:20px;color:var(--maroon);pointer-events:none;opacity:0}
+.st-cap .pnl{display:inline-block;max-width:100%;padding:12px 26px 14px;border-radius:120px 120px 18px 18px;background:rgba(255,244,222,.92);border:1px solid rgba(195,146,54,.6);box-shadow:0 10px 30px rgba(90,40,10,.18)}
+.st-cap .script{font-size:38px}
+.st-cap p{margin-top:6px;font-family:var(--f-names);letter-spacing:.14em;text-transform:uppercase;font-size:12.5px}
+.st-cap.two{top:auto;bottom:7%}
+.petal{position:absolute;top:-30px;width:12px;height:16px;border-radius:70% 0 70% 0;opacity:.9;z-index:7;animation:fall linear infinite}
+@keyframes fall{0%{transform:translate(0,-20px) rotate(0)}100%{transform:translate(40px,115vh) rotate(540deg)}}
+
+/* ---------- 5 · meet the couple ---------- */
+.maroon{position:relative;color:var(--cream);background:
+  radial-gradient(circle at 25% 20%,rgba(240,200,101,.07) 0 30px,transparent 31px) 0 0/90px 90px,
+  radial-gradient(circle at 75% 70%,rgba(240,200,101,.06) 0 18px,transparent 19px) 0 0/90px 90px,
+  linear-gradient(180deg,var(--maroon-2),var(--maroon))}
+#couple{padding:40px 0 0;overflow:hidden}
+.mt-head{text-align:center;color:var(--gold-2);position:relative;z-index:2;padding-inline:58px;font-size:40px;text-wrap:balance}
+.lantern{position:absolute;top:0;width:54px;transform-origin:50% 0;animation:swing 4.5s ease-in-out infinite;z-index:1}
+.lantern img{width:100%;height:auto}
+.lantern.l{left:12px}.lantern.r{right:12px;animation-delay:-2.2s}
+@keyframes swing{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-4deg)}}
+.m-arch{position:relative;margin:26px 22px 0;display:flex;flex-direction:column}
+.m-arch .arch-body{padding:6px 22px 30px;color:var(--ink);text-align:center}
+.m-arch .story{max-width:34ch;margin:0 auto;font-size:16.5px;line-height:1.45;color:var(--ink-soft)}
+.gframe{position:relative;width:76%;margin:22px auto 0;padding:12px;background:linear-gradient(135deg,#f9dc84,#b98327 40%,#f6d57a 60%,#a8741f);border-radius:6px;box-shadow:0 14px 30px rgba(60,20,0,.35)}
+.gframe .ph{border:3px solid #7a5216;aspect-ratio:4/5;background:#e9d3a8 center/cover no-repeat}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.duo div{min-width:0}
+.duo .caps{font-size:17px;color:var(--maroon);overflow-wrap:anywhere}
+.m-sub{margin-top:12px;font-style:italic;color:var(--ink-soft);font-size:15px}
+
+/* ---------- 6 · venue ---------- */
+#venue{padding:36px 0 0;text-align:center;overflow:hidden}
+#venue .script{font-size:46px;color:var(--gold-2)}
+.v-name{font-family:var(--f-names);font-size:20px;letter-spacing:.1em;text-transform:uppercase;color:#fff;padding-inline:24px;margin-top:8px;text-wrap:balance}
+.v-addr{color:#f0d6b8;font-size:16px;margin-top:4px;padding-inline:24px}
+#venue .btn{margin-top:18px}
+.venue-gold{width:100%;height:auto;margin-top:26px;mix-blend-mode:screen}
+
+/* ---------- 7 · rsvp behind curtains ---------- */
+#rsvp{height:240vh}
+#rsvp .stage{background:linear-gradient(180deg,var(--maroon),var(--maroon-3))}
+#rsvp .arch-win{top:12%;left:7%;right:7%;bottom:5%}
+.bells{position:absolute;top:22px;left:0;right:0;display:flex;justify-content:space-around;z-index:4;padding-inline:8%}
+.bells svg{width:22px;transform-origin:50% 0;animation:swing 3.2s ease-in-out infinite}
+.bells svg:nth-child(even){animation-delay:-1.6s}
+.rs-copy{position:absolute;left:7%;right:7%;top:12%;bottom:5%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:60px 22px 18px;color:var(--ink);overflow:auto}
+.rs-copy .script{font-size:clamp(40px,12vw,52px);color:var(--maroon)}
+.rs-copy p{max-width:30ch;font-size:16px;color:var(--ink-soft)}
+.rcard{width:100%}
+.rnote{font-size:14px;color:var(--ink-soft)}
+#rForm{display:flex;flex-direction:column;gap:9px;margin-top:6px;text-align:left}
+#rForm input,#rForm textarea,#rForm select{width:100%;font:16px var(--f-body);color:var(--ink);padding:10px 12px;border:1px solid rgba(195,146,54,.6);border-radius:8px;background:#fffdf8}
+#rForm textarea{resize:vertical}
+.rchoice{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rchoice button{font:600 14px var(--f-body);padding:10px 6px;border-radius:8px;border:1px solid rgba(195,146,54,.6);background:#fffdf8;color:var(--ink);cursor:pointer}
+.rchoice button.on{background:var(--maroon);color:#f7e2b6;border-color:var(--maroon)}
+.rguests{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:15px;color:var(--ink-soft)}
+.rguests select{width:90px!important}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+#rForm .btn{align-self:center;margin-top:4px}
+.rmsg{min-height:18px;font-size:14px;text-align:center;color:#a0281e}
+.rdone{display:none;font-size:18px;color:var(--maroon);padding:14px 6px 6px;line-height:1.5}
+.rcard.sent #rForm{display:none}.rcard.sent .rdone{display:block}
+.curtain{position:absolute;top:0;bottom:0;width:51%;z-index:5;display:flex;flex-direction:column;filter:drop-shadow(0 0 16px rgba(0,0,0,.55));will-change:transform}
+.curtain .body{flex:1;background-repeat:no-repeat;background-size:245.45% 149.33%;background-color:#6a0f1d}
+.curtain .fr{aspect-ratio:440/114;background-repeat:no-repeat;background-size:245.45% 586.8%}
+.curtain.l{left:0}.curtain.r{right:0}
+.curtain.l .body{background-position:15.6% 50.7%}.curtain.r .body{background-position:84.4% 50.7%}
+.curtain.l .fr{background-position:15.6% 100%}.curtain.r .fr{background-position:84.4% 100%}
+.valance{position:absolute;left:0;right:0;top:0;z-index:6;aspect-ratio:1080/112;background-repeat:no-repeat;background-size:100% 597.3%;background-position:0 0}
+.curtain.plain .body{background:repeating-linear-gradient(90deg,#6a0f1d 0 10px,#8d1b2e 18px,#6a0f1d 28px,#4c0914 34px)}
+.curtain.plain .fr{background:repeating-linear-gradient(90deg,var(--gold-2) 0 3px,transparent 3px 7px);aspect-ratio:auto;height:16px}
+
+/* ---------- 8 · countdown + 9 · moments ---------- */
+.paper{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 40%,#fdf3e1,#f3e2c4 90%)}
+.paper .emb{position:absolute;pointer-events:none;opacity:.9;filter:drop-shadow(1.5px 1.5px 0 rgba(255,255,255,.9)) drop-shadow(-1px -1px 0 rgba(150,105,50,.18))}
+#count{padding:56px 20px 34px;text-align:center}
+#count .script{position:relative;font-size:44px;color:var(--maroon)}
+.cd{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:340px;margin:22px auto 0}
+.cd div{background:rgba(255,255,255,.75);border:1px solid rgba(195,146,54,.45);border-radius:12px;padding:12px 4px 8px;box-shadow:0 6px 14px rgba(120,70,20,.1)}
+.cd b{display:block;font-family:var(--f-names);font-weight:400;font-size:27px;color:var(--maroon);font-variant-numeric:tabular-nums}
+.cd span{font-size:11px;font-family:var(--f-names);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-3)}
+.cd-date{position:relative;margin-top:16px;color:var(--ink-soft);font-size:16px}
+#calBtn{position:relative;margin-top:16px}
+#magic{height:78vh;height:78svh;min-height:520px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.mg-hint{position:absolute;left:0;right:0;top:8%;text-align:center;z-index:3;pointer-events:none;padding-inline:20px;transition:opacity .4s}
+.mg-hint .script{font-size:42px;color:var(--maroon)}
+.mg-hint small{display:block;font-size:15px;color:var(--ink-soft);margin-top:4px}
+.mg-hint .tap{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--f-names);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-3)}
+.mg-hint .tap svg{width:18px;height:18px;animation:nudge2 1.4s ease-in-out infinite}
+@keyframes nudge2{50%{transform:scale(.85)}}
+.pc{position:absolute;left:0;top:0;width:96px;padding:6px 6px 16px;background:#fffdf8;box-shadow:0 8px 20px rgba(60,30,10,.28);border-radius:2px;will-change:transform;pointer-events:none}
+.pc .ph{aspect-ratio:1;background:#e9d3a8 center/cover no-repeat}
+footer{background:var(--maroon-3);color:#e9cfae;text-align:center;padding:34px 20px 30px;font-size:15px}
+footer .script{font-size:32px;color:var(--gold-2)}
+.powered{background:var(--maroon-3);color:#c9a978;text-align:center;padding:0 16px 22px;font:12px/1.6 system-ui,sans-serif}
+.powered a{color:#f3d58f;text-decoration:none;font-weight:600}
+.powered .pblogo{height:46px;width:auto;max-width:70%;object-fit:contain;margin:0 auto 8px}
+.powered .cta{display:inline-block;margin-top:6px;padding:6px 14px;border:1px solid rgba(243,213,143,.45);border-radius:20px;font-size:11.5px}
+#music{position:fixed;right:max(14px,calc(50% - 216px));bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);
+  background:var(--maroon);color:#f3d58f;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#music.show{display:flex}#music svg{width:18px;height:18px}#music.playing svg{animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+body.indic .caps,body.indic .btn,body.indic .ev-meta b,body.indic .when,body.indic .cd span,body.indic .st-cap p{letter-spacing:normal;text-transform:none}
+body.indic .script{line-height:1.35}
+body.indic .h-names .caps{font-size:clamp(30px,9vw,42px);line-height:1.3}
+@media (prefers-reduced-motion: reduce){.petal,.lantern,.bells svg,.h-hint i{animation:none}}
+</style>
+</head>
+<body class="locked">
+
+<div id="gate" role="dialog" aria-label="Invitation cover">
+  <div class="wrap">
+    <div class="door l"><span class="img"></span></div>
+    <div class="door r"><span class="img"></span></div>
+    <div class="gcopy">
+      <div class="tl te" id="gTop"></div>
+      <div class="script" id="gInv">You're invited</div>
+      <div class="caps"><span id="gG"></span> <span class="amp">&amp;</span> <span id="gB"></span></div>
+      <div class="date" id="gDate"></div>
+      <button class="btn btn-gold" id="openBtn" type="button" data-l="open">Open Invitation</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+
+  <section class="scene" id="hero">
+    <div class="stage">
+      <div class="sky" id="hSky"></div>
+      <div class="layer cloud" data-dx="-60" style="left:-12%;top:31%;width:52%"><img data-src="cloud" alt=""></div>
+      <div class="layer cloud flip" data-dx="70" style="right:-14%;top:40%;width:46%"><img data-src="cloud" alt=""></div>
+      <div class="layer cloud flip" data-dx="-40" style="left:-4%;top:3%;width:34%"><img data-src="cloud" alt=""></div>
+      <div class="layer cloud" data-dx="50" style="right:-6%;top:6%;width:30%"><img data-src="cloud" alt=""></div>
+      <div class="h-names layer" id="hNames">
+        <div class="tl te" id="hTop"></div>
+        <div class="caps" id="h1"></div>
+        <div class="weds" data-l="weds">weds</div>
+        <div class="caps" id="h2"></div>
+      </div>
+      <div class="layer h-gopuram" id="hGop"><img data-src="gopuram" alt=""></div>
+      <div class="layer h-tree l" id="treeL"><img data-src="tree" alt=""></div>
+      <div class="layer h-tree r flip" id="treeR"><img data-src="tree" alt=""></div>
+      <div class="h-hint" id="hHint"><span data-l="scroll">Scroll</span><i></i></div>
+      <div class="h-flash" id="hFlash"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="invite">
+    <div class="stage">
+      <div class="wall"></div>
+      <div class="pillar l" data-bg="pillar"></div><div class="pillar r" data-bg="pillar"></div>
+      <div class="arch-win" id="iWin">
+        <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path class="af" d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#c39236" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+        <div class="arch-body"></div>
+        <div class="inv-copy">
+          <img class="ln sym" id="pSym" alt="">
+          <p class="ln" id="pBless"></p>
+          <p class="ln grand" id="pGrand"></p>
+          <p class="ln parents" id="pParents"></p>
+          <p class="ln" id="pLine"></p>
+          <div class="ln names"><span id="pBride"></span><span class="amp">&amp;</span><span id="pGroom"></span></div>
+          <div class="ln rule"></div>
+          <div class="ln when" id="pDate"></div>
+        </div>
+      </div>
+      <div class="layer toran" id="toran"><img data-src="toran" alt=""></div>
+    </div>
+  </section>
+
+  <section id="events">
+    <img class="lotus-band" data-src="lotus" alt="">
+    <div class="ev-head rv"><div class="script" data-l="followingEvents">On the following events</div></div>
+    <div class="ev-list" id="evList"></div>
+    <svg class="cloud-edge" viewBox="0 0 400 70" width="100%" aria-hidden="true"><rect width="400" height="70" fill="#7cc4f2"/><path d="M0,0 H400 V20 C380,44 350,40 336,30 C318,50 282,48 270,32 C250,52 214,50 204,30 C186,48 150,48 140,30 C120,50 86,46 76,28 C58,46 22,44 0,26 Z" fill="#fff4de"/></svg>
+  </section>
+
+  <section class="scene" id="story">
+    <div class="stage">
+      <div class="world" id="world">
+        <div class="w-sky"></div>
+        <div class="w-floor" data-bg="floor"></div>
+        <div class="layer s-cloud" style="left:-10%;top:4%;width:48%"><img data-src="cloud" alt=""></div>
+        <div class="layer s-cloud flip" style="right:-12%;top:10%;width:44%"><img data-src="cloud" alt=""></div>
+        <div class="layer s-cloud" style="left:32%;top:1%;width:28%"><img data-src="cloud" alt=""></div>
+        <div class="layer s-back" style="left:-8%;top:31.5%;width:42%"><img data-src="sside" alt=""></div>
+        <div class="layer s-back flip" style="right:-8%;top:31.5%;width:42%"><img data-src="sside" alt=""></div>
+        <div class="layer" id="sMain" style="left:14%;top:19.5%;width:72%"><img data-src="sgopuram" alt=""></div>
+        <div class="layer" id="sMandapam" style="left:-26%;top:46.5%;width:152%"><img data-src="mandapam" alt=""></div>
+        <div class="layer" id="sCouple" style="left:29%;top:52.5%;width:42%"><img data-src="scouple" alt=""></div>
+        <div class="layer" id="leafL" style="left:-14%;top:55%;width:40%"><img data-src="banana" alt=""></div>
+        <div class="layer flip" id="leafR" style="right:-14%;top:55%;width:40%"><img data-src="banana" alt=""></div>
+        <div class="layer" id="sLotus" style="left:-45%;width:190%;bottom:0"><img data-src="lotus" alt=""></div>
+      </div>
+      <div class="st-cap one" id="cap1"><div class="pnl"><div class="script" id="skyLine"></div><p id="skySub"></p></div></div>
+      <div class="st-cap two" id="cap2"><div class="pnl"><div class="script" id="mName"></div><p id="mWhen"></p></div></div>
+      <div id="petals"></div>
+    </div>
+  </section>
+
+  <section id="couple" class="maroon">
+    <div class="lantern l"><img data-src="lantern" alt=""></div><div class="lantern r"><img data-src="lantern" alt=""></div>
+    <div class="mt-head script rv" data-l="meetCouple">Meet the Bride &amp; Groom</div>
+    <div class="m-arch">
+      <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#f0c865" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+      <div class="arch-body">
+        <p class="story" id="sText"></p>
+        <div class="gframe" id="frame"><div class="ph" id="framePh"></div></div>
+        <div class="duo">
+          <div class="caps" id="dBride"></div>
+          <div class="caps" id="dGroom"></div>
+        </div>
+        <div class="m-sub" id="mSub"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="venue" class="maroon">
+    <div class="script rv" data-l="location">Location</div>
+    <div class="v-name rv d1" id="vName"></div>
+    <div class="v-addr rv d1" id="vAddr"></div>
+    <a class="btn btn-gold rv d2" id="vMap" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg><span data-l="mapBtn">Click for location</span></a>
+    <img class="venue-gold" id="vGold" data-src="vgold" alt="">
+  </section>
+
+  <section class="scene" id="rsvp">
+    <div class="stage">
+      <div class="bells" id="bells"></div>
+      <div class="arch-win">
+        <svg class="arch-top" viewBox="0 0 300 110" preserveAspectRatio="none" aria-hidden="true"><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110 Z" fill="#fff4de"/><path d="M0,110 L0,72 C0,56 12,48 28,48 C34,30 50,24 66,26 C76,12 96,8 110,14 C122,6 136,4 150,4 C164,4 178,6 190,14 C204,8 224,12 234,26 C250,24 266,30 272,48 C288,48 300,56 300,72 L300,110" fill="none" stroke="#f0c865" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>
+        <div class="arch-body"></div>
+      </div>
+      <div class="rs-copy">
+        <div class="r-ln script" data-l="rsvpTitle">Will you join us?</div>
+        <p class="r-ln" id="tyLine"></p>
+        <div class="r-ln rcard" id="rCard">
+          <div class="rnote" id="rNote"></div>
+          <form id="rForm" autocomplete="on">
+            <input type="text" name="name" maxlength="80" required data-ph="rsvpName">
+            <div class="rchoice">
+              <button type="button" data-a="1" data-l="rsvpYes">Joyfully accept</button>
+              <button type="button" data-a="0" data-l="rsvpNo">Regretfully decline</button>
+            </div>
+            <label class="rguests"><span data-l="rsvpGuests">Number of guests</span><select name="guests"></select></label>
+            <input type="tel" name="phone" maxlength="20" data-ph="rsvpPhone">
+            <textarea name="message" maxlength="300" rows="2" data-ph="rsvpMsg"></textarea>
+            <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn-maroon" data-l="rsvpSend">Send RSVP</button>
+            <div class="rmsg" id="rMsg" role="status"></div>
+          </form>
+          <div class="rdone" id="rDone"></div>
+        </div>
+      </div>
+      <div class="valance" data-bg="curtain"></div>
+      <div class="curtain l" id="curL"><div class="body" data-bg="curtain"></div><div class="fr" data-bg="curtain"></div></div>
+      <div class="curtain r" id="curR"><div class="body" data-bg="curtain"></div><div class="fr" data-bg="curtain"></div></div>
+    </div>
+  </section>
+
+  <section id="count" class="paper">
+    <div class="emb" style="width:420px;left:-150px;top:-120px"></div>
+    <div class="script rv" data-l="countdown">The countdown begins</div>
+    <div class="cd" id="cd"></div>
+    <div class="cd-date" id="cdDate"></div>
+    <a class="btn btn-maroon" id="calBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-l="addCal">Add to calendar</span></a>
+  </section>
+
+  <section id="magic" class="paper" tabindex="0" aria-label="Photos">
+    <div class="emb" style="width:460px;right:-190px;bottom:-140px"></div>
+    <div class="mg-hint" id="mgHint"><div class="script" data-l="gallery">Moments</div><small data-l="gallerySub">A few of our favourite memories</small>
+      <div class="tap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 11V5.5a1.5 1.5 0 013 0V11m0-1.5a1.5 1.5 0 013 0V12m0-1a1.5 1.5 0 013 0v4a6 6 0 01-6 6h-1a6 6 0 01-5-2.7L4 15.5a1.5 1.5 0 012.4-1.8L9 16"/></svg>Tap</div></div>
+  </section>
+
+  <footer><div class="script" data-l="thankYou">Thank You</div><div id="tyFrom"></div></footer>
+  <div class="powered" id="powered"></div>
+</div>
+
+<button id="music" type="button" aria-label="Music on or off"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg></button>
+<audio id="bgm" loop preload="none"></audio>
+
+<script>
+const CONFIG = {
+  "groom": "Arjun",
+  "bride": "Meghana",
+  "groomFull": "Arjun Rao",
+  "brideFull": "Meghana Reddy",
+  "dateLong": "Sunday, 14 February 2027",
+  "dateShort": "14 · 02 · 2027",
+  "weddingAt": "2027-02-14T10:32:00+05:30",
+  "blessing": "With the blessings of the Almighty and our beloved elders",
+  "grandparents": "",
+  "parents": "Smt. Sujatha & Sri Ravi Reddy",
+  "inviteLine": "joyfully invite you and your family to the wedding of their beloved daughter",
+  "skyLine": "Two families,",
+  "skySub": "one sacred promise",
+  "coupleSub": "Together, with the blessings of our families",
+  "storyTitle": "Our Story",
+  "story": "They met at a friend's sangeet in Bengaluru, argued about the best biryani in Hyderabad, and have been settling it ever since. Now the families are settling it together.",
+  "events": [
+    {
+      "name": "Mehendi",
+      "date": "Friday, 12 February 2027",
+      "time": "4:00 PM onwards",
+      "place": "Bride's residence, Jubilee Hills",
+      "map": ""
+    },
+    {
+      "name": "Pellikuthuru & Pellikoduku",
+      "date": "Saturday, 13 February 2027",
+      "time": "9:00 AM",
+      "place": "Both family homes",
+      "map": ""
+    },
+    {
+      "name": "Muhurtham",
+      "date": "Sunday, 14 February 2027",
+      "time": "10:32 AM",
+      "place": "Sri Lakshmi Narasimha Kalyana Mandapam",
+      "map": ""
+    },
+    {
+      "name": "Reception",
+      "date": "Sunday, 14 February 2027",
+      "time": "7:30 PM onwards",
+      "place": "Same venue, lawn",
+      "map": ""
+    }
+  ],
+  "venue": {
+    "name": "Sri Lakshmi Narasimha Kalyana Mandapam",
+    "address": "Road No. 12, Banjara Hills, Hyderabad",
+    "map": "https://maps.google.com/?q=Banjara+Hills+Hyderabad"
+  },
+  "thankYouLine": "Your presence and blessings will make our day complete.",
+  "from": "With love, the Rao & Reddy families",
+  "images": {
+    "door": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-door-1790834799486.webp",
+    "sky": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-sky-1790834800816.webp",
+    "gopuram": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-gopuram-1790834801642.webp",
+    "cloud": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-cloud-1790834802510.webp",
+    "tree": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-tree-1790834803496.webp",
+    "pillar": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-pillar-1790834804398.webp",
+    "toran": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-toran-1790834806375.webp",
+    "lotus": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-lotus-1790834807461.webp",
+    "ev1": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-ev1-1790834809023.webp",
+    "ev2": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-ev2-1790834809887.webp",
+    "ev3": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-ev3-1790834810738.webp",
+    "ev4": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-ev4-1790834811597.webp",
+    "sgopuram": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-sgopuram-1790834812591.webp",
+    "sside": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-sside-1790834813502.webp",
+    "mandapam": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-mandapam-1790834814327.webp",
+    "scouple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-scouple-1790834815162.webp",
+    "banana": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-banana-1790834816018.webp",
+    "floor": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-floor-1790834817005.webp",
+    "lantern": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-lantern-1790834817938.webp",
+    "vgold": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-vgold-1790834818837.webp",
+    "curtain": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-curtain-1790834819697.webp",
+    "couple": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-couple-1790834821423.webp"
+  },
+  "videos": {},
+  "music": "",
+  "petals": true,
+  "birds": true,
+  "poweredBy": {
+    "text": "AfterFX Templates",
+    "url": "https://afterfxtemplates.com",
+    "whatsapp": "918971738710"
+  },
+  "topLine": "॥ శ్రీరస్తు · శుభమస్తు · అవిఘ్నమస్తు ॥",
+  "layout": "temple",
+  "faq": [],
+  "pack": "temple",
+  "lang": "en",
+  "fontStyle": 0,
+  "labels": {
+    "open": "Open Invitation",
+    "scroll": "Scroll",
+    "weds": "weds",
+    "invites": "invites",
+    "celebrations": "Celebrations",
+    "wedding": "Wedding",
+    "location": "Location",
+    "mapBtn": "Click for location",
+    "evMap": "Location",
+    "thankYou": "Thank You",
+    "days": "Days",
+    "hrs": "Hrs",
+    "min": "Min",
+    "sec": "Sec",
+    "rsvpTitle": "Will you join us?",
+    "rsvpName": "Your name",
+    "rsvpYes": "Joyfully accept",
+    "rsvpNo": "Regretfully decline",
+    "rsvpGuests": "Number of guests",
+    "rsvpPhone": "Phone (optional)",
+    "rsvpMsg": "Wishes for the couple (optional)",
+    "rsvpSend": "Send RSVP",
+    "rsvpThanks": "Thank you! Your response has been received.",
+    "today": "Today is the day",
+    "followingEvents": "On the following events",
+    "timeline": "Wedding Timeline",
+    "timelineSub": "Mark your calendars — we can't wait to celebrate with you",
+    "seeRoute": "See the route",
+    "meetCouple": "Meet the Bride & Groom",
+    "gallery": "Moments",
+    "gallerySub": "A few of our favourite memories",
+    "thingsToKnow": "Things to know",
+    "countdown": "The countdown begins",
+    "addCal": "Add to calendar"
+  },
+  "rsvp": {
+    "on": false,
+    "note": ""
+  },
+  "theme": "maroon",
+  "symbolSize": "md",
+  "fontNames": "",
+  "fontBody": "",
+  "fontCustom": "",
+  "brand": {
+    "on": false,
+    "name": "",
+    "url": "",
+    "whatsapp": ""
+  },
+  "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/83dea7d47dac41c89efb",
+  "rsvpId": "83dea7d47dac41c89efb",
+  "fonts": {
+    "body": "Cormorant Garamond",
+    "disp": "Pinyon Script",
+    "q": ""
+  },
+  "gallery": [],
+  "symbol": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/test2/img-symbol-1790834820555.webp",
+  "studioLogo": "",
+  "fontFile": ""
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || ''; };
+const esc = v => String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const safeUrl = u => /^https?:\/\//i.test(String(u || '').trim()) ? String(u).trim() : '#';
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const QS = new URLSearchParams(location.search), DEMO = QS.has('demo');
+
+// colour theme (the curtain/door pictures keep their own colours)
+const THEMES = {
+  emerald: { maroon: '#0e3b2c', 'maroon-2': '#16553f', 'maroon-3': '#062117' },
+  blue:    { maroon: '#152c5c', 'maroon-2': '#1f3f7f', 'maroon-3': '#0a1633' },
+  rose:    { maroon: '#7b2542', 'maroon-2': '#a3385a', 'maroon-3': '#3d1122' },
+  purple:  { maroon: '#36195c', 'maroon-2': '#4d2a7c', 'maroon-3': '#1c0d33' },
+  black:   { maroon: '#1a1512', 'maroon-2': '#2a2320', 'maroon-3': '#0d0a08' }
+};
+const TH = THEMES[CONFIG.theme];
+if (TH){ for (const k in TH) document.documentElement.style.setProperty('--' + k, TH[k]); const mc = $('meta[name="theme-color"]'); if (mc) mc.content = TH['maroon-3']; }
+
+// language
+const EN = CONFIG.lang === 'en' || !CONFIG.lang;
+const L = Object.assign({ open: 'Open Invitation', scroll: 'Scroll', weds: 'weds', invites: 'invites', wedding: 'Wedding', location: 'Location', mapBtn: 'Click for location',
+  evMap: 'Location', thankYou: 'Thank You', days: 'Days', hrs: 'Hrs', min: 'Min', sec: 'Sec', today: 'Today is the day', rsvpTitle: 'Will you join us?', rsvpName: 'Your name',
+  rsvpYes: 'Joyfully accept', rsvpNo: 'Regretfully decline', rsvpGuests: 'Number of guests', rsvpPhone: 'Phone (optional)', rsvpMsg: 'Wishes for the couple (optional)',
+  rsvpSend: 'Send RSVP', rsvpThanks: 'Thank you! Your response has been received.', followingEvents: 'On the following events', meetCouple: 'Meet the Bride & Groom',
+  gallery: 'Moments', gallerySub: 'A few of our favourite memories', countdown: 'The countdown begins', addCal: 'Add to calendar' }, CONFIG.labels || {});
+$$('[data-l]').forEach(el => { if (L[el.dataset.l] != null) el.textContent = L[el.dataset.l]; });
+$$('[data-ph]').forEach(el => { el.placeholder = L[el.dataset.ph] || ''; });
+if (!EN){ document.documentElement.lang = CONFIG.lang; document.body.classList.add('indic'); set('gInv', L.invites); }
+
+// fonts: English keeps the layout's own faces unless the designer picked one; other languages use the language preset
+(function(){
+  const F = CONFIG.fonts || {}, r = document.documentElement.style;
+  if (F.q){
+    const ln = document.createElement('link'); ln.rel = 'stylesheet';
+    ln.href = 'https://fonts.googleapis.com/css2?' + String(F.q).replace(/[^A-Za-z0-9+&=:;@,.]/g, '') + '&display=swap';
+    document.head.appendChild(ln);
+  }
+  let names = (CONFIG.fontNames || !EN) ? (F.disp || '') : '', body = (CONFIG.fontBody || !EN) ? (F.body || '') : '';
+  if (CONFIG.fontFile && CONFIG.fontCustom){
+    const st = document.createElement('style');
+    st.textContent = "@font-face{font-family:'AfxCustom';src:url('" + String(CONFIG.fontFile).replace(/'/g, '') + "');font-display:swap}";
+    document.head.appendChild(st);
+    if (CONFIG.fontCustom === 'names' || CONFIG.fontCustom === 'both') names = 'AfxCustom';
+    if (CONFIG.fontCustom === 'body' || CONFIG.fontCustom === 'both') body = 'AfxCustom';
+  }
+  if (names) r.setProperty('--f-names', "'" + names + "',Georgia,serif");
+  if (body) r.setProperty('--f-body', "'" + body + "',Georgia,serif");
+  if (!EN && F.disp) r.setProperty('--f-script', "'" + F.disp + "'");
+})();
+
+// pictures from the pack library / this invite
+const IM = CONFIG.images || {};
+$$('img[data-src]').forEach(im => { const s = IM[im.dataset.src]; if (s) im.src = s; else (im.closest('.layer') || im).style.display = 'none'; });
+$$('[data-bg]').forEach(el => { const s = IM[el.dataset.bg]; if (s) el.style.backgroundImage = `url("${s}")`; else if (el.closest('.curtain')) el.closest('.curtain').classList.add('plain'); });
+if (IM.sky) $('#hSky').style.backgroundImage = `url("${IM.sky}"), linear-gradient(180deg,#1c66cf,#a6d8f8)`;
+$$('.door .img').forEach(d => { if (IM.door) d.style.backgroundImage = `url("${IM.door}")`; else d.style.background = 'repeating-linear-gradient(0deg,#7a2c12 0 6px,#6c2610 6px 9px,#83321a 9px 16px)'; });
+
+// text
+const couple = `${CONFIG.bride} & ${CONFIG.groom}`;
+document.title = `${couple} — Wedding Invitation`;
+set('gTop', CONFIG.topLine); set('hTop', CONFIG.topLine);
+set('gG', CONFIG.groom); set('gB', CONFIG.bride); set('gDate', CONFIG.dateShort);
+set('h1', CONFIG.groom); set('h2', CONFIG.bride);
+set('pBless', CONFIG.blessing); set('pGrand', CONFIG.grandparents); set('pParents', CONFIG.parents); set('pLine', CONFIG.inviteLine);
+set('pBride', CONFIG.brideFull || CONFIG.bride); set('pGroom', CONFIG.groomFull || CONFIG.groom); set('pDate', CONFIG.dateLong);
+['pBless', 'pGrand', 'pParents', 'pLine'].forEach(id => { if (!document.getElementById(id).textContent.trim()) document.getElementById(id).remove(); });
+set('skyLine', CONFIG.skyLine); set('skySub', CONFIG.skySub);
+set('sText', CONFIG.story); if (!CONFIG.story) $('#sText').remove();
+set('dBride', CONFIG.brideFull || CONFIG.bride); set('dGroom', CONFIG.groomFull || CONFIG.groom); set('mSub', CONFIG.coupleSub);
+set('vName', CONFIG.venue.name); set('vAddr', CONFIG.venue.address); $('#vMap').href = safeUrl(CONFIG.venue.map);
+if (safeUrl(CONFIG.venue.map) === '#') $('#vMap').remove();
+set('tyLine', CONFIG.thankYouLine); set('tyFrom', CONFIG.from); set('cdDate', CONFIG.dateLong);
+if (!CONFIG.skyLine && !CONFIG.skySub) $('#cap1').remove();
+
+// symbol (Ganesha / cross / crescent) on the card
+(function(){
+  const el = $('#pSym');
+  if (!CONFIG.symbol){ el.remove(); return; }
+  el.classList.add(['sm', 'md', 'lg'].indexOf(CONFIG.symbolSize) >= 0 ? CONFIG.symbolSize : 'md');
+  el.onerror = () => el.remove(); el.src = CONFIG.symbol;
+})();
+
+// events: pictures ev1..ev4 repeat down the list
+const evs = CONFIG.events || [];
+$('#evList').innerHTML = evs.map((e, i) => {
+  const map = safeUrl(e.map) !== '#' ? safeUrl(e.map) : safeUrl(CONFIG.venue.map), pic = IM['ev' + (i % 4 + 1)];
+  return `<article class="ev rv${i % 2 ? ' d1' : ''}"><div class="ev-art"${pic ? ` style="background-image:url('${encodeURI(pic)}')"` : ''}><div class="n">${esc(e.name)}</div></div>
+    <div class="ev-body"><div class="ev-meta"><b>${EN ? 'When' : '🗓'}</b><span>${esc([e.date, e.time].filter(Boolean).join(' · '))}</span>` +
+    `${(e.place || CONFIG.venue.name) ? `<b>${EN ? 'Where' : '📍'}</b><span>${esc(e.place || CONFIG.venue.name)}</span>` : ''}</div>` +
+    (map !== '#' ? `<a class="btn btn-maroon" href="${esc(map)}" target="_blank" rel="noopener">${esc(L.evMap)}</a>` : '') + `</div></article>`;
+}).join('');
+if (!evs.length) $('#evList').remove();
+// the main ceremony gets the second caption in the storybook scene
+(function(){
+  const m = evs.find(e => /muhur|wedding|kalyan|vivah|shaadi|nikah|matrimon|marriage|ముహూర్|కళ్యాణ|వివాహ/i.test(e.name || '')) || evs[0];
+  if (!m){ $('#cap2').remove(); return; }
+  set('mName', m.name); set('mWhen', [m.time, m.date].filter(Boolean).join(' · '));
+})();
+
+// couple photo in the gold frame
+if (IM.couple) $('#framePh').style.backgroundImage = `url("${IM.couple}")`; else $('#frame').remove();
+
+// RSVP (optional)
+(function(){
+  const R = CONFIG.rsvp || {}, card = $('#rCard');
+  if (!R.on){ card.remove(); return; }
+  set('rNote', R.note || ''); if (!R.note) $('#rNote').remove();
+  const form = $('#rForm'), msg = $('#rMsg');
+  $('#rDone').textContent = L.rsvpThanks;
+  const sel = form.guests; for (let i = 1; i <= 10; i++) sel.add(new Option(i, i));
+  let attending = null; const guestsRow = $('.rguests');
+  form.querySelectorAll('.rchoice button').forEach(b => b.onclick = () => {
+    attending = b.dataset.a === '1'; form.querySelectorAll('.rchoice button').forEach(x => x.classList.toggle('on', x === b));
+    guestsRow.style.display = attending ? '' : 'none';
+  });
+  const KEY = 'afx-rsvp-' + (CONFIG.rsvpId || '');
+  try { if (CONFIG.rsvpId && localStorage.getItem(KEY)) card.classList.add('sent'); } catch (e) {}
+  form.onsubmit = async ev => {
+    ev.preventDefault(); msg.textContent = '';
+    if (!form.name.value.trim()){ form.name.focus(); return; }
+    if (attending === null){ msg.textContent = '👆 ' + L.rsvpYes + ' / ' + L.rsvpNo; return; }
+    if (!CONFIG.rsvpUrl){ msg.textContent = 'RSVP starts working after the invite is published.'; return; }
+    const btn = form.querySelector('[type=submit]'); btn.disabled = true;
+    try {
+      const r = await fetch(CONFIG.rsvpUrl, { method: 'POST', headers: { 'content-type': 'text/plain' },
+        body: JSON.stringify({ name: form.name.value, attending, guests: attending ? +sel.value : 0, phone: form.phone.value, message: form.message.value, website: form.website.value }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Could not send, please try again');
+      card.classList.add('sent'); try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    } catch (x){ msg.textContent = x.message || 'Could not send, please try again'; }
+    finally { btn.disabled = false; }
+  };
+})();
+
+// decorations drawn in code
+function mandala(color, rings){
+  let s = '';
+  for (let k = 1; k <= rings; k++){
+    const R = k * 15, n = 8 + k * 4;
+    s += `<circle r="${R - 4}" fill="none" stroke="${color}" stroke-width=".8"/>`;
+    for (let i = 0; i < n; i++) s += `<ellipse cx="0" cy="${-R}" rx="${2 + k * .7}" ry="${5 + k * .8}" fill="none" stroke="${color}" stroke-width=".9" transform="rotate(${i * 360 / n})"/>`;
+  }
+  return `<svg viewBox="-100 -100 200 200" width="100%" aria-hidden="true">${s}</svg>`;
+}
+$$('.emb').forEach(e => e.innerHTML = mandala('#c9a36a', 7));
+const bell = '<svg viewBox="0 0 22 70" aria-hidden="true"><line x1="11" y1="0" x2="11" y2="40" stroke="#d9a947" stroke-width="1.5"/><path d="M3,62 Q3,44 11,42 Q19,44 19,62 Z" fill="#e2b24e" stroke="#8a5a14"/><rect x="1" y="61" width="20" height="3" rx="1.5" fill="#a8741f"/><circle cx="11" cy="67" r="2.6" fill="#a8741f"/></svg>';
+$('#bells').innerHTML = bell.repeat(7);
+if (CONFIG.petals !== false && !REDUCE){
+  const box = $('#petals'), cols = ['#f39a1d', '#f7c531', '#e0302f', '#f29bb6'];
+  for (let i = 0; i < 16; i++){
+    const p = document.createElement('span'); p.className = 'petal';
+    p.style.left = (Math.random() * 100) + '%'; p.style.background = cols[i % 4];
+    p.style.animationDuration = (6 + Math.random() * 6) + 's'; p.style.animationDelay = (-Math.random() * 12) + 's';
+    box.appendChild(p);
+  }
+}
+
+// countdown + calendar
+function tick(){
+  const ms = new Date(CONFIG.weddingAt) - Date.now(), el = $('#cd');
+  if (!el) return;
+  if (isNaN(ms)){ el.remove(); return; }
+  if (ms <= 0){ el.style.display = 'block'; el.innerHTML = `<div><b style="font-size:20px">${esc(L.today)}</b></div>`; return; }
+  const d = Math.floor(ms / 864e5), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
+  el.innerHTML = [[d, L.days], [h, L.hrs], [m, L.min], [s, L.sec]].map(([v, l]) => `<div><b>${String(v).padStart(2, '0')}</b><span>${esc(l)}</span></div>`).join('');
+}
+tick(); setInterval(tick, 1000);
+(function(){
+  const t = new Date(CONFIG.weddingAt);
+  if (isNaN(t)){ $('#calBtn').remove(); return; }
+  const f = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  $('#calBtn').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent('Wedding of ' + couple) +
+    '&dates=' + f(t) + '/' + f(new Date(t.getTime() + 3 * 3600e3)) + '&location=' + encodeURIComponent([CONFIG.venue.name, CONFIG.venue.address].filter(Boolean).join(', ')) +
+    '&details=' + encodeURIComponent(location.href.split('?')[0]);
+})();
+
+// powered by
+(function(){
+  const pb = CONFIG.poweredBy, el = $('#powered');
+  if (!pb || !pb.text){ el.remove(); return; }
+  const wa = pb.whatsapp ? `<br><a class="cta" target="_blank" rel="noopener" href="https://wa.me/${encodeURIComponent(String(pb.whatsapp).replace(/\D/g, ''))}?text=${encodeURIComponent('Hi, I saw a wedding invite made by you and I want one like this')}">Want an invite like this? Chat on WhatsApp</a>` : '';
+  const logo = pb.logo ? `<img class="pblogo" src="${esc(pb.logo)}" alt="">` : '';
+  const nm = pb.url ? `<a target="_blank" rel="noopener" href="${esc(safeUrl(pb.url))}">${esc(pb.text)}</a>` : `<b>${esc(pb.text)}</b>`;
+  el.innerHTML = `${logo}Powered by ${nm}${wa}`;
+})();
+
+/* =====================================================================
+   SCROLL ENGINE — each scene gets a progress 0..1 that follows the scroll
+   with a little easing (the "smooth Framer feel"), and its layers are set from it.
+   ===================================================================== */
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, t) => a + (b - a) * t;
+const eOut = x => 1 - Math.pow(1 - x, 3), eIn = x => x * x, eIO = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+const eBack = x => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const SC = [], FREE = [];
+let raf = 0, snap = true;
+function scene(id, T, upd){ const el = document.getElementById(id); if (el) SC.push({ el, T, upd, cur: 0, tgt: 0, drawn: -1 }); }
+function loop(){
+  raf = 0; let more = false; const vh = innerHeight;
+  for (const s of SC){
+    const r = s.el.getBoundingClientRect();
+    s.tgt = clamp(-r.top / Math.max(1, s.el.offsetHeight - vh));
+    if (r.bottom < -vh || r.top > vh * 2){ s.cur = s.tgt; continue; }
+    const d = s.tgt - s.cur;
+    if (snap || REDUCE || Math.abs(d) < .0006) s.cur = s.tgt; else { s.cur += d * .14; more = true; }
+    if (s.drawn !== s.cur){ s.upd(s.cur * s.T); s.drawn = s.cur; }
+  }
+  for (const f of FREE) f(vh);
+  snap = false;
+  if (more) kick();
+}
+function kick(){ if (!raf) raf = requestAnimationFrame(loop); }
+addEventListener('scroll', kick, { passive: true });
+addEventListener('resize', () => { snap = true; kick(); });
+const tf = (el, v) => { if (el) el.style.transform = v; };
+const op = (el, v) => { if (el) el.style.opacity = v; };
+
+// 1 · hero: gopuram rises over the names, then the camera flies into its doorway
+(function(){
+  const G = $('#hGop'), N = $('#hNames'), TL = $('#treeL'), TR = $('#treeR'), CL = $$('#hero .cloud'), H = $('#hHint'), FL = $('#hFlash');
+  scene('hero', 6.8, t => {
+    const a = seg(t, 0, 4), z = eIn(seg(t, 4, 7)), tr = seg(t, .5, 3.5), cf = seg(t, 4.4, 6.4);
+    tf(G, `translate(-50%,${lerp(60, 0, a) + lerp(0, -50, z)}%) scale(${1 + 5 * z})`);
+    tf(N, `translateY(${-45 * a}%)`); op(N, 1 - seg(t, 3.4, 4.6));
+    tf(TL, `translate(${-80 * z}%,${80 * (1 - tr)}%) scale(${1 + .9 * z})`);
+    tf(TR, `translate(${80 * z}%,${80 * (1 - tr)}%) scale(${1 + .9 * z})`);
+    CL.forEach(c => { tf(c, `translateX(${c.dataset.dx * 1.6 * seg(t, 0, 7)}px) scale(${1 + .6 * cf})`); op(c, 1 - cf); });
+    op(H, 1 - seg(t, 0, .4)); op(FL, seg(t, 6.3, 6.8));
+  });
+})();
+
+// 2 · invite: pillars slide in, arch rises, toran drops, lines appear one by one
+(function(){
+  const W = $('#iWin'), PL = $('#invite .pillar.l'), PR = $('#invite .pillar.r'), TO = $('#toran'), LN = $$('#invite .ln');
+  const T = 1.2 + .42 * Math.max(0, LN.length - 1) + .6 + 1;
+  $('#invite').style.height = Math.round(170 + LN.length * 16) + 'vh';
+  scene('invite', T, t => {
+    const a = eOut(seg(t, 0, 1));
+    tf(W, `translateY(${14 * (1 - a)}%)`); tf(PL, `translateX(${-45 * (1 - a)}%)`); tf(PR, `translateX(${45 * (1 - a)}%)`);
+    tf(TO, `translateY(${-110 * (1 - eBack(seg(t, .3, 1.4)))}%)`);
+    LN.forEach((l, i) => { const q = eOut(seg(t, 1.2 + .42 * i, 1.8 + .42 * i)); op(l, q); tf(l, `translateY(${24 * (1 - q)}px)`); });
+  });
+})();
+
+// 4 · storybook: camera pans down a layered scene; each layer moves at its own speed
+(function(){
+  const W = $('#world'), CL = $$('#story .s-cloud'), BK = $$('#story .s-back'), M = $('#sMain'), LL = $('#leafL'), LR = $('#leafR'), LO = $('#sLotus'),
+    CP = $('#sCouple'), C1 = $('#cap1'), C2 = $('#cap2');
+  scene('story', 6.6, t => {
+    const s = seg(t, 0, 6), c = eOut(seg(t, 2, 4.4));
+    tf(W, `translateY(${-46 * s}%)`);
+    CL.forEach(e => tf(e, `translateY(${160 * s}%)`)); BK.forEach(e => tf(e, `translateY(${14 * s}%)`));
+    tf(M, `translateY(${6 * s}%) scale(${1 + .04 * s})`);
+    tf(LL, `translateY(${-14 * s}%) rotate(${-5 * s}deg)`); tf(LR, `translateY(${-14 * s}%) rotate(${5 * s}deg)`);
+    tf(LO, `translateY(${-70 * s}%)`);
+    tf(CP, `translateY(${6 * (1 - c)}%) scale(${.9 + .1 * c})`);
+    const i1 = seg(t, .3, 1), o1 = seg(t, 2.1, 2.7), i2 = seg(t, 3.9, 4.6);
+    op(C1, i1 * (1 - o1)); tf(C1, `translateY(${24 * (1 - i1) - 20 * o1}px)`);
+    op(C2, i2); tf(C2, `translateY(${24 * (1 - i2)}px)`);
+  });
+})();
+
+// 7 · curtains open, then the RSVP lines come in
+(function(){
+  const L1 = $('#curL'), R1 = $('#curR'), LN = $$('#rsvp .r-ln');
+  scene('rsvp', 3.6, t => {
+    const a = eIO(seg(t, .2, 2.2));
+    tf(L1, `translateX(${-104 * a}%)`); tf(R1, `translateX(${104 * a}%)`);
+    LN.forEach((l, i) => { const q = eOut(seg(t, 1.4 + .25 * i, 1.9 + .25 * i)); op(l, q); tf(l, `translateY(${20 * (1 - q)}px)`); });
+  });
+})();
+
+// 5 · gold frame slides into the arch  ·  6 · gold temples rise
+FREE.push(vh => {
+  const f = $('#frame'); if (f){ const r = f.getBoundingClientRect(); if (r.top < vh * 1.5 && r.bottom > -vh){ const p = REDUCE ? 1 : clamp((vh * .95 - r.top) / (vh * .55));
+    tf(f, `translateY(${-30 * (1 - p)}%) rotate(${-4 * (1 - p)}deg) scale(${.9 + .1 * p})`); } }
+  const g = $('#vGold'); if (g){ const r = g.getBoundingClientRect(); if (r.top < vh * 1.5 && r.bottom > -vh){ const p = REDUCE ? 1 : clamp((vh - r.top) / (vh * .8));
+    tf(g, `translateY(${30 * (1 - p)}%)`); op(g, .3 + .7 * p); } }
+});
+
+// reveal-on-scroll for cards and headings
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+$$('.rv').forEach(el => io.observe(el));
+kick();
+
+// 9 · moments: photos burst from the finger, then settle into a heart
+(function(){
+  const box = $('#magic'), G = (CONFIG.gallery || []).filter(Boolean).slice(0, 8);
+  if (!G.length){ box.remove(); return; }
+  const N = G.length, cards = G.map(src => { const c = document.createElement('div'); c.className = 'pc'; c.innerHTML = `<div class="ph" style="background-image:url('${encodeURI(src)}')"></div>`; box.appendChild(c); return c; });
+  const size = () => ({ w: box.clientWidth, h: box.clientHeight });
+  const put = (c, x, y, r, s, dur, ease) => { c.style.transition = dur ? `transform ${dur}s ${ease}` : 'none'; c.style.transform = `translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`; };
+  const pile = () => { const { w, h } = size(); cards.forEach((c, i) => put(c, w / 2 - 48 + (i % 3 - 1) * 6, h * .55 - 55 + i * 1.5, (i * 37 % 24) - 12, 1, 0)); };
+  pile();
+  const heart = i => { const t = (i / N) * Math.PI * 2, { w, h } = size(), s = Math.min(w, h) / 38;
+    return [w / 2 + 16 * Math.pow(Math.sin(t), 3) * s - 48, h * .58 - (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * s - 56]; };
+  let state = 0, timer;
+  function magic(px, py){
+    op($('#mgHint'), .25); clearTimeout(timer);
+    const { w, h } = size();
+    cards.forEach(c => put(c, px - 48, py - 55, 0, .2, 0));
+    void box.offsetWidth;
+    cards.forEach((c, i) => setTimeout(() => put(c, 10 + Math.random() * (w - 116), 20 + Math.random() * (h - 150), Math.random() * 60 - 30, 1, .7, 'cubic-bezier(.2,.8,.2,1)'), i * 30));
+    if (state === 0) timer = setTimeout(() => cards.forEach((c, i) => { const [x, y] = heart(i); put(c, x, y, Math.random() * 20 - 10, 1, 1.1, 'cubic-bezier(.65,0,.35,1)'); }), 1000);
+    state = 1 - state;
+  }
+  box.addEventListener('click', e => { const r = box.getBoundingClientRect(); magic(e.clientX - r.left, e.clientY - r.top); });
+  box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); const { w, h } = size(); magic(w / 2, h / 2); } });
+  addEventListener('resize', () => { if (state === 0) pile(); });
+  window.__magic = () => { const { w, h } = size(); magic(w / 2, h * .55); };
+})();
+
+// music + doors
+const bgm = $('#bgm'), mBtn = $('#music');
+if (CONFIG.music){ bgm.src = CONFIG.music; bgm.onerror = () => { CONFIG.music = ''; mBtn.classList.remove('show'); }; }
+mBtn.onclick = () => { if (bgm.paused) bgm.play().then(() => mBtn.classList.add('playing')).catch(() => {}); else { bgm.pause(); mBtn.classList.remove('playing'); } };
+function unlock(){ document.body.classList.remove('locked'); snap = true; kick(); }
+$('#openBtn').onclick = () => {
+  const gate = $('#gate'); gate.classList.add('open'); setTimeout(unlock, 900);
+  if (CONFIG.music){ mBtn.classList.add('show'); bgm.play().then(() => mBtn.classList.add('playing')).catch(() => {}); }
+  setTimeout(() => gate.classList.add('gone'), 1800);
+  if (DEMO) setTimeout(runDemo, 2200);
+};
+try { history.scrollRestoration = 'manual'; } catch (e) {}
+scrollTo(0, 0);
+
+/* ---------- DEMO MODE (?demo) for screen-recording ads ---------- */
+function tapFx(el){ if (!el) return; const r = el.getBoundingClientRect(), d = document.createElement('div'); d.className = 'tapfx';
+  d.style.left = (r.left + r.width / 2) + 'px'; d.style.top = (r.top + r.height / 2) + 'px'; document.body.appendChild(d); setTimeout(() => d.remove(), 900); }
+if (DEMO){
+  const st = document.createElement('style');
+  st.textContent = `.tapfx{position:fixed;z-index:99;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.55);
+    box-shadow:0 0 0 2px rgba(255,255,255,.9),0 2px 12px rgba(0,0,0,.35);animation:tapfx .8s ease-out forwards}@keyframes tapfx{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.5);opacity:0}}
+    .finger{position:fixed;z-index:98;left:50%;width:46px;height:46px;margin-left:-23px;border-radius:50%;pointer-events:none;opacity:0;
+    background:radial-gradient(circle,rgba(255,255,255,.8) 0 40%,rgba(255,255,255,.25) 60%,transparent 70%);box-shadow:0 2px 10px rgba(0,0,0,.25);transition:opacity .3s}.finger.on{opacity:1}`;
+  document.head.appendChild(st);
+  $('#openBtn').addEventListener('pointerdown', e => tapFx(e.currentTarget));
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function glide(toY, ms){
+  return new Promise(res => {
+    const from = scrollY, dist = Math.max(0, Math.min(toY, document.documentElement.scrollHeight - innerHeight)) - from, t0 = performance.now();
+    const fg = QS.has('nofinger') ? null : ($('.finger') || document.body.appendChild(Object.assign(document.createElement('div'), { className: 'finger' })));
+    if (fg && Math.abs(dist) > 60) fg.classList.add('on');
+    const step = now => { const p = Math.min(1, (now - t0) / ms), e = .5 - Math.cos(Math.PI * p) / 2; scrollTo(0, from + dist * e);
+      if (fg) fg.style.top = (innerHeight * (.78 - .42 * e)) + 'px'; if (p < 1) requestAnimationFrame(step); else { if (fg) fg.classList.remove('on'); res(); } };
+    requestAnimationFrame(step);
+  });
+}
+const topOf = el => el.getBoundingClientRect().top + scrollY;
+const endOf = el => topOf(el) + el.offsetHeight - innerHeight;
+async function runDemo(){
+  await wait(1000);
+  await glide(endOf($('#hero')), 7000); await wait(600);
+  await glide(endOf($('#invite')), 6000); await wait(1400);
+  for (const c of $$('.ev')){ await glide(topOf(c) - innerHeight * .2, 1700); await wait(700); }
+  await glide(endOf($('#story')), 8000); await wait(1400);
+  await glide(topOf($('#couple')), 2200); await wait(800);
+  const f = $('#frame'); if (f){ await glide(topOf(f) - innerHeight * .2, 2200); await wait(1200); }
+  await glide(topOf($('#venue')), 2000); await wait(1600);
+  await glide(endOf($('#rsvp')), 4500); await wait(1600);
+  await glide(topOf($('#count')), 1800); await wait(2000);
+  if ($('#magic')){ await glide(topOf($('#magic')), 1600); await wait(600); tapFx($('#magic')); window.__magic(); await wait(2600); }
+  await glide(document.documentElement.scrollHeight, 2000); await wait(1800);
+  await glide(0, 4000);
+}
+
+// studio preview: skip the door, jump to a section
+if (CONFIG.skipGate){ $('#gate').classList.add('gone'); unlock(); $$('.rv').forEach(el => el.classList.add('in')); }
+addEventListener('message', e => {
+  const id = e.data && e.data.goto; if (!id) return;
+  const map = { court: 'invite', sky: 'story', couple: 'couple', events: 'events', rsvp: 'rsvp', venue: 'venue', hero: 'hero', gallery: 'magic' };
+  const el = document.getElementById(map[id] || id) || $('#hero');
+  const y = el.classList.contains('scene') && el.id !== 'hero' ? endOf(el) : topOf(el);
+  $$('.rv').forEach(x => x.classList.add('in'));
+  if (e.data.instant){ snap = true; scrollTo(0, y); } else scrollTo({ top: y, behavior: 'smooth' });
+  kick();
+});
+</script>
+</body>
+</html>
