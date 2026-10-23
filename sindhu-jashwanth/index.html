@@ -172,6 +172,8 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
 .vcard .vtm i{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:6px}
 .vcard .vno{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);margin-top:2px}
 .vcard .pill{margin-top:16px}
+.vcard .vml{display:inline-block;margin-top:10px;padding:5px 14px;border:1px solid rgba(231,205,140,.35);border-radius:20px;font-size:13px;color:var(--ivory)}
+.vcard .vml span{margin-right:2px}
 
 /* ---------- 7 · rsvp ---------- */
 .rcard{position:relative;margin-top:30px;padding:30px 22px 34px;border-radius:14px;color:var(--ivory);
@@ -369,14 +371,14 @@ const CONFIG = {
   "skySub": "",
   "coupleSub": "Two souls, one beautiful journey",
   "storyTitle": "Hello, lovely people",
-  "story": "We are so happy you are here. After five years of coffee dates, long drives and endless conversations, we are finally saying \"forever\". Scroll down for all the details — and do let us know you are coming!",
+  "story": "Our story began with an introduction, but somewhere along the way, it became a choice of the heart. As we begin this new chapter, together with love , we welcome you to share our happiness. Scroll down for all the details - and do let us know you are coming!",
   "events": [
     {
       "name": "Sumuhurtham",
       "date": "On Sunday 15th November 2026",
       "time": "10:16 AM",
-      "meal": "",
-      "mealTime": "",
+      "meal": "Lunch",
+      "mealTime": "12:30 PM Onwards",
       "place": "Ananthula Ram Reddy Convention",
       "map": "https://maps.app.goo.gl/861VH1VKkjBy4BRz5?g_st=awb",
       "hidden": false
@@ -385,8 +387,8 @@ const CONFIG = {
       "name": "Reception",
       "date": "On Sunday 22th November 2026",
       "time": "07:00 PM onwards",
-      "meal": "",
-      "mealTime": "",
+      "meal": "Dinner",
+      "mealTime": "7:00 PM Onwards",
       "place": "Yellandu Club - Kothagudem",
       "map": "https://maps.app.goo.gl/1ey4om4RBGc3mu9V8?g_st=awb",
       "hidden": false
@@ -727,12 +729,12 @@ function makeScratch(card, label){
     const p = e.place ? splitPlace(e.place) : { name: venue.name || '', addr: venue.address || '' };
     const w = whenOf(e), tm = splitTime(e.time);
     const day = w ? w.date.toLocaleDateString('en-GB', { weekday: 'short' }) + ', ' + w.d + ' ' + MONS[w.m] + ' ' + w.y : (e.date || '');
-    return { n: e.name, p, day, tm, m: mapOf([p.name, p.addr].filter(Boolean).join(', '), e.map || (e.place ? '' : venue.map)) };
+    return { n: e.name, p, day, tm, meal: [e.meal, e.mealTime].map(x => String(x || '').trim()).filter(Boolean).join(' · '), m: mapOf([p.name, p.addr].filter(Boolean).join(', '), e.map || (e.place ? '' : venue.map)) };
   }).filter(c => c.p.name || c.day);
   if (!cards.length){ drop('venues'); drop('rule2'); return; }
   $('#vList').innerHTML = cards.map(c => `<a class="vcard rv" ${c.m ? `href="${esc(safeUrl(c.m))}" target="_blank" rel="noopener"` : ''}>
     <p class="vt">${esc(c.n)}</p>${c.p.name ? `<p class="vn">${esc(c.p.name)}</p>` : ''}${c.p.addr ? `<p class="va">${esc(c.p.addr)}</p>` : ''}<div class="star">✦</div>
-    ${c.day ? `<p class="vd">${esc(c.day)}</p>` : ''}${c.tm.main ? `<p class="vtm">${c.tm.label ? `<i>${esc(c.tm.label)}</i>` : ''}${esc(c.tm.main)}</p>` : ''}${c.tm.note ? `<p class="vno">${esc(c.tm.note)}</p>` : ''}
+    ${c.day ? `<p class="vd">${esc(c.day)}</p>` : ''}${c.tm.main ? `<p class="vtm">${c.tm.label ? `<i>${esc(c.tm.label)}</i>` : ''}${esc(c.tm.main)}</p>` : ''}${c.tm.note ? `<p class="vno">${esc(c.tm.note)}</p>` : ''}${c.meal ? `<p class="vml"><span>🍽</span> ${esc(c.meal)}</p>` : ''}
     ${c.m ? `<span class="pill">${esc(L.mapBtn)} ↗</span>` : ''}</a>`).join('');
 })();
 
