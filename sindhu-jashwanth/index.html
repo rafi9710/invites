@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ankilla's Family Wedding Invitation">
-<meta property="og:description" content="Friday, 27 November 2026 · Ananthula Ram Reddy Convention">
-<meta name="description" content="Friday, 27 November 2026 · Ananthula Ram Reddy Convention">
+<meta property="og:description" content="Sunday, 15 November 2026 · Ananthula Ram Reddy Convention">
+<meta name="description" content="Sunday, 15 November 2026 · Ananthula Ram Reddy Convention">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-thumb-1792746287741.jpg">
 <meta property="og:image:secure_url" content="https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-thumb-1792746287741.jpg">
@@ -280,7 +280,7 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
 
   <!-- 3 · save the dates -->
   <section class="sec" id="dates">
-    <p class="eyebrow rv">When forever begins</p>
+    <p class="eyebrow rv" id="sdEye">When forever begins</p>
     <h2 class="title rv d1" id="sdTitle">Save the Dates</h2>
     <p class="lede rv d2" id="sdLede"></p>
     <div class="srow" id="sRow"></div>
@@ -288,8 +288,8 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
 
   <!-- 4 · countdown -->
   <section class="sec dark" id="countdown">
-    <p class="eyebrow rv">Counting every heartbeat</p>
-    <h2 class="title rv d1">Until we say “I do”</h2>
+    <p class="eyebrow rv" id="cdEye">Counting every heartbeat</p>
+    <h2 class="title rv d1" id="cdTitle">Until we say “I do”</h2>
     <div class="cgrid rv d2" id="cGrid">
       <div><b id="cdD">0</b><small data-l="days">Days</small></div>
       <div><b id="cdH">0</b><small data-l="hrs">Hours</small></div>
@@ -301,8 +301,8 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
 
   <!-- 5 · gallery -->
   <section class="sec" id="gallery">
-    <p class="eyebrow rv">Our story, in frames</p>
-    <h2 class="title rv d1">Ours is our favourite</h2>
+    <p class="eyebrow rv" id="galEye">Our story, in frames</p>
+    <h2 class="title rv d1" id="galTitle">Ours is our favourite</h2>
     <p class="lede rv d2" data-l="gallerySub">Moments we treasure</p>
     <div class="frames" id="frames"></div>
   </section>
@@ -310,8 +310,8 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
 
   <!-- 6 · venues -->
   <section class="sec" id="venues">
-    <p class="eyebrow rv">A promise to remember</p>
-    <h2 class="title rv d1">Where we'll celebrate</h2>
+    <p class="eyebrow rv" id="venEye">A promise to remember</p>
+    <h2 class="title rv d1" id="venTitle">Where we'll celebrate</h2>
     <p class="lede rv d2" id="vLede">Tap a card for directions to each celebration</p>
     <div id="vList"></div>
   </section>
@@ -325,13 +325,13 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
     <div class="rcard rv" id="rCard">
       <form id="rForm" autocomplete="on">
         <label class="fl" data-l="rsvpName">Full name</label><input type="text" name="name" maxlength="80" required>
-        <label class="fl">Phone number</label><input type="tel" name="phone" maxlength="20">
+        <label class="fl" id="rPhoneL">Phone number</label><input type="tel" name="phone" maxlength="20">
         <div class="revs" id="rEvs"></div>
         <input class="hp" name="website" tabindex="-1" autocomplete="off">
         <button class="pill send" type="submit" data-l="rsvpSend">Send RSVP</button>
         <div id="rMsg"></div>
       </form>
-      <div class="rdone"><h3 class="title">Thank you</h3><p id="rDone"></p></div>
+      <div class="rdone"><h3 class="title" id="rThanksT">Thank you</h3><p id="rDone"></p></div>
     </div>
   </section>
 
@@ -339,7 +339,7 @@ body.indic .gate-names,body.indic .hero-names,body.indic .foot-names{font-style:
   <footer id="footer" class="dark">
     <div class="slot" id="slot"></div>
     <p class="eyebrow rv" id="fEye">Two journeys, one forever</p>
-    <h2 class="title rv d1">With love</h2>
+    <h2 class="title rv d1" id="fTitle">With love</h2>
     <p class="foot-names rv d2"><span id="fn1"></span> <span class="amp">&amp;</span> <span id="fn2"></span></p>
     <p class="foot-line rv d2" id="fLine"></p>
     <p class="foot-sign rv d3" id="fSign"></p>
@@ -358,9 +358,9 @@ const CONFIG = {
   "bride": "Sindhu ",
   "groomFull": "Jashwanth ",
   "brideFull": "Sindhu ",
-  "dateLong": "Friday, 27 November 2026",
-  "dateShort": "27 · 11 · 2026",
-  "weddingAt": "2026-11-27T07:45:00+05:30",
+  "dateLong": "Sunday, 15 November 2026",
+  "dateShort": "15 · 11 · 2026",
+  "weddingAt": "2026-11-15T10:16:00+05:30",
   "blessing": "With the blessings of God and our beloved families",
   "grandparents": "",
   "parents": "Ankilla's Family",
@@ -499,12 +499,7 @@ const CONFIG = {
     "disp": "Pinyon Script",
     "q": ""
   },
-  "gallery": [
-    "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-gallery1-1792739519340.jpg",
-    "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-gallery2-1792739530430.jpg",
-    "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-gallery3-1792739541868.jpg",
-    "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/sindhu-jashwanth/img-gallery5-1792739568235.jpg"
-  ],
+  "gallery": [],
   "symbol": "",
   "studioLogo": "",
   "fontFile": ""
@@ -533,6 +528,11 @@ const fix = { hrs: ['Hrs', 'Hours'], min: ['Min', 'Minutes'], sec: ['Sec', 'Seco
   rsvpGuests: ['Number of guests', 'Number of guests (incl. you)'], gallerySub: ['A few of our favourite memories', 'Moments we treasure'], mapBtn: ['Click for location', 'Open in Google Maps'] };
 for (const k in fix) if (L[k] === fix[k][0]) L[k] = fix[k][1];
 $$('[data-l]').forEach(e => { if (L[e.dataset.l] != null) e.textContent = L[e.dataset.l]; });
+/* headings typed in the studio (empty = the design's own words) */
+const T = (k, d) => { const v = (CONFIG.labels || {})[k]; return v != null && String(v).trim() !== '' ? String(v) : d; };
+[['sdEye', 'sealDatesEye'], ['cdEye', 'sealCdEye'], ['cdTitle', 'sealCdTitle'], ['galEye', 'sealGalEye'], ['galTitle', 'sealGalTitle'], ['venEye', 'sealVenEye'], ['venTitle', 'sealVenTitle'],
+  ['rPhoneL', 'sealPhone'], ['rThanksT', 'sealThanksTitle'], ['fTitle', 'sealFootTitle']].forEach(([id, k]) => { const e = document.getElementById(id); if (e) e.textContent = T(k, e.textContent); });
+{ const sh = document.getElementById('scrollHint'); if (sh && sh.firstChild) sh.firstChild.nodeValue = T('sealScroll', sh.firstChild.nodeValue); }
 if (!EN){ document.documentElement.lang = CONFIG.lang; document.body.classList.add('indic'); }
 
 /* fonts */
@@ -558,14 +558,14 @@ const INI = ((A[0] || ' ')[0] + (A[1] || ' ')[0]).toUpperCase();
 document.title = CONFIG.familyLine || `${couple} — Wedding Invitation`;
 
 /* gate */
-set('gEye', CONFIG.topLine || (EN ? 'Together with our families' : ''));
+set('gEye', CONFIG.topLine || T('sealGateEye', EN ? 'Together with our families' : ''));
 $('#gNames').innerHTML = esc(A[0]) + ' <span class="amp">&amp;</span> ' + esc(A[1]);
 set('gSub', CONFIG.dateShort || CONFIG.dateLong);
 if (!EN) set('gTurn', '');
 const sealInner = IM.seal ? `<img src="${esc(IM.seal)}" alt="">` : `<b>${esc(INI.split('').join(''))}</b>`;
 $('#sealDisc').innerHTML = sealInner;
 $('#gMini').innerHTML = IM.seal ? `<img src="${esc(IM.seal)}" alt="">` : `<b>${esc(INI[0] || '')}</b>`;
-set('tapHint', EN ? 'Tap the seal to open' : (L.open || ''));
+set('tapHint', T('sealTapHint', EN ? 'Tap the seal to open' : (L.open || '')));
 
 /* gold dust in the gate */
 (function(){
@@ -647,10 +647,10 @@ const scratchers = [];
 (function(){
   const row = $('#sRow'); const list = evs.length ? evs : (CONFIG.dateLong ? [{ name: 'Wedding', date: CONFIG.dateLong, time: '' }] : []);
   if (!list.length){ drop('dates'); return; }
-  set('sdTitle', list.length > 1 ? 'Save the Dates' : 'Save the Date');
+  set('sdTitle', T('sealDatesTitle', list.length > 1 ? 'Save the Dates' : 'Save the Date'));
   const words = ['', 'One day', 'Two days', 'Three days', 'Four days', 'Five days', 'Six days'];
   set('sdLede', (list.length > 1 ? (words[list.length] || list.length + ' days') + ', one story. Scratch each circle to reveal.' : 'One day, one story. Scratch the circle to reveal.'));
-  if (!EN) drop('sdLede');
+  const ownLede = T('sealDatesLine', ''); if (ownLede) set('sdLede', ownLede); else if (!EN) drop('sdLede');
   list.forEach(e => {
     const w = whenOf(e), tm = splitTime(e.time);
     const wk = w ? w.date.toLocaleDateString('en-GB', { weekday: 'long' }) : '';
@@ -658,7 +658,7 @@ const scratchers = [];
     card.innerHTML = `<div class="circle"><div class="reveal">${w
       ? `<p class="rt">${esc(e.name)}</p><p class="ry">${w.y}</p><p class="rd">${pad(w.d)} ${MONS[w.m]}</p><p class="rw">${wk}</p>${tm.main ? `<p class="rtm">${esc(tm.main)}</p>` : ''}<a class="pill" target="_blank" rel="noopener" href="${esc(calLink(e, w))}">+ ${esc(L.addCal)}</a>`
       : `<p class="rt">${esc(e.name)}</p><p class="raw">${esc(e.date)}</p>${tm.main ? `<p class="rtm">${esc(tm.main)}</p>` : ''}`}</div><canvas></canvas><div class="petals"></div></div>
-      <p class="shint">Scratch to reveal</p>`;
+      <p class="shint">${esc(T('sealScratch', 'Scratch to reveal'))}</p>`;
     row.appendChild(card);
     scratchers.push(makeScratch(card, e.name || ''));
   });
@@ -743,7 +743,7 @@ function makeScratch(card, label){
   set('rNote', r.note || ''); if (!r.note) $('#rNote').style.visibility = 'hidden';
   set('rDone', L.rsvpThanks);
   const list = evs.length ? evs : [{ name: 'Wedding', date: CONFIG.dateLong }];
-  if (list.length < 2) set('rLede', 'Let us know if you can make it');
+  const ownRl = T('sealRsvpLine', ''); if (ownRl) set('rLede', ownRl); else if (list.length < 2) set('rLede', 'Let us know if you can make it');
   const ans = list.map(() => null);
   $('#rEvs').innerHTML = list.map((e, i) => { const w = whenOf(e); return `<div class="rev"><p class="rn">${esc(e.name)}${w ? ` <small>· ${w.d} ${MONS[w.m]}</small>` : ''}</p>
     <div class="yn" data-i="${i}"><button type="button" data-a="1"><i></i>${esc(L.rsvpYes)}</button><button type="button" data-a="0"><i></i>${esc(L.rsvpNo)}</button></div>
