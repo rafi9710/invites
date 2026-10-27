@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rahul &amp; Priya — Wedding Invitation">
+<meta property="og:description" content="Sunday · 14 December 2026 · Vivaha Convention">
+<meta name="description" content="Sunday · 14 December 2026 · Vivaha Convention">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rahul &amp; Priya — Wedding Invitation</title>
+<meta name="theme-color" content="#f6ece6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Pinyon+Script&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w:min(100vw,480px);
+  --ink:#3f2b33; --soft:#8a6f73; --rose:#c76d6a; --gold:#b98a3e;
+  --bg:#f7efea;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --script:'Pinyon Script',cursive;
+  --sans:'Jost',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#eadbd3}
+body{font-family:var(--serif);color:var(--ink);background:#eadbd3;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden;height:100vh}
+img{display:block;max-width:none;user-select:none;-webkit-user-drag:none}
+.app{position:relative;width:var(--w);margin:0 auto;background:
+  radial-gradient(120% 60% at 50% 0%,#fbf5f1 0%,var(--bg) 60%,#f3e6df 100%);overflow-x:clip}
+
+/* ---------------- gate (closed card) ---------------- */
+#gate{position:fixed;top:0;bottom:0;left:50%;width:var(--w);transform:translateX(-50%);z-index:50;
+  perspective:1500px;background:#efe1d9;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#gate.gone{display:none}
+.door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;
+  transition:transform 1.5s cubic-bezier(.62,.04,.28,1) .75s, filter 1.5s ease .75s;backface-visibility:hidden;will-change:transform}
+.door .dimg{position:absolute;top:0;height:100%;width:200%;background-size:cover;background-position:center}
+.door.l{left:0;transform-origin:0 50%} .door.l .dimg{left:0}
+.door.r{right:0;transform-origin:100% 50%} .door.r .dimg{right:0}
+.door::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(60,30,30,.12));opacity:0;transition:opacity 1.5s .75s}
+.door.r::after{background:linear-gradient(270deg,rgba(0,0,0,0),rgba(60,30,30,.12))}
+.rib{position:absolute;transition:transform .9s cubic-bezier(.6,0,.3,1);will-change:transform;filter:drop-shadow(0 2px 4px rgba(90,40,40,.25))}
+.rib.vt,.rib.vb{left:50%;width:15%;margin-left:-7.5%;background-repeat:repeat-y;background-size:100% auto;background-position:center top}
+.rib.vt{top:0;height:50%} .rib.vb{bottom:0;height:50%}
+.rib.hl,.rib.hr{top:50%;height:calc(var(--w)*.15);margin-top:calc(var(--w)*-.075);background-image:none!important;background:none!important;overflow:hidden}
+.rib .rot{position:absolute;left:50%;top:50%;width:calc(var(--w)*.15);height:calc(var(--w)*.5 + 4px);transform:translate(-50%,-50%) rotate(90deg);
+  background-repeat:repeat-y;background-size:100% auto;background-position:center top}
+.rib.hl{left:0;width:50%} .rib.hr{right:0;width:50%}
+#bow{position:absolute;left:50%;top:50%;width:62%;transform:translate(-50%,-31%);transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .6s;
+  filter:drop-shadow(0 8px 14px rgba(90,40,40,.3));z-index:2}
+#bow img{width:100%;height:auto}
+#tapHint{position:absolute;left:0;right:0;bottom:7%;text-align:center;font:500 13px var(--sans);letter-spacing:.32em;
+  text-transform:uppercase;color:#7a4c4c;z-index:3;transition:opacity .4s}
+#tapHint span{display:inline-block;padding:9px 18px;border-radius:30px;background:rgba(255,248,244,.82);
+  box-shadow:0 4px 18px rgba(120,60,60,.18);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#gate.o{background:transparent;transition:background .6s .7s}
+#gate.o #tapHint{opacity:0}
+#gate.o #bow{transform:translate(-50%,-60%) scale(1.25);opacity:0}
+#gate.o .rib.hl{transform:translateX(-102%);transition-delay:.25s}
+#gate.o .rib.hr{transform:translateX(102%);transition-delay:.25s}
+#gate.o .rib.vt{transform:translateY(-102%);transition-delay:.4s}
+#gate.o .rib.vb{transform:translateY(102%);transition-delay:.4s}
+#gate.o .door.l{transform:rotateY(-104deg);filter:brightness(.9)}
+#gate.o .door.r{transform:rotateY(104deg);filter:brightness(.9)}
+#gate.o .door::after{opacity:1}
+#gate.fade{opacity:0;transition:opacity .5s}
+
+/* ---------------- 1. inner card ---------------- */
+#s1{position:relative;height:100vh;height:100svh;overflow:hidden}
+#s1 .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+#s1 .txt{position:absolute;left:14%;right:14%;top:24%;text-align:center}
+.k1{font:500 12px var(--sans);letter-spacing:.42em;text-transform:uppercase;color:var(--soft)}
+.k2{font-family:var(--script);font-size:clamp(54px,16vw,76px);line-height:1.05;color:var(--rose);margin:8px 0 0}
+.k3{font:500 clamp(24px,7vw,32px)/1 var(--serif);letter-spacing:.06em;color:var(--ink)}
+.leaf{width:64px;height:auto;margin:16px auto 14px;opacity:.85}
+.k4{font:500 15px var(--serif);font-style:italic;color:var(--soft)}
+.k5{font:600 clamp(20px,6vw,26px) var(--serif);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.k5 i{font-weight:500;text-transform:none;letter-spacing:0;color:var(--rose);font-size:.8em;margin:0 6px}
+#ringSpot{position:absolute;left:50%;top:69%;width:1px;height:1px}
+.scrollHint{position:absolute;left:0;right:0;bottom:4.5%;text-align:center;font:500 11px var(--sans);letter-spacing:.3em;
+  text-transform:uppercase;color:var(--soft);opacity:.85}
+.scrollHint b{display:block;width:1px;height:26px;margin:8px auto 0;background:linear-gradient(var(--soft),transparent);animation:drip 1.6s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------------- 2. falling ribbon ---------------- */
+#s2{position:relative;height:230vh}
+#s2 .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+#curlWrap{position:absolute;left:50%;top:0;height:94%;transform:translateX(-50%);will-change:clip-path}
+#curlWrap img{height:100%;width:auto}
+#tag{position:absolute;left:0;right:0;top:44%;text-align:center;font:italic 500 22px var(--serif);color:var(--soft);opacity:0;
+  transition:opacity .6s;pointer-events:none}
+
+/* ---------------- 3. hands ---------------- */
+#s3{position:relative;height:300vh}
+#s3 .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+#names{position:absolute;left:0;right:0;top:20%;text-align:center;opacity:0}
+#names .n{font:600 clamp(26px,8vw,34px) var(--serif);letter-spacing:.16em;text-transform:uppercase}
+#names .n i{font:italic 500 .7em var(--serif);letter-spacing:0;text-transform:none;color:var(--rose);margin:0 .35em}
+#names .d{font:500 12px var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--soft);margin-top:10px}
+.hand{position:absolute;will-change:transform;filter:drop-shadow(0 10px 16px rgba(80,40,40,.18))}
+.hand img{width:100%;height:auto}
+#joke{position:absolute;left:0;right:0;text-align:center;font:600 clamp(22px,7vw,30px) var(--serif);letter-spacing:.12em;
+  color:var(--rose);opacity:0;transform:scale(.6)}
+
+/* ---------------- 4. timeline ---------------- */
+#s4{position:relative;padding:22vh 0 10vh}
+.hd{text-align:center;margin-bottom:46px}
+.hd .k1{font-size:11px}
+.hd h2{font:italic 500 clamp(32px,9.5vw,42px) var(--serif);margin-top:6px}
+#tl{position:relative;margin:0 auto;width:100%}
+#tlRib{position:absolute;left:50%;top:-30px;bottom:-30px;width:30px;margin-left:-15px;
+  background:linear-gradient(90deg,#c9a24e 0,#e7c873 2px,#d27f7b 3px,#e9a19c 30%,#f7cfc9 48%,#eaa39e 62%,#cf7672 calc(100% - 3px),#e7c873 calc(100% - 2px),#b98a3e 100%);
+  box-shadow:0 3px 8px rgba(120,50,50,.22)}
+.ev{position:relative;height:150px}
+.ev .dot{position:absolute;left:50%;top:50%;width:32px;height:32px;margin:-16px 0 0 -16px;border-radius:50%;background:#fffaf7;
+  box-shadow:0 2px 8px rgba(120,50,50,.28);display:grid;place-items:center;z-index:2;transition:transform .4s}
+.ev .dot svg{width:17px;height:17px;stroke:var(--rose);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ev .t{position:absolute;top:50%;transform:translateY(-50%);width:calc(50% - 40px);opacity:.28;transition:opacity .5s, transform .5s}
+.ev.L .t{right:calc(50% + 32px);text-align:right}
+.ev.R .t{left:calc(50% + 32px);text-align:left}
+.ev .tm{font:500 11px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--rose)}
+.ev .ti{font:italic 500 clamp(19px,5.6vw,23px)/1.15 var(--serif);margin-top:4px}
+.ev .dy{font:500 12px var(--sans);color:var(--soft);margin-top:4px;letter-spacing:.05em}
+.ev.on .t{opacity:1}
+.ev.on .dot{transform:scale(1.12)}
+
+/* ---------------- 5. venue ---------------- */
+#s5{padding:10vh 22px 12vh;text-align:center}
+.vcard{background:rgba(255,251,248,.78);border:1px solid rgba(185,138,62,.28);border-radius:22px;padding:34px 22px 30px;
+  box-shadow:0 18px 40px rgba(120,60,60,.12);backdrop-filter:blur(4px)}
+.vcard .k1{font-size:11px}
+.vcard h3{font:500 clamp(28px,8vw,34px) var(--serif);margin:10px 0 6px}
+.vcard p{font:italic 500 18px var(--serif);color:var(--soft)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:12px 22px;border-radius:40px;background:var(--rose);color:#fff;
+  text-decoration:none;font:500 13px var(--sans);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 8px 20px rgba(199,109,106,.35)}
+.btn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2}
+.closing{font:italic 500 20px var(--serif);color:var(--soft);margin-top:44px}
+.credit{display:block;margin-top:26px;font:500 10px var(--sans);letter-spacing:.24em;text-transform:uppercase;color:#b49a98;text-decoration:none}
+
+/* ---------------- the travelling ring ---------------- */
+#ring{position:fixed;left:0;top:0;width:64px;z-index:20;pointer-events:none;will-change:transform;
+  filter:drop-shadow(0 6px 8px rgba(90,50,30,.35));opacity:0}
+#ring img{width:100%;height:auto}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s, transform .9s}
+.reveal.in{opacity:1;transform:none}
+
+/* ---- studio additions ---- */
+:root{--names:var(--serif)}
+#s1 .txt .k0{font:500 12px var(--sans);letter-spacing:.18em;color:var(--soft);margin-bottom:12px}
+#s1 .sym{display:block;margin:0 auto 10px;height:auto}
+#s1 .sym.sm{width:40px} #s1 .sym.md{width:56px} #s1 .sym.lg{width:76px}
+#names .n{font-family:var(--names)}
+.ev .pl{font:italic 500 14px/1.25 var(--serif);color:var(--soft);margin-top:4px}
+.ev .mp{display:inline-block;margin-top:6px;font:500 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--rose);text-decoration:none;border-bottom:1px solid rgba(199,109,106,.4)}
+.vcard .vn2{font:500 15px/1.5 var(--serif);color:var(--soft);margin-top:12px}
+#rsvp{padding:0 22px 4vh}
+.rcard{background:rgba(255,251,248,.85);border:1px solid rgba(185,138,62,.28);border-radius:22px;padding:30px 20px;box-shadow:0 18px 40px rgba(120,60,60,.12);text-align:center}
+.rcard h3{font:italic 500 clamp(28px,8vw,34px) var(--serif);margin-bottom:6px}
+.rcard .rn{font:italic 500 16px var(--serif);color:var(--soft);margin-bottom:16px}
+.rcard input,.rcard textarea{width:100%;margin:6px 0;padding:12px 14px;border-radius:12px;border:1px solid rgba(185,138,62,.35);background:#fffdfb;font:500 15px var(--sans);color:var(--ink)}
+.rcard .yn{display:flex;gap:8px;margin:8px 0}
+.rcard .yn button{flex:1;padding:11px 8px;border-radius:12px;border:1px solid rgba(199,109,106,.45);background:#fff;font:500 13px var(--sans);color:var(--ink)}
+.rcard .yn button.on{background:var(--rose);color:#fff;border-color:var(--rose)}
+.rcard .send{margin-top:12px;border:0;cursor:pointer}
+.rcard .hp{position:absolute;left:-9999px}
+#rMsg{font:500 13px var(--sans);color:#b3261e;margin-top:8px;min-height:1em}
+.rcard .done{display:none;font:italic 500 19px var(--serif)}
+.rcard.sent form{display:none} .rcard.sent .done{display:block}
+#powered{margin-top:22px;font:500 11px/1.8 var(--sans);letter-spacing:.08em;color:#a88f8c}
+#powered a{color:var(--rose);text-decoration:none}
+#powered .cta{display:inline-block;margin-top:6px}
+#powered .pblogo{display:block;height:34px;width:auto;margin:0 auto 6px}
+body.indic .k1,body.indic .ev .tm,body.indic .scrollHint,body.indic #tapHint{letter-spacing:.04em;text-transform:none}
+</style>
+<style>html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}img{-webkit-user-drag:none}input,textarea,select{-webkit-user-select:text;user-select:text}</style></head>
+<body class="locked">
+
+<div id="gate" role="button" aria-label="Open the invitation">
+  <div class="door l"><div class="dimg"></div></div>
+  <div class="door r"><div class="dimg"></div></div>
+  <div class="rib vt"></div><div class="rib vb"></div>
+  <div class="rib hl"><div class="rot"></div></div><div class="rib hr"><div class="rot"></div></div>
+  <div id="bow"></div>
+  <div id="tapHint"><span id="tapTxt">Tap to open</span></div>
+</div>
+
+<div id="ring"><img id="ringImg" alt=""></div>
+
+<main class="app">
+  <section id="s1">
+    <img class="bg" id="cardBg" alt="">
+    <div class="txt">
+      <img class="sym" id="sym" alt="" hidden>
+      <div class="k0" id="topLine"></div>
+      <div class="k1" id="c1"></div>
+      <div class="k2" id="c2"></div>
+      <div class="k3" id="c3"></div>
+      <svg class="leaf" viewBox="0 0 64 16" aria-hidden="true"><path d="M2 8h60M32 2c-3 3-3 9 0 12 3-3 3-9 0-12zM20 8c-3-3-7-3-10 0 3 3 7 3 10 0zm24 0c3-3 7-3 10 0-3 3-7 3-10 0z" fill="none" stroke="#b98a3e" stroke-width="1.1"/></svg>
+      <div class="k4" id="c4"></div>
+    </div>
+    <div id="ringSpot"></div>
+    <div class="scrollHint"><span id="scrollTxt">Scroll</span><b></b></div>
+  </section>
+
+  <section id="s2">
+    <div class="stage">
+      <div id="curlWrap"><img id="curl" alt=""></div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="stage">
+      <div id="names"><div class="n"><span id="nA"></span><i id="nW">and</i><span id="nB"></span></div><div class="d" id="nD"></div></div>
+      <div class="hand" id="hg"><img id="hgImg" alt=""></div>
+      <div class="hand" id="hb"><img id="hbImg" alt=""></div>
+      <div id="joke"></div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="hd reveal"><div class="k1" id="tlEye"></div><h2 id="tlTitle"></h2></div>
+    <div id="tl"><div id="tlRib"></div></div>
+  </section>
+
+  <section id="s5">
+    <div class="vcard reveal">
+      <div class="k1" id="vEye"></div>
+      <h3 id="vName"></h3>
+      <p id="vAddr"></p>
+      <div class="vn2" id="vNote"></div>
+      <a class="btn" id="dir" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span id="dirTxt"></span></a>
+    </div>
+  </section>
+
+  <section id="rsvp">
+    <div class="rcard reveal" id="rCard">
+      <h3 id="rT"></h3>
+      <p class="rn" id="rNote"></p>
+      <form id="rForm" autocomplete="on">
+        <input type="text" name="name" maxlength="80" id="rName" required>
+        <div class="yn"><button type="button" data-a="1" id="rYes"></button><button type="button" data-a="0" id="rNo"></button></div>
+        <input type="number" name="guests" min="1" max="20" value="1" inputmode="numeric" id="rGuests">
+        <input type="tel" name="phone" maxlength="20" id="rPhone">
+        <textarea name="message" rows="2" maxlength="300" id="rWish"></textarea>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off">
+        <button class="btn send" type="submit" id="rSend"></button>
+        <div id="rMsg"></div>
+      </form>
+      <div class="done" id="rDone"></div>
+    </div>
+  </section>
+
+  <section id="s6" style="padding:4vh 22px 12vh;text-align:center">
+    <div class="closing reveal" id="thanks"></div>
+    <div class="closing reveal" id="from" style="margin-top:10px;font-size:17px"></div>
+    <div id="powered"></div>
+  </section>
+</main>
+
+<script>
+const CONFIG = {
+  "groom": "Rahul",
+  "bride": "Priya",
+  "groomFull": "Rahul Sharma",
+  "brideFull": "Priya Reddy",
+  "dateLong": "Sunday · 14 December 2026",
+  "dateShort": "14 · 12 · 2026",
+  "weddingAt": "2026-12-14T18:00:00+05:30",
+  "blessing": "",
+  "grandparents": "",
+  "parents": "",
+  "inviteLine": "",
+  "skyLine": "Join us for our",
+  "skySub": "Engagement Ceremony",
+  "coupleSub": "NOT NOW!!!",
+  "storyTitle": "",
+  "story": "",
+  "events": [
+    {
+      "name": "Ring Ceremony",
+      "date": "Sunday, 14 December",
+      "time": "6 PM",
+      "meal": "",
+      "mealTime": "",
+      "place": "",
+      "map": "",
+      "hidden": false
+    },
+    {
+      "name": "Cake Cutting",
+      "date": "Sunday, 14 December",
+      "time": "7 PM",
+      "meal": "",
+      "mealTime": "",
+      "place": "",
+      "map": "",
+      "hidden": false
+    },
+    {
+      "name": "Dinner",
+      "date": "Sunday, 14 December",
+      "time": "8 PM",
+      "meal": "",
+      "mealTime": "",
+      "place": "",
+      "map": "",
+      "hidden": false
+    }
+  ],
+  "venue": {
+    "name": "Vivaha Convention",
+    "address": "Amravathi-Gunturu",
+    "map": "https://share.google/me9PQfccyOSJ8fPBC"
+  },
+  "thankYouLine": "Come bless us as we exchange rings.",
+  "from": "With love, the Sharma & Reddy families",
+  "images": {
+    "rdoor": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rdoor-1793104252004.webp",
+    "rbow": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rbow-1793104252156.webp",
+    "rstrip": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rstrip-1793104252378.webp",
+    "rcurl": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rcurl-1793104252539.webp",
+    "rcard": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rcard-1793104252722.webp",
+    "rring": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rring-1793104252865.webp",
+    "rgroom": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rgroom-1793104253016.webp",
+    "rbride": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/eng01/img-rbride-1793104253166.webp"
+  },
+  "videos": {},
+  "music": "",
+  "petals": true,
+  "birds": true,
+  "poweredBy": {
+    "text": "AfterFX Templates",
+    "url": "https://afterfxtemplates.com",
+    "whatsapp": "918971738710"
+  },
+  "topLine": "",
+  "familyLine": "",
+  "venueNote": "",
+  "groomFamily": "",
+  "brideFamily": "",
+  "famTitle": "",
+  "groomFamTitle": "",
+  "brideFamTitle": "",
+  "evFont": "",
+  "evChip": "",
+  "groomFather": "",
+  "groomMother": "",
+  "brideFather": "",
+  "brideMother": "",
+  "groomParents": "",
+  "brideParents": "",
+  "nameOrder": "groom",
+  "doorMode": "panel",
+  "layout": "ribbon",
+  "faq": [],
+  "pack": "ribbon",
+  "lang": "en",
+  "fontStyle": 0,
+  "labels": {
+    "open": "Tap to open",
+    "scroll": "Scroll",
+    "weds": "and",
+    "invites": "invites",
+    "celebrations": "The Celebrations",
+    "wedding": "Wedding",
+    "location": "Venue",
+    "mapBtn": "Get directions",
+    "evMap": "Location",
+    "thankYou": "Thank You",
+    "days": "Days",
+    "hrs": "Hrs",
+    "min": "Min",
+    "sec": "Sec",
+    "rsvpTitle": "Will you join us?",
+    "rsvpName": "Your name",
+    "rsvpYes": "Joyfully accept",
+    "rsvpNo": "Regretfully decline",
+    "rsvpGuests": "Number of guests",
+    "rsvpPhone": "Phone (optional)",
+    "rsvpMsg": "Wishes for the couple (optional)",
+    "rsvpSend": "Send RSVP",
+    "rsvpThanks": "Thank you! Your response has been received.",
+    "today": "Today is the day",
+    "followingEvents": "On the following events",
+    "timeline": "Engagement itinerary",
+    "timelineSub": "Mark your calendars — we can't wait to celebrate with you",
+    "seeRoute": "See the route",
+    "meetCouple": "Meet the Bride & Groom",
+    "gallery": "Moments",
+    "gallerySub": "A few of our favourite memories",
+    "thingsToKnow": "Things to know",
+    "countdown": "The countdown begins",
+    "addCal": "Add to calendar"
+  },
+  "rsvp": {
+    "on": false,
+    "note": ""
+  },
+  "theme": "rose",
+  "symbolSize": "md",
+  "fontNames": "",
+  "fontBody": "",
+  "fontCustom": "",
+  "brand": {
+    "on": false,
+    "name": "",
+    "url": "",
+    "whatsapp": ""
+  },
+  "rsvpUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/rsvp/7f5ae13a6d38eb0d29b1",
+  "rsvpId": "7f5ae13a6d38eb0d29b1",
+  "viewUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/view/7f5ae13a6d38eb0d29b1",
+  "fonts": {
+    "body": "Cormorant Garamond",
+    "disp": "Pinyon Script",
+    "q": ""
+  },
+  "gallery": [],
+  "symbol": "",
+  "studioLogo": "",
+  "fontFile": "",
+  "curlCors": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/pf/eng01/img-rcurl-1793104252539.webp"
+};
+(function(){
+var C = CONFIG, IM = C.images || {}, L = C.labels || {};
+var QS = new URLSearchParams(location.search), DEMO = QS.has('demo'), EN = (C.lang || 'en') === 'en';
+var $ = function(id){ return document.getElementById(id); };
+function T(k, d){ var v = L[k]; return v != null && String(v).trim() !== '' ? String(v) : d; }
+function set(id, v){ var e = $(id); if (e) e.textContent = v || ''; }
+function safeUrl(v){ return /^https?:\/\//i.test(String(v || '').trim()) ? String(v).trim() : ''; }
+if (!EN){ document.documentElement.lang = C.lang; document.body.classList.add('indic'); }
+
+/* fonts */
+(function(){
+  var F = C.fonts || {}, st = document.documentElement.style;
+  if (F.q){ var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?' + String(F.q).replace(/[^A-Za-z0-9+&=:;@,.]/g, '') + '&display=swap'; document.head.appendChild(l); }
+  var n = (C.fontNames || !EN) && F.disp || '', b = (C.fontBody || !EN) && F.body || '';
+  if (C.fontFile && C.fontCustom){
+    var s = document.createElement('style'); s.textContent = "@font-face{font-family:'AfxCustom';src:url('" + String(C.fontFile).replace(/'/g, '') + "');font-display:swap}"; document.head.appendChild(s);
+    if (C.fontCustom === 'names' || C.fontCustom === 'both') n = 'AfxCustom';
+    if (C.fontCustom === 'body' || C.fontCustom === 'both') b = 'AfxCustom';
+  }
+  if (n){ st.setProperty('--names', "'" + n + "',Georgia,serif"); if (!EN) st.setProperty('--script', "'" + n + "',Georgia,serif"); }
+  if (b){ st.setProperty('--sans', "'" + b + "',system-ui,sans-serif"); if (!EN) st.setProperty('--serif', "'" + b + "',Georgia,serif"); }
+})();
+
+/* pictures */
+var CSS_RIB = 'linear-gradient(90deg,#c9a24e 0,#e7c873 4%,#d27f7b 7%,#e9a19c 30%,#f7cfc9 48%,#eaa39e 62%,#cf7672 93%,#e7c873 96%,#b98a3e 100%)';
+document.querySelectorAll('.door .dimg').forEach(function(d){ d.style.backgroundImage = IM.rdoor ? 'url("' + IM.rdoor + '")' : 'linear-gradient(#f3dcd5,#e9c6bf)'; });
+document.querySelectorAll('.rib.vt,.rib.vb,.rib .rot').forEach(function(r){
+  if (IM.rstrip) r.style.backgroundImage = 'url("' + IM.rstrip + '")'; else r.style.background = CSS_RIB;
+});
+$('bow').innerHTML = IM.rbow ? '<img src="' + IM.rbow + '" alt="">' : '';
+if (IM.rcard) $('cardBg').src = IM.rcard; else $('cardBg').style.display = 'none';
+if (IM.rcurl) $('curl').src = IM.rcurl;
+$('ringImg').src = IM.rring || 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6020"/><stop offset=".45" stop-color="#f6e2ad"/><stop offset="1" stop-color="#c9a24e"/></linearGradient></defs><ellipse cx="50" cy="70" rx="36" ry="30" fill="none" stroke="url(#g)" stroke-width="9"/><path d="M40 34 L50 18 L60 34 L50 44 Z" fill="#f4fbff" stroke="#b8863a" stroke-width="2"/></svg>');
+if (IM.rgroom) $('hgImg').src = IM.rgroom; else $('hg').style.display = 'none';
+if (IM.rbride) $('hbImg').src = IM.rbride; else $('hb').style.display = 'none';
+if (C.symbol){ var sy = $('sym'); sy.src = C.symbol; sy.className = 'sym ' + (C.symbolSize || 'md'); sy.hidden = false; }
+
+/* words */
+var bf = C.nameOrder === 'bride', A = bf ? C.bride : C.groom, B = bf ? C.groom : C.bride;
+set('tapTxt', T('open', 'Tap to open'));
+set('topLine', C.topLine);
+set('c1', C.skyLine);
+var sub = String(C.skySub || '').trim(), sp = sub.indexOf(' ');
+if (EN && sp > 0){ set('c2', sub.slice(0, sp)); set('c3', sub.slice(sp + 1)); } else { set('c2', sub); $('c3').style.display = 'none'; }
+set('c4', C.dateLong);
+set('scrollTxt', T('scroll', 'Scroll'));
+set('nA', A); set('nB', B); set('nW', T('weds', 'and')); set('nD', C.dateLong);
+set('joke', C.coupleSub);
+set('tlEye', T('timeline', 'Wedding itinerary')); set('tlTitle', T('celebrations', 'The Celebrations'));
+var V = C.venue || {};
+set('vEye', T('location', 'Venue')); set('vName', V.name); set('vAddr', V.address); set('vNote', C.venueNote);
+if (!C.venueNote) $('vNote').style.display = 'none';
+set('dirTxt', T('mapBtn', 'Get directions'));
+if (safeUrl(V.map)) $('dir').href = safeUrl(V.map); else $('dir').style.display = 'none';
+if (!V.name && !V.address) $('s5').style.display = 'none';
+set('thanks', C.thankYouLine); set('from', C.from);
+
+/* events with an icon picked from the event name */
+var ICONS = {
+  mehendi:'<path d="M12 21c-4 0-6-3-6-6V9a1.5 1.5 0 0 1 3 0v3V5a1.5 1.5 0 0 1 3 0v6V4a1.5 1.5 0 0 1 3 0v7-5a1.5 1.5 0 0 1 3 0v9c0 3-2 6-6 6z"/><circle cx="12" cy="15" r="1.4"/>',
+  sangeet:'<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',
+  haldi:'<path d="M4 13h16l-2 6H6z"/><path d="M8 13c0-3 2-5 4-6 2 1 4 3 4 6"/>',
+  wedding:'<circle cx="9" cy="14" r="5"/><circle cx="15" cy="14" r="5"/><path d="M10 5l2-2 2 2-2 2z"/>',
+  reception:'<path d="M7 3h4l-.5 6a1.5 1.5 0 0 1-3 0zM9 10.5V20M6.5 20h5"/><path d="M14 3h4l-.5 6a1.5 1.5 0 0 1-3 0zM16 10.5V20M13.5 20h5"/>',
+  pooja:'<path d="M12 3c1.5 2 2 3.5 0 5.5C10 6.5 10.5 5 12 3z"/><path d="M5 12h14c0 4-3 7-7 7s-7-3-7-7z"/><path d="M9 21h6"/>',
+  ring:'<circle cx="12" cy="14" r="6"/><path d="M9 6l3-3 3 3-3 2z"/>',
+  cake:'<path d="M4 20h16M5 20v-7h14v7M5 15c2 1.5 4 1.5 7 0s5-1.5 7 0M12 13V9M12 6.5c-.8-1-.8-2 0-3 .8 1 .8 2 0 3z"/>'
+};
+function iconFor(n){
+  n = String(n || '').toLowerCase();
+  if (/mehe?n?di|henna|mehndi|మెహందీ/.test(n)) return 'mehendi';
+  if (/sangeet|music|dj|cocktail/.test(n)) return 'sangeet';
+  if (/haldi|pellikuthuru|pellikoduku|mangala|snanam|nalugu|పెళ్ళికూతురు/.test(n)) return 'haldi';
+  if (/reception|dinner|walima|lunch|party|విందు/.test(n)) return 'reception';
+  if (/pooja|puja|vratham|homam|ganesh|వ్రతం|పూజ/.test(n)) return 'pooja';
+  if (/cake/.test(n)) return 'cake';
+  if (/engage|nischay|ring|roka|tilak/.test(n)) return 'ring';
+  return 'wedding';
+}
+var tl = $('tl');
+(C.events || []).forEach(function(e, i){
+  var d = document.createElement('div'); d.className = 'ev ' + (i % 2 ? 'R' : 'L');
+  d.innerHTML = '<div class="dot"><svg viewBox="0 0 24 24">' + ICONS[iconFor(e.name)] + '</svg></div><div class="t"><div class="tm"></div><div class="ti"></div><div class="dy"></div><div class="pl"></div></div>';
+  var q = function(c){ return d.querySelector(c); };
+  q('.tm').textContent = e.time || ''; q('.ti').textContent = e.name || ''; q('.dy').textContent = e.date || '';
+  var pl = [e.place, e.meal ? (e.meal + (e.mealTime ? ' · ' + e.mealTime : '')) : ''].filter(Boolean).join(' · ');
+  if (pl) q('.pl').textContent = pl; else q('.pl').remove();
+  if (safeUrl(e.map)){ var a = document.createElement('a'); a.className = 'mp'; a.href = safeUrl(e.map); a.target = '_blank'; a.rel = 'noopener'; a.textContent = T('evMap', 'Location') + ' ↗'; q('.t').appendChild(a); }
+  tl.appendChild(d);
+});
+if (!(C.events || []).length) $('s4').style.display = 'none';
+var EVS = [].slice.call(tl.querySelectorAll('.ev'));
+
+/* rsvp */
+(function(){
+  var r = C.rsvp || {}; if (!r.on){ $('rsvp').remove(); return; }
+  set('rT', T('rsvpTitle', 'Will you join us?')); set('rNote', r.note); if (!r.note) $('rNote').style.display = 'none';
+  $('rName').placeholder = T('rsvpName', 'Your name'); $('rGuests').placeholder = T('rsvpGuests', 'Number of guests');
+  $('rPhone').placeholder = T('rsvpPhone', 'Phone (optional)'); $('rWish').placeholder = T('rsvpMsg', 'Wishes (optional)');
+  set('rYes', T('rsvpYes', 'Joyfully accept')); set('rNo', T('rsvpNo', 'Regretfully decline')); set('rSend', T('rsvpSend', 'Send RSVP')); set('rDone', T('rsvpThanks', 'Thank you!'));
+  var ans = null, form = $('rForm'), msg = $('rMsg'), card = $('rCard');
+  [$('rYes'), $('rNo')].forEach(function(b){ b.onclick = function(){ ans = b.dataset.a === '1'; $('rYes').classList.toggle('on', ans); $('rNo').classList.toggle('on', !ans); $('rGuests').style.display = ans ? '' : 'none'; }; });
+  var key = 'afx-rsvp-' + (C.rsvpId || '');
+  try { if (C.rsvpId && localStorage.getItem(key)) card.classList.add('sent'); } catch (e){}
+  form.onsubmit = function(ev){
+    ev.preventDefault(); msg.textContent = '';
+    if (!form.name.value.trim()){ form.name.focus(); return; }
+    if (ans === null){ msg.textContent = T('rsvpYes', 'Yes') + ' / ' + T('rsvpNo', 'No') + '?'; return; }
+    if (!C.rsvpUrl){ msg.textContent = 'RSVP starts working after the invite is published.'; return; }
+    var btn = $('rSend'); btn.disabled = true;
+    fetch(C.rsvpUrl, { method: 'POST', headers: { 'content-type': 'text/plain' }, body: JSON.stringify({ name: form.name.value, attending: ans,
+      guests: ans ? Math.max(1, Math.min(20, parseInt(form.guests.value, 10) || 1)) : 0, phone: form.phone.value, message: form.message.value, website: form.website.value }) })
+      .then(function(res){ return res.json().catch(function(){ return {}; }).then(function(j){ if (!res.ok) throw new Error(j.error || 'Could not send, please try again'); }); })
+      .then(function(){ card.classList.add('sent'); try { localStorage.setItem(key, '1'); } catch (e){} })
+      .catch(function(x){ msg.textContent = x.message || 'Could not send, please try again'; })
+      .then(function(){ btn.disabled = false; });
+  };
+})();
+
+/* powered by */
+(function(){
+  var pb = C.poweredBy, box = $('powered'); if (!pb || !pb.text){ box.remove(); return; }
+  var e = function(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var wa = pb.whatsapp ? '<br><a class="cta" target="_blank" rel="noopener" href="https://wa.me/' + encodeURIComponent(String(pb.whatsapp).replace(/\D/g, '')) + '?text=' + encodeURIComponent('Hi, I saw a wedding invite made by you and I want one like this') + '">Want an invite like this? Chat on WhatsApp</a>' : '';
+  var logo = pb.logo ? '<img class="pblogo" src="' + e(pb.logo) + '" alt="">' : '';
+  var name = safeUrl(pb.url) ? '<a target="_blank" rel="noopener" href="' + e(safeUrl(pb.url)) + '">' + e(pb.text) + '</a>' : '<b>' + e(pb.text) + '</b>';
+  box.innerHTML = logo + 'Powered by ' + name + wa;
+})();
+
+/* centre line of the curly ribbon (top to bottom, fraction of its width).
+   Default matches the pack's own ribbon; a different ribbon picture is measured on load. */
+var CURL = [0.542,0.548,0.554,0.563,0.513,0.474,0.431,0.383,0.332,0.271,0.248,0.334,0.413,0.468,0.494,0.542,0.615,0.7,0.655,0.595,0.55,0.503,0.448,0.379,0.296,0.302,0.385,0.456,0.506,0.542,0.598,0.672,0.742,0.649,0.579,0.528,0.487,0.446,0.38,0.289,0.29,0.354,0.413,0.456,0.515,0.589,0.671,0.743,0.717,0.663,0.618,0.574,0.531,0.483,0.434,0.37,0.313,0.267,0.235,0.22,0.223];
+(function(){
+  if (!C.curlCors) return;
+  var im = new Image(); im.crossOrigin = 'anonymous';
+  im.onload = function(){
+    try {
+      var w = 120, h = Math.round(im.height * w / im.width), cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      var cx = cv.getContext('2d'); cx.drawImage(im, 0, 0, w, h);
+      var d = cx.getImageData(0, 0, w, h).data, top = -1, bot = -1, rows = [];
+      for (var y = 0; y < h; y++){ var s = 0, n = 0; for (var x = 0; x < w; x++){ if (d[(y * w + x) * 4 + 3] > 40){ s += x; n++; } } rows.push(n ? s / n / w : -1); if (n){ if (top < 0) top = y; bot = y; } }
+      if (top < 0) return;
+      var out = [], last = .5;
+      for (var i = 0; i <= 60; i++){ var v = rows[Math.round(top + (bot - top) * i / 60)]; if (v >= 0) last = v; out.push(last); }
+      CURL = out; tick();
+    } catch (e){}
+  };
+  im.src = C.curlCors;
+})();
+
+/* ---------- gate ---------- */
+var gate = $('gate'), opened = false, audio = null;
+if (C.music){ audio = new Audio(C.music); audio.loop = true; }
+function openGate(){
+  if (opened) return; opened = true;
+  if (audio) audio.play().catch(function(){});
+  gate.classList.add('o');
+  setTimeout(function(){ document.body.classList.remove('locked'); window.scrollTo(0, 0); tick(); }, 900);
+  setTimeout(function(){ gate.classList.add('fade'); }, 2150);
+  setTimeout(function(){ gate.classList.add('gone'); if (DEMO) runDemo(); }, 2700);
+}
+gate.addEventListener('click', openGate);
+
+/* ---------- scroll engine ---------- */
+var ring = $('ring'), s1 = $('s1'), s2 = $('s2'), s3 = $('s3');
+var curlWrap = $('curlWrap'), curl = $('curl'), names = $('names'), hg = $('hg'), hb = $('hb'), joke = $('joke');
+function cl(v, a, b){ return v < a ? a : v > b ? b : v; }
+function seg(p, a, b){ return cl((p - a) / (b - a), 0, 1); }
+function ease(t){ return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+function eout(t){ return 1 - Math.pow(1 - t, 3); }
+function lerp(a, b, t){ return a + (b - a) * t; }
+function curlX(r){ var f = r * (CURL.length - 1), i = Math.floor(f), t = f - i; return lerp(CURL[i], CURL[Math.min(i + 1, CURL.length - 1)], t); }
+function placeRing(x, y, size, rot, op){
+  ring.style.width = size + 'px';
+  ring.style.transform = 'translate(' + (x - size / 2) + 'px,' + (y - size * .55) + 'px) rotate(' + (rot || 0) + 'deg)';
+  ring.style.opacity = op == null ? 1 : op;
+}
+var G = {};
+function layout(){
+  var st = s3.querySelector('.stage'), W = st.clientWidth, H = st.clientHeight;
+  var gw = W * .78, bw = W * .74;
+  hg.style.width = gw + 'px'; hb.style.width = bw + 'px';
+  var gi = $('hgImg'), bi = $('hbImg');
+  var gr = gi.naturalWidth ? gi.naturalHeight / gi.naturalWidth : .441, br = bi.naturalWidth ? bi.naturalHeight / bi.naturalWidth : .354;
+  var gh = gw * gr, bh = bw * br;
+  var gTop = H * .5, gLeft = -W * .25, gTipY = gTop + gh * .53;
+  var bLeft = W - bw + W * .22, bTop = gTipY - bh * .37 - W * .02;
+  G = { W: W, H: H, gw: gw, gh: gh, bw: bw, bh: bh, gTop: gTop, gLeft: gLeft, bLeft: bLeft, bTop: bTop, palmX: gLeft + gw * .79, palmY: gTop + gh * .47 };
+  joke.style.top = (Math.max(gTop + gh, bTop + bh) + 22) + 'px';
+}
+function tick(){
+  var H = window.innerHeight, appL = s1.getBoundingClientRect().left;
+  var r2 = s2.getBoundingClientRect(), r3 = s3.getBoundingClientRect(), rt = tl.getBoundingClientRect();
+  var done = false;
+  var P2 = cl((H - r2.top) / r2.height, 0, 1);
+  var rr = .05 + .95 * ease(seg(P2, .12, .84));
+  curlWrap.style.clipPath = 'inset(0 0 ' + ((1 - rr) * 100) + '% 0)';
+  curlWrap.style.webkitClipPath = curlWrap.style.clipPath;
+  var cr = curl.getBoundingClientRect();
+  var endX = cr.left + cr.width * curlX(rr), endY = cr.top + cr.height * rr;
+  var tilt = (curlX(Math.min(1, rr + .02)) - curlX(Math.max(0, rr - .02))) * cr.width * 1.6;
+
+  var P3 = cl(-r3.top / (r3.height - H), 0, 1), E3 = cl((H - r3.top) / H, 0, 1);
+  var sIn = eout(seg(E3, .35, 1)), offer = ease(seg(P3, .24, .42)), pull = ease(seg(P3, .42, .5)), back = ease(seg(P3, .64, .86));
+  var gx = G.gLeft - G.W * (1 - sIn) * .9 - G.W * .10 * (1 - offer) + G.W * .035 * back;
+  var bx = G.bLeft + G.W * (1 - sIn) * .9 + G.W * .10 * (1 - offer) * (1 - pull) + G.W * .16 * pull * (1 - back);
+  hg.style.transform = 'translate(' + gx + 'px,' + G.gTop + 'px)';
+  hb.style.transform = 'translate(' + bx + 'px,' + G.bTop + 'px)';
+  names.style.opacity = seg(E3, .4, .95).toFixed(3);
+  names.style.transform = 'translateY(' + ((1 - seg(E3, .4, .95)) * 16) + 'px)';
+  var jk = C.coupleSub ? seg(P3, .44, .5) * (1 - seg(P3, .8, .88)) : 0;
+  joke.style.opacity = jk.toFixed(3);
+  joke.style.transform = 'scale(' + (.6 + .4 * eout(seg(P3, .44, .51))) + ')';
+
+  if (rt.top < H + 60 && r3.bottom <= H + 2 && EVS.length){
+    var y4 = cl(H * .5, rt.top + 6, rt.bottom - 6);
+    placeRing(rt.left + rt.width / 2, y4, 46, -6, 1);
+    EVS.forEach(function(ev){ var d = ev.querySelector('.dot').getBoundingClientRect(); ev.classList.toggle('on', d.top + d.height / 2 <= y4 + 12); });
+    done = true;
+  }
+  if (!done && r3.top <= 0){
+    var palmX = G.palmX + (gx - G.gLeft), palmY = G.palmY;
+    var drop = eout(seg(P3, 0, .22)), fall = seg(P3, .52, .72);
+    var x = lerp(G.W * .5, palmX, drop), y = lerp(-90, palmY, drop), rot = lerp(-40, -8, drop);
+    if (fall > 0){ y = palmY + fall * fall * (G.H - palmY + 120); x = palmX + fall * G.W * .08; rot = -8 + fall * 160; }
+    placeRing(appL + x, y, Math.min(58, G.W * .15), rot, P3 <= 0 ? 0 : 1);
+    done = true;
+  }
+  if (!done){
+    var spt = $('ringSpot').getBoundingClientRect();
+    var enter = cl(1 - r2.top / (H * .55), 0, 1);
+    var x1 = lerp(spt.left, endX, ease(enter)), y1 = lerp(spt.top, endY, ease(enter));
+    var off = seg(P2, .86, 1);
+    if (off > 0) y1 = endY + off * off * (H + 140);
+    placeRing(x1, y1, lerp(70, 52, enter), tilt + off * 90, 1);
+  }
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(el){ if (el.getBoundingClientRect().top < H * .88) el.classList.add('in'); });
+}
+var raf = 0;
+function onScroll(){ if (!raf) raf = requestAnimationFrame(function(){ raf = 0; tick(); }); }
+window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('resize', function(){ layout(); tick(); });
+[$('hgImg'), $('hbImg'), curl].forEach(function(i){ i.addEventListener('load', function(){ layout(); tick(); }); });
+layout(); tick();
+window.addEventListener('load', function(){ layout(); tick(); });
+
+/* ?demo — auto-play for screen recordings */
+function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function glide(to, ms){ return new Promise(function(res){ var y0 = scrollY, t0 = performance.now(); (function f(t){ var k = Math.min(1, (t - t0) / ms); scrollTo(0, y0 + (to - y0) * ease(k)); if (k < 1) requestAnimationFrame(f); else res(); })(t0); }); }
+function topOf(el){ return el.getBoundingClientRect().top + scrollY; }
+function runDemo(){
+  var H = innerHeight;
+  wait(1200).then(function(){ return glide(topOf(s2) - H * .05, 2200); })
+    .then(function(){ return glide(topOf(s2) + s2.offsetHeight - H, 3600); })
+    .then(function(){ return glide(topOf(s3) + s3.offsetHeight * .55, 4200); })
+    .then(function(){ return wait(500); })
+    .then(function(){ return glide(topOf(s3) + s3.offsetHeight - H, 2600); })
+    .then(function(){ return glide(document.documentElement.scrollHeight - H, 7000); })
+    .then(function(){ return wait(3000); });
+}
+if (DEMO && !C.skipGate) setTimeout(openGate, 2600);
+
+/* studio preview: no gate, jump to a section */
+if (C.skipGate){ opened = true; gate.classList.add('gone'); document.body.classList.remove('locked'); document.querySelectorAll('.reveal').forEach(function(e){ e.classList.add('in'); }); tick(); }
+addEventListener('message', function(e){
+  var t = e.data && e.data.goto; if (!t) return;
+  var map = { hero: 's1', court: 's1', sky: 's2', couple: 's3', events: 's4', wed: 's4', venue: 's5', rsvp: 'rsvp', gallery: 's6', countdown: 's6', faq: 's5' };
+  var el = $(map[t] || t) || s1;
+  document.querySelectorAll('.reveal').forEach(function(x){ x.classList.add('in'); });
+  var y = el === s3 ? topOf(s3) + (s3.offsetHeight - innerHeight) * .5 : topOf(el);
+  scrollTo({ top: y, behavior: e.data.instant ? 'auto' : 'smooth' });
+});
+})();
+</script>
+<script>!function(){try{if(/[?&]demo/.test(location.search))return;var f=1;try{f=localStorage.getItem("afxv-7f5ae13a6d38eb0d29b1")?0:1;localStorage.setItem("afxv-7f5ae13a6d38eb0d29b1","1")}catch(e){}fetch("https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/view/7f5ae13a6d38eb0d29b1"+"?u="+f,{method:"POST",mode:"no-cors",keepalive:!0}).catch(function(){})}catch(e){}}()</script><script>!function(){var t=location.hostname,e=location.protocol;if("invites.afterfxtemplates.com"===t||"afterfxtemplates.com"===t||"www.afterfxtemplates.com"===t||"rafi9710.github.io"===t||"localhost"===t||/\.workers\.dev$/.test(t)||"about:"===e||"blob:"===e){["contextmenu","dragstart","selectstart","copy","cut"].forEach(function(t){document.addEventListener(t,function(t){(function(t){var e=t.target;return e&&("INPUT"===e.tagName||"TEXTAREA"===e.tagName||"SELECT"===e.tagName||e.isContentEditable)})(t)||t.preventDefault()},!0)}),document.addEventListener("keydown",function(t){var e=(t.key||"").toLowerCase(),a=t.ctrlKey||t.metaKey;("f12"===e||a&&("u"===e||"s"===e||"p"===e)||a&&t.shiftKey&&("i"===e||"j"===e||"c"===e))&&(t.preventDefault(),t.stopPropagation())},!0)}else document.documentElement.innerHTML='<head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#3d0710;color:#f0c865;font:18px Georgia,serif;text-align:center;padding:24px">This invitation was designed by&nbsp;<a style="color:#fff" href="https://afterfxtemplates.com">AfterFX Templates</a></body>'}();</script></body>
+</html>
