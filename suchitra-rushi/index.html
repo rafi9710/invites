@@ -266,6 +266,7 @@ body.pre #prelude .cn{animation-delay:.8s}
   .ev .band{position:absolute;left:0;right:0;bottom:0}
 }
 /* moods */
+.m-gold{--bg:linear-gradient(180deg,#efc865,#e2ae3c);--fade:#e9bc50;--fg:#4a2c08;--hd:#3a2006;--ac:#7a4a0c}
 .m-haldi{--bg:linear-gradient(180deg,#f8e7ad,#f2d483);--fade:#f5dc95;--fg:#5a3a14;--hd:#4a2a0c;--ac:#9a6a1c}
 .m-mehendi{--bg:linear-gradient(180deg,#fbf4ea,#f5ead9);--fade:#f8efe2;--fg:#2c3f26;--hd:#24391f;--ac:#6f8a3d}
 .m-brown{--bg:linear-gradient(180deg,#2c170c,#3a2112);--fade:#2f190d;--fg:#ecdcc0;--hd:#f6ead3;--ac:#d6b06a}
@@ -386,8 +387,8 @@ body.pre #prelude .cn{animation-delay:.8s}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
-<meta name="afx-pv" content="mwf70c0h">
-<script>!function(){var V="mwf70c0h";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
+<meta name="afx-pv" content="mwf7bnqq">
+<script>!function(){var V="mwf7bnqq";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
 <style>html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}img{-webkit-user-drag:none}input,textarea,select{-webkit-user-select:text;user-select:text}</style></head>
 <body class="locked">
 <nav id="topnav"><div class="in" id="navIn"></div></nav>
@@ -536,7 +537,7 @@ const CONFIG = {
       "sub": "The Turmeric Blessing",
       "desc": "Turmeric at sunrise — every hand that loves her, painting her gold.",
       "dress": "Twin with the sky — gentlemen in whites, ladies in shades of sky blue",
-      "mood": "haldi",
+      "mood": "gold",
       "cd": false
     },
     {
@@ -645,7 +646,7 @@ const CONFIG = {
     "leaf": ""
   },
   "videos": {},
-  "music": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/suchitra-rushi/music-1794587262903.mp3",
+  "music": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/suchitra-rushi/music-1794587516784.mp3",
   "petals": false,
   "birds": false,
   "poweredBy": {
@@ -748,7 +749,7 @@ const CONFIG = {
   "rsvpId": "370d00263d98d9704b81",
   "viewUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/view/370d00263d98d9704b81",
   "shareUrl": "https://invites.afterfxtemplates.com/suchitra-rushi/share-1794584484243.jpg",
-  "pv": "mwf70c0h",
+  "pv": "mwf7bnqq",
   "fonts": {
     "body": "Cormorant Garamond",
     "disp": "Pinyon Script",
@@ -956,7 +957,7 @@ const CROSS = `<svg viewBox="0 0 120 120"><defs><linearGradient id="xg" x1="0" y
 })();
 
 /* ---------------- events ---------------- */
-const MOODS = ['haldi', 'mehendi', 'brown', 'sangeeth', 'maroon', 'rose', 'ivory', 'blue', 'green'];
+const MOODS = ['haldi', 'gold', 'mehendi', 'brown', 'sangeeth', 'maroon', 'rose', 'ivory', 'blue', 'green'];
 const DARK = new Set(['brown', 'sangeeth', 'maroon', 'blue', 'green']);
 function moodOf(e, i){
   if (MOODS.includes(e.mood)) return e.mood;
@@ -1007,7 +1008,7 @@ const evs = (CONFIG.events || []).filter(e => e && (e.name || e.date));
       </div></div>
       <div class="band caps"><span>${esc(couple)}</span><b></b><span>${w ? `${w.d} ${MONTHS[w.m]} ${w.y}` : esc(e.date || '')}</span></div>`;
     const im = sec.querySelector('.im');
-    if (vd){ const v = vid(vd, 'im'); if (img) v.poster = img; im.replaceWith(v); } else if (img) paint(im, img); else im.style.backgroundImage = ph('ev' + n + (e.name || ''), { haldi: 0, mehendi: 1, brown: 2, sangeeth: 3, maroon: 4, rose: 5, ivory: 7, blue: 6, green: 1 }[mood]);
+    if (vd){ const v = vid(vd, 'im'); if (img) v.poster = img; im.replaceWith(v); } else if (img) paint(im, img); else im.style.backgroundImage = ph('ev' + n + (e.name || ''), { haldi: 0, gold: 0, mehendi: 1, brown: 2, sangeeth: 3, maroon: 4, rose: 5, ivory: 7, blue: 6, green: 1 }[mood]);
     box.appendChild(sec);
     if (e.cd && w) cdBox(sec.querySelector('.ecd'), w.h == null ? w.date : new Date(Date.UTC(w.y, w.m, w.d, w.h, w.mi) - 330 * 6e4));
   });
