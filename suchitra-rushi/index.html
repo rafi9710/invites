@@ -386,8 +386,8 @@ body.pre #prelude .cn{animation-delay:.8s}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
-<meta name="afx-pv" content="mwf6i5rr">
-<script>!function(){var V="mwf6i5rr";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
+<meta name="afx-pv" content="mwf6npjn">
+<script>!function(){var V="mwf6npjn";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
 <style>html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}img{-webkit-user-drag:none}input,textarea,select{-webkit-user-select:text;user-select:text}</style></head>
 <body class="locked">
 <nav id="topnav"><div class="in" id="navIn"></div></nav>
@@ -748,7 +748,7 @@ const CONFIG = {
   "rsvpId": "370d00263d98d9704b81",
   "viewUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/view/370d00263d98d9704b81",
   "shareUrl": "https://invites.afterfxtemplates.com/suchitra-rushi/share-1794584484243.jpg",
-  "pv": "mwf6i5rr",
+  "pv": "mwf6npjn",
   "fonts": {
     "body": "Cormorant Garamond",
     "disp": "Pinyon Script",
@@ -1055,6 +1055,38 @@ const NTH = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Ni
   else $('#famStrip').innerHTML = FAM.map((s, i) => `<div class="tile"><div class="im" style="background-image:${bgOf(s, 'f' + i)}"></div></div>`).join('');
   if (!CHAP.length && !ENG.length && !THEN && !THEN_PH && !FAM.length) drop('gallery');
   else { const first = $('#gallery .sub2'); if (first && !$('#galChap')) first.classList.remove('sub2'); }
+})();
+
+/* ---------------- tap a gallery photo = open it big ---------------- */
+(function(){
+  const G = $('#gallery'); if (!G) return;
+  const urlOf = el => { const m = /url\(["']?(.*?)["']?\)/.exec((el && el.style.backgroundImage) || ''); return m ? m[1] : ''; };
+  const st = document.createElement('style');
+  st.textContent = '#gallery .im,#thenIm{cursor:zoom-in}#lb{position:fixed;inset:0;z-index:9999;background:rgba(8,4,2,.94);display:none;align-items:center;justify-content:center}#lb.on{display:flex}#lb img{max-width:94vw;max-height:84vh;object-fit:contain;box-shadow:0 10px 50px #000;border-radius:2px;-webkit-user-drag:none}#lb button{position:absolute;background:rgba(255,255,255,.08);border:1px solid rgba(217,180,109,.6);color:#f3e2bd;width:44px;height:44px;border-radius:50%;font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}#lb .x{top:16px;right:16px}#lb .l{left:12px;top:50%;transform:translateY(-50%)}#lb .r{right:12px;top:50%;transform:translateY(-50%)}#lb .n{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#d9c08c;font:12px/1 Marcellus,serif;letter-spacing:.3em}';
+  document.head.appendChild(st);
+  const lb = document.createElement('div'); lb.id = 'lb';
+  lb.innerHTML = '<img alt=""><button class="x" type="button" aria-label="Close">\u00d7</button><button class="l" type="button" aria-label="Previous">\u2039</button><button class="r" type="button" aria-label="Next">\u203a</button><div class="n"></div>';
+  document.body.appendChild(lb);
+  const img = $('img', lb); let list = [], at = 0;
+  const show = i => { at = (i + list.length) % list.length; img.src = list[at]; $('.n', lb).textContent = list.length > 1 ? (at + 1) + ' / ' + list.length : ''; $('.l', lb).style.display = $('.r', lb).style.display = list.length > 1 ? '' : 'none'; };
+  const close = () => { lb.classList.remove('on'); document.documentElement.style.overflow = ''; };
+  G.addEventListener('click', e => {
+    if (e.target.closest('button, a')) return;
+    let im = e.target.closest('.im, #thenIm');
+    if (!im){ const t = e.target.closest('.slide, .tile, #galThen'); if (t) im = t.querySelector('.im, #thenIm'); }
+    const u = urlOf(im); if (!u) return;
+    const box = im.closest('#track, #engGrid, #famStrip') || im.parentElement;
+    list = [...box.querySelectorAll('.im, #thenIm')].map(urlOf).filter(Boolean); if (!list.length) list = [u];
+    show(Math.max(0, list.indexOf(u))); lb.classList.add('on'); document.documentElement.style.overflow = 'hidden';
+  });
+  $('.x', lb).onclick = close;
+  $('.l', lb).onclick = e => { e.stopPropagation(); show(at - 1); };
+  $('.r', lb).onclick = e => { e.stopPropagation(); show(at + 1); };
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
+  addEventListener('keydown', e => { if (!lb.classList.contains('on')) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') show(at - 1); if (e.key === 'ArrowRight') show(at + 1); });
+  let sx = null;
+  lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => { if (sx == null) return; const d = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(d) > 50 && list.length > 1) show(at + (d < 0 ? 1 : -1)); }, { passive: true });
 })();
 
 /* ---------------- rsvp ---------------- */
