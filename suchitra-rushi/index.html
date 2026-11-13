@@ -100,6 +100,47 @@ body.opened #hero .scroll{display:block}
   #hero .bg{background-position:30% center}
 }
 
+/* ---------- hero: matched to reference (2026-11-13) ---------- */
+#hero{background:linear-gradient(180deg,#2a100c 0%,#1e0a08 55%,#140605 100%)}
+#hero .bg{bottom:auto;height:60vh;background-position:50% 22%}
+#hero video.bg{object-position:50% 22%}
+#hero .shade{bottom:auto;height:60vh;background:linear-gradient(180deg,#14060500 0%,#14060500 45%,#1e0a0855 62%,#1e0a08bf 80%,#140605f0 93%,#140605 100%)}
+#hero .box{text-shadow:none;padding:90px 22px 28px}
+#hero .eye{color:#f0deb6;font-size:.55rem;letter-spacing:.42em;max-width:none;line-height:1.9;margin-bottom:4px;text-shadow:0 1px 12px #0a0402e6,0 0 22px #0a0402b3}
+#hero h1{line-height:1.1;letter-spacing:-.01em;margin:6px 0 4px;font-size:clamp(2.6rem,14vw,4.2rem);background:linear-gradient(180deg,#fff6de 0%,#f0d9a2 55%,#c7a66e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 14px #c7a66e59)}
+#hero h1 .n{padding-bottom:.06em}
+#hero h1 .amp{font-size:.5em;margin:-.04em 0;color:#c7a66e;-webkit-text-fill-color:#c7a66e;text-shadow:0 0 22px #c7a66e99}
+#hero .orn{width:150px;margin:6px auto 10px;color:#c7a66e}
+#hero .date{font-size:.9rem;letter-spacing:.32em;color:#f5ead3;gap:0;text-shadow:0 2px 22px #0000008c}
+#hero .date small{font-size:1em;color:#c7a66e;opacity:.85;padding:0 .6em;letter-spacing:0}
+#hero .places{color:#e2cfa6;text-shadow:0 1px 12px #000c}
+#hero .tag{text-shadow:0 1px 12px #000c}
+#hero .cdl{margin:16px 0 8px;color:#f0deb6;font-size:.52rem;letter-spacing:.42em}
+#hCd{gap:6px;padding:10px 12px;min-width:0;width:min(300px,88vw);border:1px solid #c7a66e73;background:linear-gradient(180deg,#c7a66e24,#c7a66e0a);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#hCd div{min-width:0;flex:1}
+#hCd b{font-weight:300;font-size:1.35rem;color:#f5ead3;line-height:1;text-shadow:0 0 16px #c7a66e59;font-variant-numeric:tabular-nums}
+#hCd span{font-size:.44rem;letter-spacing:.26em;color:#f0deb6;display:block;margin-top:4px}
+#hCd i{color:#c7a66e80}
+#openBtn{margin-top:16px;font-size:.56rem;letter-spacing:.36em;padding:13px 26px;color:#f5ead3;background:#c7a66e14;border:1px solid #c7a66ebf;text-shadow:0 0 18px #c7a66e59}
+#openBtn:hover{color:#fff6de;border-color:#f0deb6;background:#c7a66e24}
+@media(min-width:900px){
+  #hero{background:#0a0402}
+  #hero .bg{inset:0 38% 0 0;height:auto;background-position:50% 18%}
+  #hero video.bg{object-position:50% 18%}
+  #hero .shade{inset:0;height:auto;background:linear-gradient(90deg,#0a040200 0%,#0a040200 46%,#0a040259 54%,#0a0402b8 62%,#0a0402e0 78%,#0a0402f2 100%),linear-gradient(0deg,#0a04028c,#0a040200 34%),radial-gradient(ellipse at 30% 50%,transparent 55%,#00000080 100%)}
+  #hero .box{justify-content:center;padding:60px 4vw 60px 58vw}
+  #hero .eye{font-size:.72rem;letter-spacing:.5em;margin-bottom:26px;text-shadow:0 2px 20px #0009}
+  #hero h1{font-size:clamp(3.4rem,6.6vw,7.6rem);margin:0 0 14px;filter:drop-shadow(0 4px 22px #00000073)}
+  #hero h1 .amp{font-size:.44em;margin:.02em 0}
+  #hero .orn{width:220px;margin:10px auto 20px}
+  #hero .date{font-size:clamp(1.1rem,1.6vw,1.5rem);letter-spacing:.05em}
+  #hero .cdl{margin:30px 0 12px;font-size:.62rem;letter-spacing:.5em}
+  #hCd{width:min(380px,100%);gap:14px;padding:14px 22px}
+  #hCd b{font-size:1.55rem}
+  #hCd span{font-size:.5rem;letter-spacing:.28em;margin-top:5px}
+  #openBtn{margin-top:30px;font-size:.74rem;letter-spacing:.45em;padding:18px 44px}
+}
+
 /* ---------- invocation ---------- */
 #invocation{position:relative;padding:70px 14px 60px;background:radial-gradient(120% 80% at 50% 30%,#f6e6bf 0%,#efd9a6 55%,#e5c88c 100%);color:#4a2a14;--lab:#6d4a22}
 #invocation .frame{position:relative;border:1px solid #b8893a66;padding:56px 18px 44px;text-align:center;max-width:860px;margin:0 auto}
@@ -746,7 +787,7 @@ function tick(){
   set('hEye', CONFIG.topLine || T('heroEye', EN ? 'You are cordially invited to the wedding of' : ''));
   $('#hNames').innerHTML = `<span class="n">${esc(A[0])}</span><span class="amp">&amp;</span><span class="n">${esc(A[1])}</span>`;
   const w = wedDay;
-  if (w) $('#hDate').innerHTML = `${w.getDate()} <small>◆</small> ${MONTHS[w.getMonth()]} <small>◆</small> ${w.getFullYear()}`;
+  if (w) $('#hDate').innerHTML = `${w.getDate()} <small>·</small>${MONTHS[w.getMonth()]}<small>·</small> ${w.getFullYear()}`;
   else set('hDate', CONFIG.dateLong);
   set('hPlaces', T('places', '')); if (!T('places', '')) drop('hPlaces');
   set('hTag', CONFIG.skyLine); if (!CONFIG.skyLine) drop('hTag');
