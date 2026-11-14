@@ -362,6 +362,7 @@ body.pre #prelude .cn{animation-delay:.8s}
 #finale .eye{color:#9a7440}
 #finale h2{font-family:var(--names);font-weight:400;font-size:clamp(46px,12vw,96px);line-height:1.05;color:#3d140c;margin:14px 0}
 #finale h2 .amp{font-style:italic;color:#9a3a22}
+#finale h2{white-space:nowrap;max-width:100%}
 #finale .lines{font-family:var(--serif);font-style:italic;font-size:18px;color:#6d4a2a;line-height:1.8}
 .pair{display:grid;grid-template-columns:1fr;gap:28px;max-width:860px;margin:40px auto 0;position:relative}
 .pair .who .caps{color:#9a5a2a;font-size:10px}
@@ -1140,6 +1141,8 @@ const LEAF = `<svg viewBox="0 0 200 260"><defs><linearGradient id="lf" x1="0" y1
   $('#leaves').innerHTML = IM.leaf ? `<img class="leaf l" src="${esc(IM.leaf)}" alt=""><img class="leaf r" src="${esc(IM.leaf)}" alt="">` : `<div class="leaf l">${LEAF}</div><div class="leaf r">${LEAF}</div>`;
   set('fnEye', T('finEye', EN ? 'A new chapter begins' : ''));
   $('#fnNames').innerHTML = `${esc(A[0])} <span class="amp">&amp;</span> ${esc(A[1])}`;
+  const fnFit = () => { const h = $('#fnNames'); if (!h) return; h.style.fontSize = ''; const max = h.parentElement.clientWidth - 32; let f = parseFloat(getComputedStyle(h).fontSize); while (h.scrollWidth > max && f > 18){ f -= 2; h.style.fontSize = f + 'px'; } };
+  fnFit(); addEventListener('resize', fnFit); if (document.fonts) document.fonts.ready.then(fnFit);
   const lines = [CONFIG.thankYouLine, CONFIG.coupleSub].filter(Boolean);
   $('#fnLines').innerHTML = lines.map(esc).join('<br>');
   const side = g => {
