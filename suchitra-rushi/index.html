@@ -126,6 +126,13 @@ body.opened #hero .scroll{display:block}
 #hCd i{color:#c7a66e80}
 #openBtn{margin-top:16px;font-size:.56rem;letter-spacing:.36em;padding:13px 26px;color:#f5ead3;background:#c7a66e14;border:1px solid #c7a66ebf;text-shadow:0 0 18px #c7a66e59}
 #openBtn:hover{color:#fff6de;border-color:#f0deb6;background:#c7a66e24}
+#hero,#hero .box{min-height:100vh;min-height:100svh}
+#hero .box{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+@media(max-width:899px) and (max-height:760px){#hero .box{padding-top:70px}#hero .eye{font-size:.52rem;line-height:1.7}#hero h1{font-size:clamp(2.3rem,12vw,3.4rem)}#hero .orn{margin:4px auto 6px}#hero .cdl{margin:10px 0 6px}#hCd{padding:8px 10px}#hCd b{font-size:1.2rem}#openBtn{margin-top:12px;padding:12px 22px}}
+#hero.t1 .tag{display:none}
+#hero.t2 .places{display:none}
+#hero.t3 h1{font-size:clamp(2rem,10vw,2.8rem)}
+#hero.t3 .cdl{display:none}
 @media(min-width:900px){
   #hero{background:#0a0402}
   #hero .bg{inset:0 38% 0 0;height:auto;background-position:50% 18%;-webkit-mask-image:linear-gradient(90deg,#000 0%,#000 72%,transparent 100%);mask-image:linear-gradient(90deg,#000 0%,#000 72%,transparent 100%)}
@@ -913,6 +920,16 @@ function tick(){
   // fit long names on one line
   const fit = () => $$('#hNames .n').forEach(n => { n.style.fontSize = ''; const max = n.parentElement.clientWidth || innerWidth; let f = 1; while (n.scrollWidth > max && f > .45){ f -= .05; n.style.fontSize = f + 'em'; } });
   fit(); addEventListener('resize', fit); if (document.fonts) document.fonts.ready.then(fit);
+})();
+
+/* keep the Open Invitation button on screen on short phones */
+(function(){
+  const btn = $('#openBtn'), H = $('#hero'); if (!btn || !H) return;
+  const vh = () => (window.visualViewport ? visualViewport.height : innerHeight);
+  const fit = () => { if (!document.body.classList.contains('locked')) return; H.classList.remove('t1', 't2', 't3');
+    ['t1', 't2', 't3'].forEach(c => { if (btn.getBoundingClientRect().bottom > vh() - 12) H.classList.add(c); }); };
+  fit(); addEventListener('resize', fit); if (window.visualViewport) visualViewport.addEventListener('resize', fit);
+  if (document.fonts) document.fonts.ready.then(fit); setTimeout(fit, 1200);
 })();
 
 /* ---------------- prelude (2nd photo, shown after Open Invitation) ---------------- */
