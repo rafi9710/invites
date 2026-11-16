@@ -395,8 +395,8 @@ body.pre #prelude .cn{animation-delay:.8s}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
-<meta name="afx-pv" content="mwiolgge">
-<script>!function(){var V="mwiolgge";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
+<meta name="afx-pv" content="mwipijad">
+<script>!function(){var V="mwipijad";try{var q=new URLSearchParams(location.search);if(q.has("demo"))return;fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=t.match(/name="afx-pv" content="([a-z0-9]+)"/);if(!m||m[1]===V)return;var k="afx-pv-"+m[1];try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1")}catch(e){}q.set("v",m[1]);location.replace(location.pathname+"?"+q.toString()+location.hash)}).catch(function(){})}catch(e){}}()</script>
 <style>html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}img{-webkit-user-drag:none}input,textarea,select{-webkit-user-select:text;user-select:text}</style></head>
 <body class="locked">
 <nav id="topnav"><div class="in" id="navIn"></div></nav>
@@ -616,7 +616,7 @@ const CONFIG = {
     "ev4": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-ev4-1794797135340.jpg",
     "ev5": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-ev5-1794794869226.jpg",
     "ev6": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-ev6-1794794869475.jpg",
-    "andthen": "",
+    "andthen": "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-andthen-1794798559031.jpg",
     "leaf": ""
   },
   "videos": {},
@@ -661,7 +661,8 @@ const CONFIG = {
     "engSub": "14th Octoeber 2026",
     "brideCity": "Devarapalli",
     "groomCity": "Badepuram",
-    "hashtag": "#Sushi"
+    "hashtag": "#Sushi",
+    "engOff": true
   },
   "faq": [],
   "pack": "editorial",
@@ -723,7 +724,7 @@ const CONFIG = {
   "rsvpId": "8fe7d578469f975d5887",
   "viewUrl": "https://afterfx-invite-studio.afterfxtemplates.workers.dev/api/view/8fe7d578469f975d5887",
   "shareUrl": "https://invites.afterfxtemplates.com/pujitha-shravankumar/share-1794794872581.jpg",
-  "pv": "mwiolgge",
+  "pv": "mwipijad",
   "fonts": {
     "body": "Cormorant Garamond",
     "disp": "Pinyon Script",
@@ -742,7 +743,11 @@ const CONFIG = {
       "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-chap5-1794797277887.jpg"
     ],
     "eng": [],
-    "fam": []
+    "fam": [
+      "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-fam1-1794799639009.jpg",
+      "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-fam2-1794799655727.jpg",
+      "https://pub-1d2f18ed0a8d407dad41cfb99c7b3963.r2.dev/pujitha-shravankumar/img-fam3-1794799815744.jpg"
+    ]
   }
 };
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1019,6 +1024,7 @@ const NTH = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Ni
     tr.addEventListener('pointerdown', () => { last = Date.now() + 8000; });
     setInterval(() => { if (vis && CHAP.length > 1 && Date.now() - last > 5000){ last = Date.now(); goTo(cur + 1); } }, 1000);
   }
+  if (X.engOff) ENG = [];
   set('eEye', T('engEye', 'The Promise')); set('eTitle', T('engTitle', 'Engagement')); set('eSub', T('engSub', '')); if (!T('engSub', '')) drop('eSub');
   if (!ENG.length) drop('galEng');
   else { const g = $('#engGrid'); g.className = 'engg n' + Math.min(ENG.length, 4) + (ENG.length > 4 ? ' many' : '');
